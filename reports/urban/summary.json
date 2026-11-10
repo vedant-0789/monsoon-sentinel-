@@ -1,0 +1,29 @@
+{
+  "best_model": "Monotone LightGBM (physics 6)",
+  "n_hotspots": 32,
+  "n_road_locations": 21458,
+  "spatial_folds": 5,
+  "block_km": 2.0,
+  "metrics": {
+    "ROC_AUC": 0.7610703175971665,
+    "AUC_fold_mean": 0.7775772965100167,
+    "AUC_fold_std": 0.11260832183815135,
+    "capture_top5pct": 0.15625,
+    "capture_top10pct": 0.34375,
+    "capture_top20pct": 0.5625
+  },
+  "top_features": {
+    "log_dist_nala": 0.1263,
+    "log_dist_river": 0.0466,
+    "road_density_500m": 0.0465,
+    "tpi_300m": 0.034,
+    "hand_smooth": 0.0252,
+    "sink_depth_smooth": 0.0175
+  },
+  "risk_class_counts": {
+    "low": 12895,
+    "moderate": 5371,
+    "high": 2150,
+    "very high": 1074
+  }
+}

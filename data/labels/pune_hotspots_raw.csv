@@ -1,0 +1,39 @@
+name,geocode_query,hazard_type,precision,event_years,source_url
+Shahir Amar Shaikh Chowk,"Shahir Amar Shaikh Chowk, Pune",waterlogging,point,2025,https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/
+Fatimanagar,"Fatima Nagar, Wanowrie, Pune",waterlogging,point,2025,https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/
+Bhairobanala Chowk,"Bhairoba Nala, Pune",waterlogging,point,2025,https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/
+Radha Hotel Chowk (Baner),"Radha Chowk, Baner, Pune",waterlogging,point,2025,https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/
+North Main Road (Mundhwa),"North Main Road, Koregaon Park, Pune",waterlogging,point,2025,https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/
+Tadigutta Chowk,"Tadigutta, Pune",waterlogging,point,2025,https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/
+Seven Loves Chowk,"Seven Loves Chowk, Pune",waterlogging,point,2025,https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/
+Road below Ruby Hall Metro,"Ruby Hall Clinic, Pune",waterlogging,point,2025,https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/
+Gunjan Talkies,"Gunjan Theatre, Yerawada, Pune",waterlogging,point,2025,https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/
+Rajaram Bridge,"Rajaram Bridge, Pune",waterlogging,point,2025,https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/
+Navale Bridge,"Navale Bridge, Pune",waterlogging,point,2025,https://www.thebridgechronicle.com/pune/heavy-rains-waterlogging-90-locations-pune
+Athawale Chowk canal road,"Athawale Chowk, Pune",waterlogging,point,2025,https://www.thebridgechronicle.com/pune/heavy-rains-waterlogging-90-locations-pune
+Prabhat Road,"Prabhat Road, Erandwane, Pune",waterlogging,point,2025,https://www.thebridgechronicle.com/pune/heavy-rains-waterlogging-90-locations-pune
+Bhau Patil Road (Bopodi),"Bopodi, Pune",waterlogging,area,2025,https://www.thebridgechronicle.com/pune/heavy-rains-waterlogging-90-locations-pune
+Dhayari-Narhe low-lying area,"Narhe, Pune",waterlogging,area,2025,https://www.thebridgechronicle.com/pune/heavy-rains-waterlogging-90-locations-pune
+Ekta Nagari (Sinhagad Road),"Ekta Nagar, Vitthalwadi, Pune",riverine,point,2019;2024;2025,https://www.freepressjournal.in/pune/pune-80-years-of-independence-but-no-freedom-from-floods-for-ekta-nagar-residents
+Nimbaj Nagar,"Nimbaj Nagar, Pune",riverine,point,2024,https://www.punekarnews.in/?p=182761
+Vitthal Nagar (Sinhagad Road),"Vitthal Nagar, Pune",riverine,point,2024,https://www.lokmattimes.com/national/rain-wreaks-havoc-in-pune-boats-rescue-stranded-people-schools-shut/amp
+Vitthalwadi,"Vitthalwadi, Pune",riverine,point,2024,https://www.punekarnews.in/?p=182761
+Shivne,"Shivane, Pune",riverine,area,2024,https://www.lokmattimes.com/national/rain-wreaks-havoc-in-pune-boats-rescue-stranded-people-schools-shut/amp
+Pulachiwadi,"Pulachi Wadi, Deccan Gymkhana, Pune",riverine,point,2024,https://www.lokmattimes.com/national/rain-wreaks-havoc-in-pune-boats-rescue-stranded-people-schools-shut/amp
+Bhide Bridge,"Bhide Bridge, Pune",riverine,point,2024,https://www.freepressjournal.in/pune/pune-rains-bhide-bridge-submerged-after-khadakwasla-dam-discharge-video
+Wakdewadi,"Wakdewadi, Pune",waterlogging,area,2024,https://www.sphereindia.org.in/sites/default/files/2024-07/SI%20Sitrep-1__Flood%20Situation%20in%20maharashtra%20%2025_-07-2024.pdf
+Tangewala Colony (Sahakar Nagar),"Sahakar Nagar, Pune",flash_flood,point,2019,https://www.sakaltimes.com/pune/7-days-after-floods-people-still-not-rehabilitated-41579
+Annabhau Sathe Colony (Aranyeshwar),"Aranyeshwar, Pune",flash_flood,point,2019,https://www.sakaltimes.com/pune/clogged-sewage-lines-flood-ambil-odha-houses-again-41816
+Ambil Odha Colony (Dattawadi),"Dattawadi, Pune",flash_flood,point,2019,https://www.sakaltimes.com/pune/after-homes-women-fear-losing-livelihood-41505
+Shelar Mala (Katraj),"Shelar Mala, Katraj, Pune",flash_flood,point,2019,https://www.downtoearth.org.in/news/natural-disasters/what-fuelled-this-year-s-flood-fury-in-pune--67154
+Katraj Lake,"Katraj Lake, Pune",flash_flood,point,2019,https://citizenmatters.in/pune-september-flash-floods-causes-and-aftermath-14109
+Dhankawadi,"Dhankawadi, Pune",flash_flood,area,2019,https://citizenmatters.in/pune-september-flash-floods-causes-and-aftermath-14109
+Balajinagar,"Balaji Nagar, Pune",waterlogging,area,2019,https://citizenmatters.in/pune-september-flash-floods-causes-and-aftermath-14109
+Parvati,"Parvati Paytha, Pune",waterlogging,area,2019,https://citizenmatters.in/pune-september-flash-floods-causes-and-aftermath-14109
+Kolhewadi,"Kolhewadi, Pune",waterlogging,area,2019,https://citizenmatters.in/pune-september-flash-floods-causes-and-aftermath-14109
+Kirkatwadi,"Kirkatwadi, Pune",waterlogging,area,2019,https://citizenmatters.in/pune-september-flash-floods-causes-and-aftermath-14109
+Wadgaon Sheri crematorium area,"Wadgaon Sheri, Pune",waterlogging,area,2019,https://thebridgechronicle.com/news/bibvewadi-and-wadgaon-sheri-reeling-under-heavy-rains
+Bibvewadi,"Bibwewadi, Pune",waterlogging,area,2019,https://thebridgechronicle.com/news/bibvewadi-and-wadgaon-sheri-reeling-under-heavy-rains
+Ambil Odha (stream corridor),"Ambil Odha, Pune",flash_flood,area,2019;2023,https://punekarnews.in/?p=144886
+Hadapsar,"Hadapsar, Pune",waterlogging,area,2023;2025,https://punekarnews.in/?p=144886
+Sinhagad Road,"Sinhagad Road, Pune",waterlogging,area,2019;2023;2025,https://punekarnews.in/?p=144886

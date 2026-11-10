@@ -43,6 +43,15 @@ split:                 # strictly chronological - no future leakage
   val:   [2017, 2020]
   test:  [2021, 2024]
 
+# Urban waterlogging module
+urban:
+  bbox: {lat_min: 18.40, lat_max: 18.66, lon_min: 73.70, lon_max: 73.99}
+  stream_threshold_cells: 500     # ~0.45 km2 upstream area defines a drainage line (nala)
+  sample_spacing_m: 150           # spacing of candidate road locations
+  spatial_block_km: 2.0           # block size for spatial cross-validation
+  exclude_hotspots:               # geocoded to the wrong place, checked by hand
+    - Vitthal Nagar (Sinhagad Road)
+
 paths:
   raw: data/raw
   interim: data/interim

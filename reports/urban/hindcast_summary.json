@@ -1,0 +1,74 @@
+{
+  "2019-09-25": {
+    "event": "Ambil Odha flash flood (Sahakar Nagar, Aranyeshwar, Katraj)",
+    "observed_rain_city_cells_mm": 78.1,
+    "max_p_heavy_city": 0.04,
+    "road_share_by_alert": {
+      "green": 0.95,
+      "yellow": 0.05,
+      "orange": 0.0,
+      "red": 0.0
+    },
+    "hotspots_orange_or_red": "0/32"
+  },
+  "2024-07-24": {
+    "event": "Night before the Khadakwasla-release flood",
+    "observed_rain_city_cells_mm": 40.2,
+    "max_p_heavy_city": 0.34,
+    "road_share_by_alert": {
+      "green": 0.282,
+      "yellow": 0.601,
+      "orange": 0.081,
+      "red": 0.036
+    },
+    "hotspots_orange_or_red": "17/32"
+  },
+  "2024-07-25": {
+    "event": "Sinhagad Road / Ekta Nagar flood",
+    "observed_rain_city_cells_mm": 113.9,
+    "max_p_heavy_city": 0.62,
+    "road_share_by_alert": {
+      "green": 0.0,
+      "yellow": 0.693,
+      "orange": 0.189,
+      "red": 0.118
+    },
+    "hotspots_orange_or_red": "31/32"
+  },
+  "2023-07-10": {
+    "event": "ordinary monsoon day",
+    "observed_rain_city_cells_mm": 0.6,
+    "max_p_heavy_city": 0.0,
+    "road_share_by_alert": {
+      "green": 0.95,
+      "yellow": 0.05,
+      "orange": 0.0,
+      "red": 0.0
+    },
+    "hotspots_orange_or_red": "0/32"
+  },
+  "2022-08-20": {
+    "event": "ordinary monsoon day",
+    "observed_rain_city_cells_mm": 0.6,
+    "max_p_heavy_city": 0.0,
+    "road_share_by_alert": {
+      "green": 0.95,
+      "yellow": 0.05,
+      "orange": 0.0,
+      "red": 0.0
+    },
+    "hotspots_orange_or_red": "0/32"
+  },
+  "2024-08-15": {
+    "event": "ordinary monsoon day",
+    "observed_rain_city_cells_mm": 0.0,
+    "max_p_heavy_city": 0.0,
+    "road_share_by_alert": {
+      "green": 0.95,
+      "yellow": 0.05,
+      "orange": 0.0,
+      "red": 0.0
+    },
+    "hotspots_orange_or_red": "0/32"
+  }
+}

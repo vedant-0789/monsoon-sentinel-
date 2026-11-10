@@ -15,7 +15,7 @@ Monsoon Sentinel answers three questions every monsoon morning:
 | Module | Status |
 |---|---|
 | ① Rain module — 24 h heavy-rain forecast + SHAP explanations | ✅ v0.1 |
-| ② Waterlogging module — hotspot risk with weak labels + uncertainty | ⏳ next |
+| ② Waterlogging module — street susceptibility + daily alerts | ✅ v0.1 |
 | ③ Impact module — roads, population, critical facilities | 🗓 planned |
 | ④ Decision module — RL pump / crew allocation | 🗓 planned |
 | ⑤ Citizen signals — report classifier + photo verification | 🗓 planned |
@@ -68,6 +68,39 @@ PR-AUC is **2.5×** the climatology baseline. Full table of 9 models + 2 baselin
 
 ---
 
+## Waterlogging module (v0.1)
+
+**1. Hotspot catalogue** — [`data/labels/pune_hotspots_raw.csv`](data/labels/pune_hotspots_raw.csv): 38 waterlogging / flood locations from public sources (Pune Traffic Police 2026 list, PMC disaster-cell reports 2025, July 2024 Khadakwasla-release flood, Sept 2019 Ambil Odha flash flood), each with its source URL, geocoded with OpenStreetMap Nominatim → 32 usable after de-duplication and manual checks. PMC's full list of 120 spots is not published in machine-readable form; obtaining it (e.g. via an RTI request) is the single biggest accuracy upgrade available.
+
+**2. Terrain & drainage** — Copernicus 30 m DEM → slope, topographic position, depression depth, flow accumulation, topographic wetness index, height above nearest drainage (HAND); OpenStreetMap rivers, canals, nalas and road network (urbanisation proxy).
+
+**3. Street susceptibility** — every ~150 m of Pune's road network (21,458 locations) scored by positive-unlabelled learning, evaluated with **spatial block cross-validation** (2 km blocks, 5 folds — the model is always scored on neighbourhoods it never saw).
+
+| Model (spatial CV) | ROC-AUC | Hotspots in riskiest 10 % / 20 % of roads |
+|---|---|---|
+| Baseline: high TWI | 0.50 | 13 % / 13 % |
+| Baseline: low HAND | 0.57 | 22 % / 28 % |
+| LightGBM, all 15 features | 0.70 | 19 % / 38 % |
+| Baseline: distance to nearest nala | 0.77 | 38 % / 50 % |
+| **Monotone LightGBM, 6 physics features (deployed)** | **0.76** (fold mean 0.78) | **34 % / 56 %** |
+
+Lesson: with ~30 labelled hotspots, an unconstrained 15-feature model overfits; a small model with physically enforced monotonic effects (closer to a nala / lower HAND / deeper depression ⇒ never less risk) generalises better and stays explainable. It is statistically on par with the strong "distance to nala" rule while also using depressions, terrain and urban density. Most important drivers: distance to nala, distance to river, road density, local topographic position. Full table: [`reports/urban/susceptibility_benchmark.md`](reports/urban/susceptibility_benchmark.md); map: [`reports/urban/susceptibility_map.png`](reports/urban/susceptibility_map.png). Each location also carries a bootstrap 10–90 % uncertainty band.
+
+**4. Daily alert** — impact-based risk matrix (as used by IMD): rain-module heavy-rain probability (likelihood, raised one level when the previous 3 days had ≥ 100 mm) × street susceptibility (impact) → green / yellow / orange / red per road location, with plain-language advice.
+
+**Hindcast** ([figure](reports/urban/hindcast_alerts.png)):
+
+| Day | City rain (IMD) | P(heavy) | Known hotspots on orange/red |
+|---|---|---|---|
+| 24 Jul 2024 (night before flood) | 40 mm | 0.34 | 17 / 32 |
+| **25 Jul 2024 — Sinhagad Road / Ekta Nagar flood** | 114 mm | 0.62 | **31 / 32** |
+| 25 Sep 2019 — Ambil Odha flash flood | 78 mm | 0.04 | **0 / 32 (missed)** |
+| Three ordinary monsoon days | 0–1 mm | 0.00 | 0 / 32 |
+
+The 2019 miss is a sudden local cloudburst with no large-scale precursor in the morning data — the same city-cell limitation as in the rain module. Fix planned: ingest live NWP / nowcast rainfall so short convective events can trigger alerts.
+
+---
+
 ## Quick start
 
 ```bash
@@ -78,6 +111,11 @@ pip install -r requirements.txt
 python scripts/download_data.py   # IMD + ERA5 (~700 MB, resumable)
 python scripts/train_rain.py      # features, benchmark, SHAP, case study
 python scripts/analyze_rain.py    # PCA, feature selection, clustering, HMM, Apriori, regression
+
+python scripts/geocode_hotspots.py      # hotspot catalogue -> coordinates (Nominatim)
+python scripts/build_urban_layers.py    # DEM hydrology + OpenStreetMap roads/waterways
+python scripts/train_susceptibility.py  # street susceptibility, spatial CV, map
+python scripts/hindcast_risk.py         # daily alerts on 2019 / 2024 flood days
 ```
 
 ## Project layout
@@ -85,11 +123,13 @@ python scripts/analyze_rain.py    # PCA, feature selection, clustering, HMM, Apr
 ```
 configs/pune.yaml              study area, thresholds, data split
 src/monsoon_sentinel/
-  data/        imd.py, era5.py          data download & loading
-  features/    rain_features.py         leakage-safe feature engineering
-  models/      rain_models.py           candidate classifiers
-  evaluation/  metrics.py               POD / FAR / CSI / HSS / BSS
-scripts/       download_data.py, train_rain.py, analyze_rain.py
+  data/        imd.py, era5.py, terrain.py, osm.py   data download & GIS layers
+  features/    rain_features.py, urban_features.py  leakage-safe feature engineering
+  models/      rain_models.py                       candidate classifiers
+  evaluation/  metrics.py                           POD / FAR / CSI / HSS / BSS
+  risk.py                                           likelihood x impact alert matrix
+data/labels/   curated hotspot catalogue (with sources)
+scripts/       pipeline steps (see Quick start)
 reports/       generated benchmark tables and figures
 ```
 
