@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Timeline } from "@/components/charts";
+import { OutlookCard } from "@/components/features";
 import RiskMap from "@/components/MapClient";
 import { Drivers, alertLabels } from "@/components/panels";
 import { ALERT_STYLE, AlertIcon, AlertPill, Card, Gauge, Legend, Spinner } from "@/components/ui";
 import { api } from "@/lib/api";
 import { ALERT_COPY } from "@/lib/i18n";
 import { useSentinel } from "@/lib/store";
-import type { Alert, CitizenReport, FacilityKind, Zone } from "@/lib/types";
+import type { Alert, AlertsSummary, CitizenReport, FacilityKind, Zone } from "@/lib/types";
 
 const ALERTS: Alert[] = ["red", "orange", "yellow", "green"];
 const FAC_ORDER: FacilityKind[] = ["hospital", "fire_station", "clinic", "police", "school", "college"];
@@ -23,6 +24,11 @@ export default function ControlRoom() {
   const [hideGreen, setHideGreen] = useState(true);
   const [showFac, setShowFac] = useState(true);
   const [fly, setFly] = useState<{ lat: number; lon: number; zoom?: number; key: number } | null>(null);
+  const [subs, setSubs] = useState<AlertsSummary | null>(null);
+
+  useEffect(() => {
+    api.alertsSummary().then(setSubs).catch(() => setSubs(null));
+  }, [reportsVersion]);
 
   useEffect(() => {
     let alive = true;
@@ -151,6 +157,33 @@ export default function ControlRoom() {
             )}
           </Card>
 
+          <OutlookCard compact />
+
+          {subs && (
+            <Card className="!p-3">
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="rounded-lg bg-emerald-50 px-2 py-1.5 dark:bg-emerald-950/40">
+                  <div className="text-emerald-900/70 dark:text-emerald-200/70">{t("subscribers")}</div>
+                  <div className="text-lg font-bold tabular-nums text-emerald-800 dark:text-emerald-200">
+                    {Object.values(subs.active_subscribers).reduce((a, b) => a + b, 0)}
+                  </div>
+                  <div className="text-[10px] text-zinc-500">
+                    WhatsApp {subs.active_subscribers.whatsapp ?? 0} · SMS {subs.active_subscribers.sms ?? 0}
+                  </div>
+                </div>
+                <div className="rounded-lg bg-zinc-100 px-2 py-1.5 dark:bg-zinc-800">
+                  <div className="text-zinc-500">{t("sentToday")}</div>
+                  <div className="text-lg font-bold tabular-nums">
+                    {(subs.sent_today.sent ?? 0) + (subs.sent_today.dry_run ?? 0)}
+                  </div>
+                  {(subs.dry_run || !Object.values(subs.providers).some(Boolean)) && (
+                    <div className="text-[10px] text-zinc-500">{t("dryRunNote")}</div>
+                  )}
+                </div>
+              </div>
+            </Card>
+          )}
+
           {/* Impact */}
           {impact && (
             <Card>
@@ -216,15 +249,24 @@ export default function ControlRoom() {
               <ul className="space-y-1.5">
                 {reports.slice(0, 15).map((r) => (
                   <li key={r.id}>
-                    <button onClick={() => go(r.lat, r.lon, 15.5)} className="w-full rounded-lg px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                      <span className="flex items-center gap-2">
+                    <button onClick={() => go(r.lat, r.lon, 15.5)} className="flex w-full gap-2 rounded-lg px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                      {r.has_photo ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- photo served by the API
+                        <img src={api.reportPhotoUrl(r.id)} alt="" loading="lazy" className="h-12 w-12 shrink-0 rounded-md object-cover" />
+                      ) : null}
+                      <span className="min-w-0 flex-1">
+                      <span className="flex flex-wrap items-center gap-2">
                         {r.urgent ? <span className="rounded-full bg-red-600 px-1.5 py-0.5 text-[10px] font-semibold text-white">{t("urgent")}</span> : null}
                         <span className="font-medium">{t(`cat_${r.category}`)}</span>
                         {r.depth !== "unknown" && <span className="text-zinc-500">· {t(`depth_${r.depth}`)}</span>}
+                        {r.photo_verified === 1 && (
+                          <span className="rounded-full bg-emerald-600 px-1.5 py-0.5 text-[10px] font-semibold text-white">✓ {t("verifiedPhoto")}</span>
+                        )}
                       </span>
                       <span className="block text-[11px] text-zinc-500">
                         {new Date(r.created_at).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
                         {r.note && ` · “${r.note}”`}
+                      </span>
                       </span>
                     </button>
                   </li>

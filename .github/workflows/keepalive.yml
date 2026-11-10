@@ -1,0 +1,17 @@
+name: Keep API awake
+
+# Render's free tier sleeps after 15 min idle. A light ping every 10 minutes keeps the
+# API warm (one always-on service is ~720 h/month, inside the 750 free instance-hours).
+# GitHub may delay scheduled runs by a few minutes; that is fine here.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping health endpoint
+        run: curl -fsS -m 90 --retry 2 https://monsoon-sentinel-api.onrender.com/api/health || echo "API not reachable; will retry next run"

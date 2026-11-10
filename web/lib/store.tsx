@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { api } from "./api";
 import { makeT } from "./i18n";
-import type { Bulletin, HistoryPoint, Lang, Mode, PointInfo, ReplayDay } from "./types";
+import type { Bulletin, HistoryPoint, Lang, Mode, Outlook, PointInfo, ReplayDay } from "./types";
 
 interface Picked {
   lat: number;
@@ -28,6 +28,8 @@ interface Ctx {
   slow: boolean;
   error: string | null;
   history: HistoryPoint[];
+  outlook: Outlook | null;
+  linkTarget: { lat: number; lon: number } | null;
   picked: Picked | null;
   pick: (lat: number, lon: number) => void;
   clearPick: () => void;
@@ -49,6 +51,9 @@ export function SentinelProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [slow, setSlow] = useState(false);
   const [history, setHistory] = useState<HistoryPoint[]>([]);
+  const [outlook, setOutlook] = useState<Outlook | null>(null);
+  const [linkTarget, setLinkTarget] = useState<{ lat: number; lon: number } | null>(null);
+  const [hydrated, setHydrated] = useState(false); // URL / prefs read: only then start loading
   const [error, setError] = useState<string | null>(null);
   const [picked, setPicked] = useState<Picked | null>(null);
   const [reportsVersion, setReportsVersion] = useState(0);
@@ -58,14 +63,19 @@ export function SentinelProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const l = localStorage.getItem("ms.lang") as Lang | null;
-      const d = new URL(window.location.href).searchParams.get("date");
+      const params = new URL(window.location.href).searchParams;
+      const d = params.get("date");
+      const la = Number(params.get("lat"));
+      const lo = Number(params.get("lon"));
       // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration of browser-only prefs
+      if (la && lo) setLinkTarget({ lat: la, lon: lo }); // opened from an alert message
       if (l === "en" || l === "mr" || l === "hi") setLangState(l);
       if (d) {
         setMode("replay");
         setDate(d);
       }
     } catch {}
+    setHydrated(true);
     api.replayDays().then(setReplayDays).catch(() => {});
   }, []);
 
@@ -112,10 +122,12 @@ export function SentinelProvider({ children }: { children: React.ReactNode }) {
   const setReplay = useCallback((d: string) => switchTo("replay", d || DEFAULT_REPLAY), [switchTo]);
 
   useEffect(() => {
+    if (!hydrated) return;
     let alive = true;
     // free hosting sleeps when idle: tell people the first load may take a while
     const slowTimer = setTimeout(() => alive && setSlow(true), 4000);
     api.history(mode, date).then((h) => alive && setHistory(h)).catch(() => alive && setHistory([]));
+    api.outlook(mode, date).then((o) => alive && setOutlook(o)).catch(() => alive && setOutlook(null));
     Promise.all([api.bulletin(mode, date), api.roads(mode, date)])
       .then(([b, r]) => {
         if (!alive) return;
@@ -134,16 +146,16 @@ export function SentinelProvider({ children }: { children: React.ReactNode }) {
       alive = false;
       clearTimeout(slowTimer);
     };
-  }, [mode, date]);
+  }, [mode, date, hydrated]);
 
   const pick = useCallback((lat: number, lon: number) => loadPoint(lat, lon, mode, date), [loadPoint, mode, date]);
 
   const value = useMemo<Ctx>(
     () => ({
-      lang, setLang, t: makeT(lang), mode, date, setLive, setReplay, replayDays, bulletin, roads, loading, slow, error, history,
+      lang, setLang, t: makeT(lang), mode, date, setLive, setReplay, replayDays, bulletin, roads, loading, slow, error, history, outlook, linkTarget,
       picked, pick, clearPick: () => setPicked(null), reportsVersion, bumpReports: () => setReportsVersion((v) => v + 1),
     }),
-    [lang, setLang, mode, date, setLive, setReplay, replayDays, bulletin, roads, loading, slow, error, history, picked, pick, reportsVersion],
+    [lang, setLang, mode, date, setLive, setReplay, replayDays, bulletin, roads, loading, slow, error, history, outlook, linkTarget, picked, pick, reportsVersion],
   );
   return <SentinelContext.Provider value={value}>{children}</SentinelContext.Provider>;
 }

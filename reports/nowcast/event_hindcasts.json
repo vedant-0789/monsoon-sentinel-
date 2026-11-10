@@ -1,0 +1,37 @@
+{
+  "2024-07-24": {
+    "city_rain_mm": 40.2,
+    "p_ml": 0.34,
+    "p_blend": 0.1,
+    "nwp_mean_mm": 35.5,
+    "nwp_max_mm": 68.7
+  },
+  "2024-07-25": {
+    "city_rain_mm": 113.9,
+    "p_ml": 0.62,
+    "p_blend": 0.2,
+    "nwp_mean_mm": 24.1,
+    "nwp_max_mm": 57.6
+  },
+  "2024-09-25": {
+    "city_rain_mm": 19.3,
+    "p_ml": 0.02,
+    "p_blend": 0.01,
+    "nwp_mean_mm": 28.8,
+    "nwp_max_mm": 60.8
+  },
+  "2023-07-27": {
+    "city_rain_mm": 5.6,
+    "p_ml": 0.2,
+    "p_blend": 0.03,
+    "nwp_mean_mm": 10.4,
+    "nwp_max_mm": 17.7
+  },
+  "2022-10-17": {
+    "city_rain_mm": 15.7,
+    "p_ml": 0.0,
+    "p_blend": 0.0,
+    "nwp_mean_mm": 16.9,
+    "nwp_max_mm": 23.7
+  }
+}

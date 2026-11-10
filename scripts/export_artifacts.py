@@ -22,6 +22,11 @@ FILES = [
     "models/dispatch_qtable.json",
     "models/report_classifier.joblib",
     "models/model_card.json",
+    "models/photo_verifier.onnx",
+    "models/photo_verifier.json",
+    "data/raw/nwp/nwp_hourly_2022.parquet",
+    "data/raw/nwp/nwp_hourly_2023.parquet",
+    "data/raw/nwp/nwp_hourly_2024.parquet",
 ]
 
 if __name__ == "__main__":
@@ -29,6 +34,9 @@ if __name__ == "__main__":
     out = ROOT / "deploy" / "artifacts"
     shutil.rmtree(out / "data" / "processed", ignore_errors=True)
     for f in FILES:
+        if not (ROOT / f).exists():
+            print(f"{f:45s} MISSING - skipped")
+            continue
         dst = out / f
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / f, dst)

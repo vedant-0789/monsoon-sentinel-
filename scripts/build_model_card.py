@@ -62,6 +62,8 @@ if __name__ == "__main__":
         },
         "hindcast": jload("urban/hindcast_summary.json"),
         "dispatch": jload("dispatch/summary.json"),
+        "nowcast": jload("nowcast/summary.json"),
+        "photo": jload("photo/summary.json"),
         "citizen_reports": {
             "summary": jload("citizen/summary.json"),
             "benchmark": table("citizen/classifier_benchmark.csv", ["model", "category_macro_F1", "urgent_F1"]),

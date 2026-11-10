@@ -306,6 +306,58 @@ This is an interpretable, monotone threshold policy, learned from data alone. It
   - masking place names was essential, because place names appear in every category
   - generating more examples per phrasing raised Marathi from 0.39 to 0.48
 
+### 7.7 Short-range (0–24 h) NWP forecasts — do they add skill? (2022–2024, leave-one-season-out)
+
+**Setup:**
+- **Data:** Open-Meteo Historical Forecast API. The hourly archive is a "best available short-lead forecast" from five operational models:
+
+  | Model | Archived from |
+  |---|---|
+  | GFS | 2022 |
+  | JMA | 2022 |
+  | ICON | 2023 |
+  | GEM | 2023 |
+  | ECMWF IFS 0.25° | 2024 |
+
+- **Features** for each IMD day window (03–03 UTC):
+  - per-model 24 h total and 3 h peak
+  - ensemble mean, median, max and std
+  - share of models ≥ 64.5 mm and ≥ 35 mm, ignoring models with no archive
+  - 3×3-cell neighbourhood maximum
+- **Sample:** 6,885 cell-days, 266 heavy-rain days (8 in the city cells).
+
+| Approach | ROC-AUC | PR-AUC | POD | FAR | CSI | HSS |
+|---|---|---|---|---|---|---|
+| **A. Morning ML model (XGBoost)** | 0.961 | **0.683** | 0.613 | 0.373 | 0.449 | 0.605 |
+| B. Raw ensemble (share of models ≥ 64.5 mm) | 0.644 | 0.167 | 0.316 | 0.713 | 0.177 | 0.271 |
+| C. NWP-only logistic model | 0.924 | 0.362 | 0.492 | 0.588 | 0.289 | 0.424 |
+| D. Stacked blend (ML logit + NWP features) | 0.962 | 0.680 | 0.624 | 0.362 | 0.461 | 0.617 |
+| E. ML raised by NWP rule (≥ 35 / ≥ 64.5 mm) | 0.960 | 0.673 | 0.613 | 0.373 | 0.449 | 0.605 |
+| F. max(ML, NWP-only) | 0.962 | 0.629 | 0.620 | 0.417 | 0.430 | 0.585 |
+
+**Per-model daily skill** (each judged only on its archived seasons):
+
+| Model | ROC-AUC | PR-AUC |
+|---|---|---|
+| ECMWF | 0.90 | 0.30 |
+| GFS | 0.92 | 0.30 |
+| ICON | 0.93 | 0.33 |
+| GEM | 0.88 | 0.17 |
+| JMA | 0.88 | 0.30 |
+
+On the same 2024 sample, the morning ML model reaches PR-AUC 0.67 and the ensemble mean 0.35.
+
+**Event check, 25 July 2024 (city cells):**
+- Observed: 114 mm.
+- The ensemble mean forecast 24 mm (range 4–58 mm), so the NWP models under-forecast the flood.
+- The ML model gave 0.62; the stacked blend would have lowered it to 0.20.
+
+**Finding (a publishable negative result):**
+- At daily, 0.25° scale, operational NWP short-range rain adds no skill over the observation-driven morning ML model.
+- A naive "raise if NWP is wet" rule slightly *reduces* skill, so it was removed from the live system.
+- NWP is therefore used for **timing**: an hour-by-hour outlook, plus an intense-rain watch when ≥ 3 models forecast ≥ 30 mm in 3 h.
+- **Caveats:** the archive starts in 2022, so the 2019 cloudburst cannot be hindcast, and there is no hourly gauge truth to verify the watch.
+
 ---
 
 ## 8. System and deployment (for a "System design" section)

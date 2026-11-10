@@ -14,3 +14,7 @@ xgboost-cpu==3.4.1
 pydantic==2.14.3
 fastapi==0.162.3
 uvicorn==0.54.0
+# photo verification (ONNX) and permanent storage (Postgres / Neon)
+onnxruntime==1.31.1
+pillow==13.0.0
+psycopg[binary]==3.3.8

@@ -29,3 +29,4 @@ data/reports.sqlite
 web/public/maplibre-gl-worker.mjs
 web/.claude/
 .claude/
+web/public/_e2e/

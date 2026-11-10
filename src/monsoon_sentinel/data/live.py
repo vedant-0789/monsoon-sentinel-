@@ -28,7 +28,7 @@ def fetch(cfg: Config, past_days: int = 40) -> pd.DataFrame:
         "longitude": ",".join(str(c[1]) for c in cells),
         "hourly": ",".join(VARS), "past_days": past_days, "forecast_days": 2, "timezone": "GMT",
     }
-    r = requests.get(API, params=params, timeout=60)
+    r = requests.get(API, params=params, timeout=25)
     r.raise_for_status()
     js = r.json()
     js = js if isinstance(js, list) else [js]
@@ -53,11 +53,11 @@ def load_snapshot(url: str, max_age_hours: float = 7) -> pd.DataFrame | None:
     import json
 
     try:
-        meta = requests.get(url.rsplit("/", 1)[0] + "/meta.json", timeout=20).json()
+        meta = requests.get(url.rsplit("/", 1)[0] + "/meta.json", timeout=8).json()
         age = pd.Timestamp.now(tz="UTC") - pd.Timestamp(meta["fetched_at"])
         if age > pd.Timedelta(hours=max_age_hours):
             return None
-        r = requests.get(url, timeout=60)
+        r = requests.get(url, timeout=20)
         r.raise_for_status()
         df = pd.read_parquet(io.BytesIO(r.content))
         df["time"] = pd.to_datetime(df["time"])
@@ -75,6 +75,22 @@ def get_hourly(cfg: Config) -> tuple[pd.DataFrame, str]:
     if snap is not None:
         return snap, "snapshot"
     return fetch(cfg), "direct"
+
+
+NWP_SNAPSHOT_URL = SNAPSHOT_URL.replace("openmeteo_hourly.parquet", "nwp_live.parquet")
+
+
+def get_nwp_hourly(cfg: Config) -> tuple[pd.DataFrame, str]:
+    """5-model hourly forecast: published snapshot if fresh, else a direct request."""
+    import os
+
+    from monsoon_sentinel.data import nwp
+
+    url = os.environ.get("MS_NWP_SNAPSHOT_URL", NWP_SNAPSHOT_URL)
+    snap = load_snapshot(url, max_age_hours=7) if url else None
+    if snap is not None:
+        return snap, "snapshot"
+    return nwp.fetch_live(cfg), "direct"
 
 
 def daily_rain_imd_style(hourly: pd.DataFrame, issue_hour: int = 3) -> pd.DataFrame:

@@ -1,0 +1,209 @@
+{
+  "seasons": [
+    2022,
+    2023,
+    2024
+  ],
+  "rows": 6885,
+  "heavy_days": 266,
+  "city_heavy_days": 8,
+  "models": [
+    "ECMWF",
+    "GFS",
+    "ICON",
+    "GEM",
+    "JMA"
+  ],
+  "cv": "leave-one-season-out",
+  "benchmark": [
+    {
+      "model": "A. Morning ML model (XGBoost)",
+      "ROC_AUC": 0.961,
+      "PR_AUC": 0.6826,
+      "POD": 0.6128,
+      "FAR": 0.3731,
+      "CSI": 0.449,
+      "HSS": 0.6047,
+      "city_PR_AUC": 0.1185,
+      "city_ROC_AUC": 0.7837,
+      "city_POD": 0.125,
+      "city_CSI": 0.1111,
+      "threshold": 0.6016
+    },
+    {
+      "model": "B. Raw NWP ensemble (share of models >= 64.5 mm)",
+      "ROC_AUC": 0.6437,
+      "PR_AUC": 0.1667,
+      "POD": 0.3158,
+      "FAR": 0.7133,
+      "CSI": 0.1768,
+      "HSS": 0.271,
+      "city_PR_AUC": 0.0087,
+      "city_ROC_AUC": 0.4923,
+      "city_POD": 0.0,
+      "city_CSI": 0.0,
+      "threshold": 0.2
+    },
+    {
+      "model": "C. NWP-only logistic model",
+      "ROC_AUC": 0.9237,
+      "PR_AUC": 0.3625,
+      "POD": 0.4925,
+      "FAR": 0.5881,
+      "CSI": 0.2892,
+      "HSS": 0.4244,
+      "city_PR_AUC": 0.0313,
+      "city_ROC_AUC": 0.803,
+      "city_POD": 0.0,
+      "city_CSI": 0.0,
+      "threshold": 0.2817
+    },
+    {
+      "model": "D. Blend: ML + NWP ensemble (stacked)",
+      "ROC_AUC": 0.9624,
+      "PR_AUC": 0.68,
+      "POD": 0.6241,
+      "FAR": 0.3615,
+      "CSI": 0.4611,
+      "HSS": 0.6165,
+      "city_PR_AUC": 0.1497,
+      "city_ROC_AUC": 0.8242,
+      "city_POD": 0.0,
+      "city_CSI": 0.0,
+      "threshold": 0.3886
+    },
+    {
+      "model": "E. ML, raised by NWP rule (>=35 / >=64.5 mm)",
+      "ROC_AUC": 0.9596,
+      "PR_AUC": 0.6725,
+      "POD": 0.6128,
+      "FAR": 0.3731,
+      "CSI": 0.449,
+      "HSS": 0.6047,
+      "city_PR_AUC": 0.1085,
+      "city_ROC_AUC": 0.7808,
+      "city_POD": 0.125,
+      "city_CSI": 0.1111,
+      "threshold": 0.6016
+    },
+    {
+      "model": "F. max(ML, NWP-only logistic)",
+      "ROC_AUC": 0.962,
+      "PR_AUC": 0.6289,
+      "POD": 0.6203,
+      "FAR": 0.417,
+      "CSI": 0.4297,
+      "HSS": 0.5845,
+      "city_PR_AUC": 0.1176,
+      "city_ROC_AUC": 0.824,
+      "city_POD": 0.125,
+      "city_CSI": 0.1111,
+      "threshold": 0.6017
+    }
+  ],
+  "per_model": {
+    "ECMWF": {
+      "seasons": [
+        2024
+      ],
+      "n_days": 2295,
+      "ROC_AUC": 0.895441663582949,
+      "PR_AUC": 0.2978867359901725
+    },
+    "GFS": {
+      "seasons": [
+        2022,
+        2023,
+        2024
+      ],
+      "n_days": 6885,
+      "ROC_AUC": 0.9217199972283027,
+      "PR_AUC": 0.29773294351027435
+    },
+    "ICON": {
+      "seasons": [
+        2023,
+        2024
+      ],
+      "n_days": 4590,
+      "ROC_AUC": 0.9336138629155166,
+      "PR_AUC": 0.3288625136902433
+    },
+    "GEM": {
+      "seasons": [
+        2023,
+        2024
+      ],
+      "n_days": 4575,
+      "ROC_AUC": 0.876961964496063,
+      "PR_AUC": 0.17262365222929293
+    },
+    "JMA": {
+      "seasons": [
+        2022,
+        2023,
+        2024
+      ],
+      "n_days": 6885,
+      "ROC_AUC": 0.8842239872229297,
+      "PR_AUC": 0.30376495665152947
+    },
+    "_2024_ML_model": {
+      "ROC_AUC": 0.964827567533417,
+      "PR_AUC": 0.6667857742467506
+    },
+    "_2024_ensemble_mean": {
+      "ROC_AUC": 0.9162612706120201,
+      "PR_AUC": 0.3511944258973983
+    }
+  },
+  "events": {
+    "2024-07-24": {
+      "city_rain_mm": 40.2,
+      "p_ml": 0.34,
+      "p_blend": 0.1,
+      "nwp_mean_mm": 35.5,
+      "nwp_max_mm": 68.7
+    },
+    "2024-07-25": {
+      "city_rain_mm": 113.9,
+      "p_ml": 0.62,
+      "p_blend": 0.2,
+      "nwp_mean_mm": 24.1,
+      "nwp_max_mm": 57.6
+    },
+    "2024-09-25": {
+      "city_rain_mm": 19.3,
+      "p_ml": 0.02,
+      "p_blend": 0.01,
+      "nwp_mean_mm": 28.8,
+      "nwp_max_mm": 60.8
+    },
+    "2023-07-27": {
+      "city_rain_mm": 5.6,
+      "p_ml": 0.2,
+      "p_blend": 0.03,
+      "nwp_mean_mm": 10.4,
+      "nwp_max_mm": 17.7
+    },
+    "2022-10-17": {
+      "city_rain_mm": 15.7,
+      "p_ml": 0.0,
+      "p_blend": 0.0,
+      "nwp_mean_mm": 16.9,
+      "nwp_max_mm": 23.7
+    }
+  },
+  "blend_coefficients": {
+    "logit_ml": 2.157,
+    "log_nwp_neigh_max": -0.845,
+    "log_nwp_median": 0.668,
+    "log_nwp_peak3h_mean": 0.652,
+    "log_nwp_std": -0.437,
+    "log_nwp_mean": 0.402,
+    "log_nwp_peak3h_max": 0.231,
+    "log_nwp_max": -0.214,
+    "nwp_frac_heavy": -0.051,
+    "nwp_frac_35": -0.026
+  }
+}

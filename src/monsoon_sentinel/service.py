@@ -174,11 +174,78 @@ class Sentinel:
 
     # --------------------------------------------------------------- alerts
     def _effective_probability(self, r: pd.DataFrame) -> np.ndarray:
-        """ML probability, raised when the NWP forecast itself shows heavy rain (live mode)."""
-        p = r.p_heavy.to_numpy(copy=True)
-        fc = r.nwp_rain_24h.fillna(0).to_numpy()
-        p = np.maximum(p, np.where(fc >= 64.5, 0.60, np.where(fc >= 35, 0.35, 0.0)))
-        return p
+        """Alert likelihood = the morning ML probability.
+
+        A rule that raised it when NWP forecast rain was high was evaluated on 2022-2024
+        (scripts/build_nowcast.py) and slightly *reduced* skill (PR-AUC 0.683 -> 0.673), as did
+        five other ways of combining NWP; NWP is therefore shown as the hourly outlook instead.
+        """
+        return r.p_heavy.to_numpy(copy=True)
+
+    # ------------------------------------------------- short-range outlook
+    def _nwp_hourly(self, mode: str, date: str | None) -> tuple[pd.DataFrame | None, str]:
+        if mode == "live":
+            try:
+                h, src = live.get_nwp_hourly(self.cfg)
+                return h, src
+            except Exception:  # noqa: BLE001 - outlook is optional
+                return None, "unavailable"
+        y = pd.Timestamp(date).year
+        f = self.cfg.path("raw") / "nwp" / f"nwp_hourly_{y}.parquet"
+        return (pd.read_parquet(f), "archive") if f.exists() else (None, "unavailable")
+
+    def outlook(self, mode: str, date: str | None) -> dict:
+        if mode == "live":
+            return self._ttl("outlook", 1800, lambda: self._outlook(mode, date))
+        return self._outlook(mode, date)
+
+    def _outlook(self, mode: str, date: str | None) -> dict:
+        """Hour-by-hour rain for the next 24 h over the city from 5 NWP models, with agreement.
+
+        Intense-rain watch: >= 3 of the available models forecast >= 30 mm in 3 h over a city
+        cell within the window (a flash-flood signal the daily model cannot see).
+        """
+        from monsoon_sentinel.data import nwp
+
+        h, src = self._nwp_hourly(mode, date)
+        if h is None:
+            return {"available": False, "reason": "Short-range forecasts are archived from 2022 onwards."
+                    if mode == "replay" else "Live model forecast unavailable right now."}
+        issue = self.cfg["issue_hour_utc"]
+        if mode == "live":
+            now = pd.Timestamp.now(tz="UTC").tz_localize(None).floor("h")
+            start = now
+        else:
+            start = pd.Timestamp(date) + pd.Timedelta(hours=issue)
+        end = start + pd.Timedelta(hours=24)
+        city = [tuple(c) for c in self.cfg["grid"]["city_cells"]]
+        h = h[(h.time > start) & (h.time <= end)]
+        h = h[[(a, b) in city for a, b in zip(h.lat, h.lon)]]
+        models = [m for m in nwp.MODELS if m in h]
+        h[models] = h[models].apply(pd.to_numeric, errors="coerce")
+        models = [m for m in models if h[m].notna().any()]
+        if h.empty or not models:
+            return {"available": False, "reason": "No model data for this period."}
+        g = h.groupby("time")[models].max()  # wettest city cell, per model and hour
+        roll3 = g.rolling(3, min_periods=1).sum()
+        agree = int((roll3.max() >= 30).sum())
+        ist = pd.Timedelta(hours=5, minutes=30)
+        hours = [{"time": (t + ist).strftime("%Y-%m-%dT%H:%M"),
+                  "mean": round(float(row.mean()), 1), "min": round(float(row.min()), 1),
+                  "max": round(float(row.max()), 1),
+                  "by_model": {nwp.MODEL_NAMES[m]: (None if pd.isna(row[m]) else round(float(row[m]), 1)) for m in models}}
+                 for t, row in g.iterrows()]
+        totals = g.sum()
+        return {
+            "available": True, "source": src, "models": [nwp.MODEL_NAMES[m] for m in models],
+            "window_start_ist": (start + ist).strftime("%Y-%m-%dT%H:%M"),
+            "total_24h_mm": {"mean": round(float(totals.mean()), 1), "min": round(float(totals.min()), 1),
+                             "max": round(float(totals.max()), 1)},
+            "max_3h_mm": round(float(roll3.max().max()), 1),
+            "models_intense": agree, "intense_watch": agree >= 3,
+            "peak_hour_ist": hours[int(np.argmax([x["mean"] for x in hours]))]["time"] if hours else None,
+            "hours": hours,
+        }
 
     @lru_cache(maxsize=8)
     def _road_alerts_cached(self, mode: str, date: str) -> pd.DataFrame:
@@ -394,8 +461,24 @@ class Sentinel:
                 "urgent": u >= 0.5, "urgent_probability": round(u, 2)}
 
     # --------------------------------------------------------------- history
+    def _ttl(self, key: str, seconds: int, fn):
+        """Tiny time-based cache for live results (network calls must not repeat per request)."""
+        store = self.__dict__.setdefault("_ttl_cache", {})
+        now = dt.datetime.now(dt.timezone.utc)
+        hit = store.get(key)
+        if hit and (now - hit[0]).total_seconds() < seconds:
+            return hit[1]
+        val = fn()
+        store[key] = (now, val)
+        return val
+
     def history(self, mode: str, date: str | None, days: int = 14) -> list[dict]:
         """City heavy-rain probability and observed rain for the days up to the selected one."""
+        if mode == "live":
+            return self._ttl(f"history:{days}", 1800, lambda: self._history(mode, date, days))
+        return self._history(mode, date, days)
+
+    def _history(self, mode: str, date: str | None, days: int = 14) -> list[dict]:
         city = {tuple(c) for c in self.cfg["grid"]["city_cells"]}
         if mode == "live":
             hourly, _ = live.get_hourly(self.cfg)
@@ -414,6 +497,12 @@ class Sentinel:
         g = p.groupby("date").agg(probability=("p_heavy", "max"), rain_mm=("rain_mm", "max")).reset_index()
         return [{"date": str(r.date.date()), "probability": round(float(r.probability), 3),
                  "rain_mm": round(float(r.rain_mm), 1)} for r in g.itertuples()]
+
+    def photo_thresholds(self) -> dict:
+        f = self.cfg.path("models") / "photo_verifier.json"
+        t = json.loads(f.read_text()) if f.exists() else {}
+        return {"threshold_verified": float(t.get("threshold_verified", 0.9)),
+                "threshold_possible": float(t.get("threshold_possible", 0.5))}
 
     def model_card(self) -> dict:
         f = self.cfg.path("models") / "model_card.json"

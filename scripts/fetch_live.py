@@ -20,8 +20,12 @@ from monsoon_sentinel.data import live  # noqa: E402
 if __name__ == "__main__":
     out = Path(sys.argv[1] if len(sys.argv) > 1 else "live-snapshot")
     out.mkdir(parents=True, exist_ok=True)
-    hourly = live.fetch(load_config())
+    cfg = load_config()
+    hourly = live.fetch(cfg)
     hourly.to_parquet(out / "openmeteo_hourly.parquet", index=False)
+    from monsoon_sentinel.data import nwp
+
+    nwp.fetch_live(cfg).to_parquet(out / "nwp_live.parquet", index=False)  # 5-model short-range outlook
     meta = {"fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
             "rows": len(hourly), "source": "Open-Meteo forecast API (best-match NWP)",
             "first": str(hourly.time.min()), "last": str(hourly.time.max())}

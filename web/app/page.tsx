@@ -1,26 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { OutlookCard, SubscribeCard, SubscribeSheet } from "@/components/features";
 import RiskMap from "@/components/MapClient";
 import { AlertHero, ReportSheet, StreetCheck, StreetsToWatch, alertLabels } from "@/components/panels";
 import { Legend, Spinner } from "@/components/ui";
 import { useSentinel } from "@/lib/store";
 
 export default function CitizenPage() {
-  const { roads, bulletin, picked, pick, t, lang, loading } = useSentinel();
+  const { roads, bulletin, picked, pick, t, lang, loading, slow, linkTarget } = useSentinel();
   const [fly, setFly] = useState<{ lat: number; lon: number; key: number } | null>(null);
   const [reportOpen, setReportOpen] = useState(false);
+  const [subOpen, setSubOpen] = useState(false);
+  const handledLink = useRef(false);
 
   const goTo = (lat: number, lon: number) => {
     setFly((f) => ({ lat, lon, key: (f?.key ?? 0) + 1 }));
     pick(lat, lon);
   };
 
+  // opened from an alert message (?lat=&lon=): show that street straight away
+  useEffect(() => {
+    if (!linkTarget || handledLink.current || !bulletin) return;
+    handledLink.current = true;
+    setFly({ ...linkTarget, key: 1 });
+    pick(linkTarget.lat, linkTarget.lon);
+  }, [linkTarget, bulletin, pick]);
+
   return (
     <div className="flex h-full flex-col-reverse lg:grid lg:grid-cols-[420px_1fr]">
       <aside className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 pb-24 lg:pb-3">
         <AlertHero />
         <StreetCheck onLocate={goTo} />
+        <SubscribeCard onOpen={() => setSubOpen(true)} />
+        <OutlookCard />
         <StreetsToWatch onSelect={goTo} />
         <p className="px-1 text-[11px] leading-snug text-zinc-500">{t("sources")}</p>
       </aside>
@@ -38,8 +51,8 @@ export default function CitizenPage() {
             <Legend title={t("legend")} labels={alertLabels(lang)} />
           </div>
           {loading && (
-            <div className="pointer-events-auto flex w-fit items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 text-xs shadow dark:bg-zinc-900/95">
-              <Spinner className="h-3.5 w-3.5" /> {t("loading")}
+            <div className="pointer-events-auto flex w-fit max-w-[80vw] items-center gap-2 rounded-2xl bg-white/95 px-3 py-1.5 text-xs shadow dark:bg-zinc-900/95">
+              <Spinner className="h-3.5 w-3.5 shrink-0" /> {slow ? t("waking") : t("loading")}
             </div>
           )}
         </div>
@@ -54,6 +67,7 @@ export default function CitizenPage() {
         </button>
       </div>
       <ReportSheet open={reportOpen} onClose={() => setReportOpen(false)} />
+      <SubscribeSheet open={subOpen} onClose={() => setSubOpen(false)} />
     </div>
   );
 }

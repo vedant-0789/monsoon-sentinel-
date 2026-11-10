@@ -1,0 +1,66 @@
+{
+  "dataset": "Flood10k (Mendeley Data, DOI 10.17632/4sgcd7zdsp.1, CC BY-NC 4.0)",
+  "images_used": 10320,
+  "split": "70/10/20 stratified, seed 42",
+  "backbone": "MobileNetV3-Small (ImageNet), frozen",
+  "deployed_head": "Logistic Regression",
+  "threshold_verified": 0.697,
+  "test_at_verified_threshold": {
+    "precision": 0.966839378238342,
+    "recall": 0.915603532875368
+  },
+  "confusion_matrix_at_0.5 [[TN,FP],[FN,TP]]": [
+    [
+      1000,
+      45
+    ],
+    [
+      52,
+      967
+    ]
+  ],
+  "onnx_mb": 3.72,
+  "onnx_vs_torch_max_abs_diff": 6.798654794692993e-08,
+  "benchmark": [
+    {
+      "model": "CNN features + Logistic Regression",
+      "accuracy": 0.953,
+      "F1": 0.9522,
+      "precision": 0.9555,
+      "recall": 0.949,
+      "ROC_AUC": 0.9876
+    },
+    {
+      "model": "CNN features + Linear SVM",
+      "accuracy": 0.952,
+      "F1": 0.9513,
+      "precision": 0.9545,
+      "recall": 0.948,
+      "ROC_AUC": 0.9874
+    },
+    {
+      "model": "CNN features + Random Forest",
+      "accuracy": 0.9486,
+      "F1": 0.9486,
+      "precision": 0.9377,
+      "recall": 0.9598,
+      "ROC_AUC": 0.9854
+    },
+    {
+      "model": "CNN features + KNN (k=15)",
+      "accuracy": 0.9288,
+      "F1": 0.9312,
+      "precision": 0.89,
+      "recall": 0.9764,
+      "ROC_AUC": 0.9802
+    },
+    {
+      "model": "Colour histogram + Logistic Regression (no deep learning)",
+      "accuracy": 0.8571,
+      "F1": 0.8595,
+      "precision": 0.8352,
+      "recall": 0.8852,
+      "ROC_AUC": 0.915
+    }
+  ]
+}

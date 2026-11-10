@@ -15,7 +15,9 @@ const PIPELINE = [
   { t: "3 · Alert", d: "IMD-style risk matrix: likelihood × street impact → green / yellow / orange / red" },
   { t: "4 · Impact", d: "Road-km and critical facilities (hospitals, fire stations, schools) whose access road is on alert" },
   { t: "5 · Action", d: "DBSCAN groups red streets into response zones; a Q-learning agent decides where the limited pumps go" },
-  { t: "6 · People", d: "Citizen reports in English, मराठी, हिंदी; Naive Bayes flags category and urgency" },
+  { t: "6 · People", d: "Citizen reports in English, मराठी, हिंदी; Naive Bayes flags category and urgency; a CNN checks photos" },
+  { t: "7 · Next hours", d: "5 operational weather models give an hour-by-hour outlook and an intense-rain watch" },
+  { t: "8 · Reach", d: "Verified WhatsApp / SMS subscribers get a morning alert when their own street is at risk" },
 ];
 
 const SYLLABUS: [string, string][] = [
@@ -24,7 +26,7 @@ const SYLLABUS: [string, string][] = [
   ["Naive Bayes (Gaussian, Multinomial)", "Rain benchmark; citizen-report text classifier"],
   ["SVM / SVR", "Rain benchmark (RBF SVM); rain-amount Linear SVR"],
   ["Decision tree, bagging, random forest, boosting", "Rain benchmark; deployed XGBoost; monotone LightGBM for streets"],
-  ["Neural network", "MLP in the rain benchmark"],
+  ["Neural network", "MLP in the rain benchmark; MobileNetV3 CNN for photo verification (transfer learning)"],
   ["Feature selection (filter, wrapper, embedded)", "Mutual information, forward/backward selection, L1"],
   ["PCA", "Components, variance and std-dev; PCA-compressed model"],
   ["K-means, hierarchical, DBSCAN", "Weather regimes; anomaly days; response zones"],
@@ -50,6 +52,8 @@ export default function About() {
   const sus = card?.susceptibility;
   const disp = card?.dispatch;
   const cit = card?.citizen_reports;
+  const now = card?.nowcast;
+  const photo = card?.photo;
   const an = card?.analysis;
   const hind = card?.hindcast ?? {};
 
@@ -171,6 +175,44 @@ export default function About() {
               </div>
               <p className="mt-2 text-xs text-zinc-500">Urgency F1 (Naive Bayes): {fmt(cit?.summary?.metrics?.urgent_F1, 2)}</p>
             </Card>
+          </section>
+        )}
+
+        {(now?.benchmark || photo?.benchmark) && (
+          <section className="grid gap-4 lg:grid-cols-2">
+            {now?.benchmark && (
+              <Card>
+                <h2 className="text-lg font-semibold">7 · Short-range forecasts: do they help?</h2>
+                <p className="mt-1 text-xs text-zinc-500">
+                  {now.models?.join(", ")} forecasts (archived {now.seasons?.join("–")}) verified against IMD rain gauges,
+                  {" "}{now.cv}. PR-AUC for heavy rain (≥ 64.5 mm):
+                </p>
+                <div className="mt-2">
+                  <Bars rows={now.benchmark.map((r: any) => ({ label: r.model.replace(/^[A-F]\. /, ""), value: r.PR_AUC }))}
+                    max={0.75} highlight="Morning ML model (XGBoost)" />
+                </div>
+                <p className="mt-2 text-xs text-zinc-500">
+                  None of six ways of adding the weather models beat the morning ML model at daily scale, so alerts stay on the
+                  ML model and the models are used for what they do well: hour-by-hour timing and an intense-rain watch.
+                </p>
+              </Card>
+            )}
+            {photo?.benchmark && (
+              <Card>
+                <h2 className="text-lg font-semibold">Photo verification (CNN)</h2>
+                <p className="mt-1 text-xs text-zinc-500">
+                  {photo.backbone} features, {photo.images_used?.toLocaleString("en-IN")} photos from {photo.dataset}. Held-out test set:
+                </p>
+                <div className="mt-2">
+                  <Bars rows={photo.benchmark.map((r: any) => ({ label: r.model, value: r.accuracy }))}
+                    max={1} format={(v) => `${(v * 100).toFixed(1)}%`} highlight="CNN features + Logistic Regression" />
+                </div>
+                <p className="mt-2 text-xs text-zinc-500">
+                  Runs on the phone (instant, private) and again on the server. &quot;Verified&quot; needs ≥ 95 % precision
+                  (threshold {fmt(photo.threshold_verified, 2)}).
+                </p>
+              </Card>
+            )}
           </section>
         )}
 

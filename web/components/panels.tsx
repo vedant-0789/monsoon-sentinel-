@@ -6,6 +6,7 @@ import { ALERT_COPY, factor } from "@/lib/i18n";
 import { useSentinel } from "@/lib/store";
 import type { Alert } from "@/lib/types";
 import { Timeline } from "./charts";
+import { PhotoPicker, type PhotoState } from "./features";
 import { ALERT_STYLE, AlertIcon, AlertPill, Card, Gauge, Spinner, Stat } from "./ui";
 
 const mm = (v: number | null | undefined) => (v === null || v === undefined ? "—" : `${v.toFixed(0)} mm`);
@@ -263,6 +264,8 @@ export function ReportSheet({ open, onClose }: { open: boolean; onClose: () => v
     return () => clearTimeout(id);
   }, [note, touchedCat]);
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [photo, setPhoto] = useState<PhotoState | null>(null);
+  const [verdict, setVerdict] = useState<string | null>(null);
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -274,10 +277,13 @@ export function ReportSheet({ open, onClose }: { open: boolean; onClose: () => v
     if (!picked) return;
     setState("sending");
     try {
-      await api.sendReport({ lat: picked.lat, lon: picked.lon, category: cat, depth, note, lang });
+      const r = await api.sendReport({ lat: picked.lat, lon: picked.lon, category: cat, depth, note, lang,
+        photo: photo?.dataUrl ?? null });
+      setVerdict(r.photo_verdict ?? null);
       setState("done");
       bumpReports();
       setNote("");
+      setPhoto(null);
     } catch {
       setState("error");
     }
@@ -290,7 +296,7 @@ export function ReportSheet({ open, onClose }: { open: boolean; onClose: () => v
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={onClose}>
       <div
         role="dialog" aria-modal="true" aria-labelledby="report-title"
-        className="w-full max-w-md rounded-t-3xl bg-white p-5 shadow-2xl sm:rounded-3xl dark:bg-zinc-900"
+        className="max-h-[92vh] w-full max-w-md overflow-y-auto rounded-t-3xl bg-white p-5 shadow-2xl sm:rounded-3xl dark:bg-zinc-900"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-zinc-300 sm:hidden" />
@@ -299,7 +305,10 @@ export function ReportSheet({ open, onClose }: { open: boolean; onClose: () => v
           {picked ? `${t("reportWhere")} (${picked.lat.toFixed(4)}, ${picked.lon.toFixed(4)})` : t("reportPick")}
         </p>
         {state === "done" ? (
-          <div className="mt-4 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200">{t("thanks")}</div>
+          <div className="mt-4 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200">
+            {t("thanks")}
+            {verdict === "flooding confirmed" && <span className="mt-2 block font-semibold">✓ {t("verifiedPhoto")}</span>}
+          </div>
         ) : (
           <>
             <div className="mt-4 flex flex-wrap gap-2">
@@ -330,6 +339,7 @@ export function ReportSheet({ open, onClose }: { open: boolean; onClose: () => v
                 )}
               </p>
             )}
+            <PhotoPicker value={photo} onChange={setPhoto} />
             {state === "error" && <p className="mt-2 text-sm text-red-600">{t("apiDown")}</p>}
           </>
         )}
@@ -339,7 +349,7 @@ export function ReportSheet({ open, onClose }: { open: boolean; onClose: () => v
           </button>
           {state !== "done" && (
             <button
-              onClick={submit} disabled={!picked || state === "sending"}
+              onClick={submit} disabled={!picked || state === "sending" || !!photo?.checking}
               className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-40"
             >
               {state === "sending" && <Spinner />}

@@ -95,6 +95,38 @@ export interface CitizenReport {
   lang: Lang;
   auto_category?: string | null;
   urgent?: number | boolean;
+  has_photo?: number;
+  photo_flood_prob?: number | null;
+  photo_verified?: number | null;
+}
+
+export interface OutlookHour {
+  time: string;
+  mean: number;
+  min: number;
+  max: number;
+  by_model: Record<string, number | null>;
+}
+
+export interface Outlook {
+  available: boolean;
+  reason?: string;
+  source?: string;
+  models?: string[];
+  window_start_ist?: string;
+  total_24h_mm?: { mean: number; min: number; max: number };
+  max_3h_mm?: number;
+  models_intense?: number;
+  intense_watch?: boolean;
+  peak_hour_ist?: string | null;
+  hours?: OutlookHour[];
+}
+
+export interface AlertsSummary {
+  active_subscribers: Record<string, number>;
+  sent_today: Record<string, number>;
+  providers: Record<string, boolean>;
+  dry_run: boolean;
 }
 
 export interface ReplayDay {
