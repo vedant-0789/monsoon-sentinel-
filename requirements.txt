@@ -1,0 +1,16 @@
+numpy>=2.0
+pandas>=2.2
+pyarrow>=16
+pyyaml>=6
+requests>=2.31
+tqdm>=4.66
+imdlib>=0.1.20
+scikit-learn>=1.5
+lightgbm>=4.3
+xgboost>=2.1
+shap>=0.46
+hmmlearn>=0.3
+mlxtend>=0.23
+matplotlib>=3.9
+joblib>=1.4
+tabulate>=0.9

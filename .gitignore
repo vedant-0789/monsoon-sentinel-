@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Data & models (large / regenerable — run scripts/download_data.py)
+data/raw/
+data/interim/
+data/processed/
+data/*.log
+models/*.joblib
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node (frontend, later)
+node_modules/
+.next/

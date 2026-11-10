@@ -1,0 +1,51 @@
+# Monsoon Sentinel - Pune pilot configuration
+
+city: pune
+city_center: {lat: 18.52, lon: 73.86}
+
+# IMD 0.25 deg grid cells covering Pune city and its upstream Western Ghats catchment
+# (Mulshi, Khadakwasla, Pavana dams lie in the western cells).
+grid:
+  lats: [18.25, 18.5, 18.75]
+  lons: [73.25, 73.5, 73.75, 74.0, 74.25]
+  city_cells:            # cells that overlap the PMC / PCMC urban area
+    - [18.5, 73.75]
+    - [18.5, 74.0]
+
+years: {start: 2001, end: 2024}
+season_months: [5, 6, 7, 8, 9, 10]   # data fetched for May-Oct
+target_months: [6, 7, 8, 9, 10]      # forecasts evaluated Jun-Oct
+
+# IMD rainfall categories (mm / 24 h)
+thresholds:
+  heavy: 64.5
+  very_heavy: 115.6
+  extremely_heavy: 204.5
+
+# Forecast issued at 08:30 IST (03 UTC) for the next 24 h, matching the IMD
+# gridded-rainfall day convention (08:30 IST day D -> 08:30 IST day D+1).
+issue_hour_utc: 3
+
+era5_hourly_vars:
+  - precipitation
+  - pressure_msl
+  - relative_humidity_2m
+  - dew_point_2m
+  - cloud_cover
+  - wind_speed_10m
+  - wind_direction_10m
+  - total_column_integrated_water_vapour
+  - soil_moisture_0_to_7cm
+  - boundary_layer_height
+
+split:                 # strictly chronological - no future leakage
+  train: [2001, 2016]
+  val:   [2017, 2020]
+  test:  [2021, 2024]
+
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  models: models
+  reports: reports

@@ -1,0 +1,31 @@
+{
+  "k_by_silhouette": 2,
+  "silhouette": {
+    "2": 0.359,
+    "3": 0.349,
+    "4": 0.28,
+    "5": 0.256,
+    "6": 0.245,
+    "7": 0.249,
+    "8": 0.231
+  },
+  "kmeans": {
+    "homogeneity": 0.1410197333633646,
+    "completeness": 0.26618094922276087
+  },
+  "hierarchical": {
+    "homogeneity": 0.13179045915497026,
+    "completeness": 0.3215969921329601
+  },
+  "dbscan": {
+    "eps": 1.3321325697491302,
+    "clusters": 1,
+    "anomalous_days": 75,
+    "heavy_rain_rate_anomalous_days": 0.8,
+    "heavy_rain_rate_normal_days": 0.17185309784132324
+  },
+  "heavy_rain_rate_by_kmeans_regime": {
+    "0": 0.01,
+    "1": 0.266
+  }
+}

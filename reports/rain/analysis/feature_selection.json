@@ -1,0 +1,26 @@
+{
+  "forward": [
+    "rain_lag1",
+    "rain_sum30",
+    "pr_24h",
+    "rh_mean24",
+    "tcwv_max24",
+    "dom_tcwv",
+    "dom_u",
+    "ghats_pr24",
+    "dom_rain_lag1_max",
+    "dom_heavy_cells_lag1"
+  ],
+  "backward": [
+    "rh_mean24",
+    "doy_cos",
+    "doy_sin",
+    "tcwv_mean24",
+    "rain_sum30",
+    "dom_rain_lag1_max",
+    "rain_lag1",
+    "moist_flux_u",
+    "dom_rain_lag1_mean",
+    "rh_now"
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "pca_components_for_90pct_variance": 15,
+  "logreg_PR_AUC_all_features": 0.6581431153338113,
+  "logreg_PR_AUC_pca_90pct": 0.6016623693408205,
+  "SFS_top10": [
+    "rain_lag1",
+    "rain_sum30",
+    "pr_24h",
+    "rh_mean24",
+    "tcwv_max24",
+    "dom_tcwv",
+    "dom_u",
+    "ghats_pr24",
+    "dom_rain_lag1_max",
+    "dom_heavy_cells_lag1"
+  ],
+  "SBS_top10": [
+    "rh_mean24",
+    "doy_cos",
+    "doy_sin",
+    "tcwv_mean24",
+    "rain_sum30",
+    "dom_rain_lag1_max",
+    "rain_lag1",
+    "moist_flux_u",
+    "dom_rain_lag1_mean",
+    "rh_now"
+  ],
+  "weather_regimes": {
+    "k_by_silhouette": 2,
+    "silhouette": {
+      "2": 0.359,
+      "3": 0.349,
+      "4": 0.28,
+      "5": 0.256,
+      "6": 0.245,
+      "7": 0.249,
+      "8": 0.231
+    },
+    "kmeans": {
+      "homogeneity": 0.1410197333633646,
+      "completeness": 0.26618094922276087
+    },
+    "hierarchical": {
+      "homogeneity": 0.13179045915497026,
+      "completeness": 0.3215969921329601
+    },
+    "dbscan": {
+      "eps": 1.3321325697491302,
+      "clusters": 1,
+      "anomalous_days": 75,
+      "heavy_rain_rate_anomalous_days": 0.8,
+      "heavy_rain_rate_normal_days": 0.17185309784132324
+    },
+    "heavy_rain_rate_by_kmeans_regime": {
+      "0": 0.01,
+      "1": 0.266
+    }
+  },
+  "hmm": {
+    "state_mean_rain_mm": {
+      "dry": 0.00048211439662222666,
+      "break": 2.745782376675915,
+      "active": 18.237507795117242
+    },
+    "transition_matrix": {
+      "dry": {
+        "dry": 0.756,
+        "break": 0.238,
+        "active": 0.005
+      },
+      "break": {
+        "dry": 0.086,
+        "break": 0.825,
+        "active": 0.089
+      },
+      "active": {
+        "dry": 0.0,
+        "break": 0.092,
+        "active": 0.908
+      }
+    },
+    "share_of_days": {
+      "active": 0.433,
+      "break": 0.424,
+      "dry": 0.143
+    },
+    "heavy_rain_rate_by_phase": {
+      "active": 0.411,
+      "break": 0.019,
+      "dry": 0.0
+    }
+  },
+  "apriori_top_rules": [
+    {
+      "antecedents": "cloudy + moist_flux_high + rain_yesterday_heavy",
+      "support": 0.01,
+      "confidence": 0.809,
+      "lift": 15.929
+    },
+    {
+      "antecedents": "moist_flux_high + rain_yesterday_heavy + wet_week",
+      "support": 0.014,
+      "confidence": 0.746,
+      "lift": 14.701
+    },
+    {
+      "antecedents": "moist_flux_high + rain_yesterday_heavy",
+      "support": 0.014,
+      "confidence": 0.733,
+      "lift": 14.435
+    },
+    {
+      "antecedents": "cloudy + rain_yesterday_heavy + tcwv_high",
+      "support": 0.015,
+      "confidence": 0.693,
+      "lift": 13.661
+    },
+    {
+      "antecedents": "moist_flux_high + tcwv_high + wet_week",
+      "support": 0.013,
+      "confidence": 0.681,
+      "lift": 13.425
+    }
+  ],
+  "base_rate_heavy": 0.050762527233115466,
+  "regression": {
+    "Linear Regression": {
+      "MAE_mm": 7.553913280971457,
+      "RMSE_mm": 21.146245579216494,
+      "R2": 0.17641287410374773,
+      "MAE_on_heavy_days_mm": 72.01183689772105
+    },
+    "Linear SVR": {
+      "MAE_mm": 8.327960961826307,
+      "RMSE_mm": 25.720378174023388,
+      "R2": -0.21842192649133185,
+      "MAE_on_heavy_days_mm": 85.4836666991584
+    },
+    "Random Forest Regressor": {
+      "MAE_mm": 6.254921896978868,
+      "RMSE_mm": 13.994831703697155,
+      "R2": 0.6392732354300625,
+      "MAE_on_heavy_days_mm": 43.311645205179424
+    }
+  }
+}
