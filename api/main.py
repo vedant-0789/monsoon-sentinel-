@@ -57,6 +57,19 @@ def _guard(mode: str, date: str | None):
         raise HTTPException(400, "replay mode needs ?date=YYYY-MM-DD")
 
 
+@app.exception_handler(Exception)
+async def upstream_error(request, exc: Exception):
+    """Live mode depends on Open-Meteo; report upstream failures clearly instead of a bare 500."""
+    from fastapi.responses import JSONResponse
+
+    live = request.query_params.get("mode", "live") == "live"
+    msg = f"{type(exc).__name__}: {str(exc)[:300]}"
+    if live:
+        return JSONResponse({"detail": f"Live weather data is unavailable right now ({msg}). "
+                                       "Try again shortly, or use Replay."}, status_code=503)
+    return JSONResponse({"detail": msg}, status_code=500)
+
+
 @app.get("/api/health")
 def health():
     return {"status": "ok", "time": dt.datetime.now(dt.timezone.utc).isoformat()}
