@@ -43,6 +43,40 @@ def fetch(cfg: Config, past_days: int = 40) -> pd.DataFrame:
     return pd.concat(frames, ignore_index=True)
 
 
+SNAPSHOT_URL = ("https://raw.githubusercontent.com/vedant-0789/monsoon-sentinel-/live-data/"
+                "openmeteo_hourly.parquet")
+
+
+def load_snapshot(url: str, max_age_hours: float = 7) -> pd.DataFrame | None:
+    """Hourly inputs published by the scheduled pipeline, or None if missing / stale."""
+    import io
+    import json
+
+    try:
+        meta = requests.get(url.rsplit("/", 1)[0] + "/meta.json", timeout=20).json()
+        age = pd.Timestamp.now(tz="UTC") - pd.Timestamp(meta["fetched_at"])
+        if age > pd.Timedelta(hours=max_age_hours):
+            return None
+        r = requests.get(url, timeout=60)
+        r.raise_for_status()
+        df = pd.read_parquet(io.BytesIO(r.content))
+        df["time"] = pd.to_datetime(df["time"])
+        return df
+    except (requests.RequestException, KeyError, ValueError, json.JSONDecodeError):
+        return None
+
+
+def get_hourly(cfg: Config) -> tuple[pd.DataFrame, str]:
+    """Prefer the published snapshot; fall back to calling Open-Meteo directly."""
+    import os
+
+    url = os.environ.get("MS_LIVE_SNAPSHOT_URL", SNAPSHOT_URL)
+    snap = load_snapshot(url) if url else None
+    if snap is not None:
+        return snap, "snapshot"
+    return fetch(cfg), "direct"
+
+
 def daily_rain_imd_style(hourly: pd.DataFrame, issue_hour: int = 3) -> pd.DataFrame:
     """Sum hourly rain over 03 UTC (D) -> 03 UTC (D+1) windows, labelled D (IMD convention)."""
     h = hourly[["time", "lat", "lon", "precipitation"]].copy()

@@ -151,7 +151,7 @@ class Sentinel:
             now = dt.datetime.now(dt.timezone.utc)
             if self._live_cache and (now - self._live_cache[0]).total_seconds() < 1800:
                 return self._live_cache[1]
-            hourly = live.fetch(self.cfg)
+            hourly, _source = live.get_hourly(self.cfg)
             daily = live.daily_rain_imd_style(hourly, self.cfg["issue_hour_utc"])
             issue = now if now.hour >= self.cfg["issue_hour_utc"] else now - dt.timedelta(days=1)
             day = pd.Timestamp(issue.date())
