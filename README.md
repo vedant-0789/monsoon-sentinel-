@@ -137,6 +137,15 @@ cd web && npm install && npm run dev -- --port 3007
 #      http://localhost:3007/control?date=2024-07-25   (control room)
 ```
 
+### Deployment
+
+| Part | Host | How |
+|---|---|---|
+| API | Render (free, Docker) | [`render.yaml`](render.yaml) blueprint → [`deploy/Dockerfile`](deploy/Dockerfile); redeploys on every push to `main` |
+| Web app | Vercel (free) | Root directory `web`, env `NEXT_PUBLIC_API_URL=https://<api-host>` |
+
+The container ships ~10 MB of trained artifacts from [`deploy/artifacts/`](deploy/artifacts) (refresh with `python scripts/export_artifacts.py` after retraining) and runs in ~220–270 MB of RAM: CPU-only XGBoost, no GIS libraries at runtime, Arrow's system allocator, text-cached map layers. Free-tier caveats: the API sleeps after 15 min idle (first request then takes ~1 min) and citizen reports live in temporary storage.
+
 ---
 
 ## Quick start

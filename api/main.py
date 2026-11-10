@@ -17,7 +17,7 @@ from typing import Literal
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from fastapi import FastAPI, HTTPException, Query  # noqa: E402
+from fastapi import FastAPI, HTTPException, Query, Response  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 from fastapi.middleware.gzip import GZipMiddleware  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
@@ -78,7 +78,7 @@ def roads(mode: Mode = "live", date: str | None = None,
     """GeoJSON points (~every 150 m of road) with alert colour a, susceptibility s, road name n."""
     _guard(mode, date)
     try:
-        return STATE["s"].roads_geojson(mode, date, min_alert)
+        return Response(STATE["s"].roads_geojson(mode, date, min_alert), media_type="application/json")
     except KeyError as e:
         raise HTTPException(404, str(e))
 

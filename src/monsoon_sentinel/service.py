@@ -9,10 +9,10 @@ Two modes:
 from __future__ import annotations
 
 import datetime as dt
+import json
 import threading
 from functools import lru_cache
 
-import geopandas as gpd
 import joblib
 import numpy as np
 import pandas as pd
@@ -20,7 +20,7 @@ import xgboost as xgb
 
 from monsoon_sentinel import risk
 from monsoon_sentinel.config import load_config
-from monsoon_sentinel.data import live, osm
+from monsoon_sentinel.data import live
 from monsoon_sentinel.features import rain_features as rf
 
 FRIENDLY = {
@@ -43,6 +43,15 @@ FRIENDLY = {
     "elevation": "terrain height",
 }
 LIKELIHOOD_WORDS = ["very unlikely", "unlikely", "possible", "likely"]
+_LAT0 = np.deg2rad(18.52)  # equirectangular metres: < 0.1 % error across Pune
+
+
+def _xy(lat, lon):
+    return np.asarray(lon) * 111_320 * np.cos(_LAT0), np.asarray(lat) * 110_574
+
+
+def _lat_lon(x, y):
+    return y / 110_574, x / (111_320 * np.cos(_LAT0))
 
 
 class Sentinel:
@@ -51,6 +60,8 @@ class Sentinel:
         self.rain = joblib.load(self.cfg.path("models") / "rain_model.joblib")
         self.archive = pd.read_parquet(self.cfg.path("processed") / "rain_features.parquet")
         self.archive["date"] = pd.to_datetime(self.archive["date"])
+        f64 = self.archive.select_dtypes("float64").columns.difference(["lat", "lon"])
+        self.archive[f64] = self.archive[f64].astype("float32")
         self.roads = self._load_roads()
         hs = pd.read_csv(self.cfg.path("raw").parent / "labels" / "pune_hotspots.csv").dropna(subset=["lat"])
         self.hotspots = hs[~hs.name.isin(self.cfg["urban"]["exclude_hotspots"])].reset_index(drop=True)
@@ -58,7 +69,25 @@ class Sentinel:
         self._lock = threading.Lock()
 
     # ------------------------------------------------------------------ roads
-    def _load_roads(self) -> gpd.GeoDataFrame:
+    def _load_roads(self) -> pd.DataFrame:
+        """Plain table (no geometry library at runtime): plat, plon, road_name, risk_class, ..."""
+        light = self.cfg.path("processed") / "road_points_light.parquet"
+        if light.exists():
+            return pd.read_parquet(light)
+        g = self._build_named_roads()
+        df = pd.DataFrame({
+            "plat": g.geometry.y.values, "plon": g.geometry.x.values, "road_name": g.road_name.values,
+            "risk_class": g.risk_class.astype(str).values, "percentile": g.percentile.values,
+            "p10": g.p10.values, "p90": g.p90.values, "cell_lat": g.cell_lat.values, "cell_lon": g.cell_lon.values,
+        })
+        df.to_parquet(light, index=False)
+        return df
+
+    def _build_named_roads(self):
+        import geopandas as gpd
+
+        from monsoon_sentinel.data import osm
+
         f = self.cfg.path("processed") / "road_points_named.parquet"
         if f.exists():
             return gpd.read_parquet(f)
@@ -143,12 +172,12 @@ class Sentinel:
         p = np.maximum(p, np.where(fc >= 64.5, 0.60, np.where(fc >= 35, 0.35, 0.0)))
         return p
 
-    @lru_cache(maxsize=64)
+    @lru_cache(maxsize=8)
     def _road_alerts_cached(self, mode: str, date: str) -> pd.DataFrame:
         r = self.rain_live() if mode == "live" else self.rain_replay(date)
         r = r.assign(p_eff=self._effective_probability(r))
         d = self.roads.merge(r[["lat", "lon", "p_eff", "rain_sum3"]], left_on=["cell_lat", "cell_lon"],
-                             right_on=["lat", "lon"], how="left")
+                             right_on=["lat", "lon"], how="left").drop(columns=["lat", "lon"])
         d["alert"] = risk.alerts(d.p_eff.fillna(0).values, d.risk_class, d.rain_sum3.fillna(0).values).values
         return d
 
@@ -173,12 +202,10 @@ class Sentinel:
         issue_date = pd.Timestamp(r.date.iloc[0]).date()
 
         hs = self.hotspots.copy()
-        hcells = risk.nearest_cell(hs.lat.values, hs.lon.values, self.cfg.cells)
-        nearest = []
-        rr = roads.to_crs("EPSG:32643")
-        hs_g = gpd.GeoDataFrame(hs, geometry=gpd.points_from_xy(hs.lon, hs.lat), crs="EPSG:4326").to_crs("EPSG:32643")
-        j = gpd.sjoin_nearest(hs_g, rr[["alert", "percentile", "geometry"]], how="left").drop_duplicates("name")
-        hs["alert"] = j["alert"].values
+        rx, ry = _xy(roads.plat.values, roads.plon.values)
+        hx, hy = _xy(hs.lat.values, hs.lon.values)
+        nearest = [int(np.argmin((rx - a) ** 2 + (ry - b) ** 2)) for a, b in zip(hx, hy)]
+        hs["alert"] = roads.alert.values[nearest]
         top = (roads[roads.alert.isin(["red", "orange"])].sort_values("percentile", ascending=False)
                .dropna(subset=["road_name"]).drop_duplicates("road_name").head(15))
 
@@ -204,19 +231,20 @@ class Sentinel:
                        "nwp_rain_24h_mm": None if pd.isna(a.nwp_rain_24h) else round(float(a.nwp_rain_24h), 1)}
                       for a in r.itertuples()],
             "road_alert_counts": {k: int(v) for k, v in counts.items()},
-            "streets_to_watch": [{"road": t.road_name, "alert": t.alert, "lat": round(t.geometry.y, 5),
-                                  "lon": round(t.geometry.x, 5)} for t in top.itertuples()],
+            "streets_to_watch": [{"road": t.road_name, "alert": t.alert, "lat": round(float(t.plat), 5),
+                                  "lon": round(float(t.plon), 5)} for t in top.itertuples()],
             "hotspots": [{"name": h.name, "type": h.hazard_type, "alert": h.alert, "lat": h.lat, "lon": h.lon,
                           "source": h.source_url} for h in hs.itertuples()],
         }
 
-    def roads_geojson(self, mode: str, date: str | None, min_alert: str = "green") -> dict:
+    def roads_geojson(self, mode: str, date: str | None, min_alert: str = "green") -> str:
+        """GeoJSON as compact JSON text (cached as text: far smaller in memory than dicts)."""
         key = (mode, date if mode == "replay" else dt.datetime.now().strftime("%Y%m%d%H"), min_alert)
         cache = self.__dict__.setdefault("_geo_cache", {})
         if key not in cache:
-            if len(cache) > 32:
-                cache.clear()
-            cache[key] = self._roads_geojson(mode, date, min_alert)
+            if len(cache) >= 8:
+                cache.pop(next(iter(cache)))
+            cache[key] = json.dumps(self._roads_geojson(mode, date, min_alert), separators=(",", ":"))
         return cache[key]
 
     def _roads_geojson(self, mode: str, date: str | None, min_alert: str) -> dict:
@@ -225,12 +253,12 @@ class Sentinel:
         d = d[d.alert.isin(keep)]
         feats = [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [round(x, 5), round(y, 5)]},
                   "properties": {"a": a, "s": round(float(s), 3), "n": n if isinstance(n, str) else None}}
-                 for x, y, a, s, n in zip(d.geometry.x, d.geometry.y, d.alert, d.percentile, d.road_name)]
+                 for x, y, a, s, n in zip(d.plon, d.plat, d.alert, d.percentile, d.road_name)]
         return {"type": "FeatureCollection", "features": feats}
 
     def point(self, lat: float, lon: float, mode: str, date: str | None) -> dict:
         d = self.road_alerts(mode, date)
-        dist = (d.geometry.y - lat) ** 2 + ((d.geometry.x - lon) * np.cos(np.deg2rad(lat))) ** 2
+        dist = (d.plat - lat) ** 2 + ((d.plon - lon) * np.cos(np.deg2rad(lat))) ** 2
         i = int(np.argmin(dist.values))
         row = d.iloc[i]
         meters = float(np.sqrt(dist.iloc[i])) * 111_000
@@ -262,8 +290,8 @@ class Sentinel:
             focus = d[d.alert.isin(["red", "orange"])]
         if focus.empty:
             return []
-        u = focus.to_crs("EPSG:32643")
-        xy = np.c_[u.geometry.x, u.geometry.y]
+        fx, fy = _xy(focus.plat.values, focus.plon.values)
+        xy = np.c_[fx, fy]
         lab = DBSCAN(eps=250, min_samples=5).fit_predict(xy)
         # split clusters larger than a crew can cover (~120 segments = ~1.5 km^2) with K-means
         next_id = lab.max() + 1
@@ -274,21 +302,22 @@ class Sentinel:
                 sub = KMeans(k, n_init=5, random_state=0).fit_predict(xy[idx])
                 lab[idx] = next_id + sub
                 next_id += k
-        u = u.assign(zone=lab)
-        named = self.roads[self.roads.road_name.notna()].to_crs("EPSG:32643")
-        orange_all = d[d.alert == "orange"].to_crs("EPSG:32643")
+        u = focus.assign(zone=lab, x=fx, y=fy)
+        named = self.roads[self.roads.road_name.notna()]
+        nx, ny = _xy(named.plat.values, named.plon.values)
+        orange_all = d[d.alert == "orange"]
+        ox, oy = _xy(orange_all.plat.values, orange_all.plon.values)
         zones = []
         for z, g in u[u.zone >= 0].groupby("zone"):
-            cx, cy = g.geometry.x.mean(), g.geometry.y.mean()
+            cx, cy = g.x.mean(), g.y.mean()
             n_red = int((g.alert == "red").sum())
-            n_or = int((((orange_all.geometry.x - cx) ** 2 + (orange_all.geometry.y - cy) ** 2) < 600 ** 2).sum())
+            n_or = int((((ox - cx) ** 2 + (oy - cy) ** 2) < 600 ** 2).sum())
             score = n_red * 2 + n_or
-            dist = (named.geometry.x - cx) ** 2 + (named.geometry.y - cy) ** 2
-            label = named.road_name.iloc[int(np.argmin(dist.values))]
-            c = gpd.GeoSeries(gpd.points_from_xy([cx], [cy]), crs="EPSG:32643").to_crs("EPSG:4326").iloc[0]
+            label = named.road_name.iloc[int(np.argmin((nx - cx) ** 2 + (ny - cy) ** 2))]
+            clat, clon = _lat_lon(cx, cy)
             zones.append({
-                "zone": int(z), "lat": round(float(c.y), 5),
-                "lon": round(float(c.x), 5), "area_label": label,
+                "zone": int(z), "lat": round(float(clat), 5),
+                "lon": round(float(clon), 5), "area_label": label,
                 "red_segments": n_red, "orange_segments": n_or,
                 "priority_score": score,
                 "action": "pump" if n_red >= 10 else "crew" if n_red else "inspect",

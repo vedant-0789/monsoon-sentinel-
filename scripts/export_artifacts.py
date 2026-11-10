@@ -16,13 +16,14 @@ ROOT = Path(__file__).resolve().parents[1]
 FILES = [
     "models/rain_model.joblib",
     "data/processed/rain_features.parquet",
-    "data/processed/road_points_named.parquet",
+    "data/processed/road_points_light.parquet",
     "data/labels/pune_hotspots.csv",
 ]
 
 if __name__ == "__main__":
-    Sentinel()  # makes sure road_points_named.parquet exists
+    Sentinel()  # makes sure road_points_light.parquet exists
     out = ROOT / "deploy" / "artifacts"
+    shutil.rmtree(out / "data" / "processed", ignore_errors=True)
     for f in FILES:
         dst = out / f
         dst.parent.mkdir(parents=True, exist_ok=True)

@@ -1,5 +1,6 @@
 # Runtime dependencies of the deployed API, pinned to the versions the
 # shipped models were trained with (pickled XGBoost/sklearn objects are version-sensitive).
+# No GIS libraries at runtime: road geometry ships as plain lat/lon columns.
 numpy==2.5.4
 pandas==3.1.1
 pyarrow==26.0.1
@@ -8,10 +9,8 @@ requests==2.34.2
 joblib==1.6.0
 scipy==1.18.1
 scikit-learn==1.9.1
-xgboost==3.4.1
-shapely==2.2.0
-pyproj==3.8.0
-geopandas==1.2.0
+# CPU-only build of the same XGBoost release: ~190 MB less memory than the CUDA wheel
+xgboost-cpu==3.4.1
 pydantic==2.14.3
 fastapi==0.162.3
 uvicorn==0.54.0

@@ -1,0 +1,21 @@
+# Render Blueprint: Dashboard -> New -> Blueprint -> pick this repo -> Apply.
+services:
+  - type: web
+    name: monsoon-sentinel-api
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./deploy/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - api/**
+        - src/**
+        - configs/**
+        - deploy/**
+        - requirements-api.txt
+    envVars:
+      - key: MS_CORS
+        value: "*"
