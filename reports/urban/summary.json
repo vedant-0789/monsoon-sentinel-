@@ -21,9 +21,9 @@
     "sink_depth_smooth": 0.0175
   },
   "risk_class_counts": {
-    "low": 12895,
-    "moderate": 5371,
-    "high": 2150,
-    "very high": 1074
+    "low": 12930,
+    "moderate": 5474,
+    "high": 2245,
+    "very high": 1149
   }
 }

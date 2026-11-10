@@ -17,9 +17,9 @@ Monsoon Sentinel answers three questions every monsoon morning:
 | ① Rain module — 24 h heavy-rain forecast + SHAP explanations | ✅ v0.1 |
 | ② Waterlogging module — street susceptibility + daily alerts | ✅ v0.1 |
 | ③ Impact module — roads, population, critical facilities | 🗓 planned |
-| ④ Decision module — RL pump / crew allocation | 🗓 planned |
-| ⑤ Citizen signals — report classifier + photo verification | 🗓 planned |
-| API + dashboard + citizen app | 🗓 planned |
+| ④ Decision module — response zones (DBSCAN) ✅ · RL pump / crew allocation 🗓 | ⏳ partial |
+| ⑤ Citizen signals — reporting ✅ · report classifier + photo verification 🗓 | ⏳ partial |
+| Live system — FastAPI + citizen app + control room (EN / मराठी / हिंदी) | ✅ v0.1 |
 
 ---
 
@@ -98,6 +98,44 @@ Lesson: with ~30 labelled hotspots, an unconstrained 15-feature model overfits; 
 | Three ordinary monsoon days | 0–1 mm | 0.00 | 0 / 32 |
 
 The 2019 miss is a sudden local cloudburst with no large-scale precursor in the morning data — the same city-cell limitation as in the rain module. Fix planned: ingest live NWP / nowcast rainfall so short convective events can trigger alerts.
+
+---
+
+## Live system (v0.1)
+
+```
+Open-Meteo NWP (live)  ─┐                 ┌─ /            citizen app (mobile-first)
+IMD + ERA5 archive      ├─► service.py ─► FastAPI ─┤
+street susceptibility  ─┘   (rain model,   :8077   └─ /control     control room
+hotspot catalogue            risk matrix,
+                             DBSCAN zones)
+```
+
+- **Two modes.** *Live* rebuilds the rain-model features from Open-Meteo's latest model analysis (past 40 days + 2-day forecast) and also raises the likelihood when the NWP forecast itself shows ≥ 35 / ≥ 64.5 mm. *Replay* runs any June–October day of 2001–2024 from the IMD + ERA5 archive through the identical alert logic — used for demos and hindcasts.
+- **Explanations.** Every bulletin carries the top reasons from exact TreeSHAP contributions of the XGBoost model, translated into plain language (EN / MR / HI).
+- **Response zones.** Red street segments are grouped with DBSCAN (250 m), oversized clusters split with K-means, ranked, labelled with the nearest named road and given a recommended action (pre-position pump / station crew / inspect drains).
+- **Citizen reports** are stored in SQLite and appear on the control-room map within 30 s.
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /api/bulletin?mode=live\|replay&date=` | Headline alert, heavy-rain probability, reasons, streets to watch, hotspot status |
+| `GET /api/roads` | GeoJSON alert for ~21,900 road locations |
+| `GET /api/point?lat=&lon=` | Alert + advice for the nearest street |
+| `GET /api/actions` | Ranked response zones |
+| `GET /api/replay-days` | Notable archived days |
+| `POST /api/reports`, `GET /api/reports` | Citizen flooding reports |
+
+Interactive API docs at `http://localhost:8077/docs`.
+
+```bash
+# terminal 1 — API (after running the pipeline steps below)
+uvicorn api.main:app --port 8077
+
+# terminal 2 — web app
+cd web && npm install && npm run dev -- --port 3007
+# open http://localhost:3007/?date=2024-07-25   (citizen)
+#      http://localhost:3007/control?date=2024-07-25   (control room)
+```
 
 ---
 

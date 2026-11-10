@@ -54,7 +54,9 @@ def _era5_cell_features(h: pd.DataFrame, issue_hour: int) -> pd.DataFrame:
     return f.reset_index(drop=True)
 
 
-def build(cfg: Config, imd_df: pd.DataFrame, era5_df: pd.DataFrame) -> pd.DataFrame:
+def build(cfg: Config, imd_df: pd.DataFrame, era5_df: pd.DataFrame,
+          training: bool = True) -> pd.DataFrame:
+    """training=False keeps rows without an observed target (live forecasting, any month)."""
     issue_hour = cfg["issue_hour_utc"]
     th = cfg["thresholds"]["heavy"]
 
@@ -110,8 +112,9 @@ def build(cfg: Config, imd_df: pd.DataFrame, era5_df: pd.DataFrame) -> pd.DataFr
     df["elevation"] = [elev[(a, b)] for a, b in zip(df["lat"], df["lon"])]
 
     # ---- target -----------------------------------------------------------
-    df = df[df["month"].isin(cfg["target_months"])]
-    df = df.dropna(subset=["rain_mm"])
+    if training:
+        df = df[df["month"].isin(cfg["target_months"])]
+        df = df.dropna(subset=["rain_mm"])
     df["y_heavy"] = (df["rain_mm"] >= th).astype(int)
     return df.reset_index(drop=True)
 

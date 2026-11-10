@@ -25,3 +25,7 @@ Thumbs.db
 # Node (frontend, later)
 node_modules/
 .next/
+data/reports.sqlite
+web/public/maplibre-gl-worker.mjs
+web/.claude/
+.claude/

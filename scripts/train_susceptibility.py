@@ -173,10 +173,11 @@ def main():
     est, F = models()[best]
     final = fit(est, X[F], y, w)
     # bootstrap ensemble -> uncertainty of each location's score
-    boots = []
+    boots, boot_models = [], []
     for b in range(30):
         idx = rng.choice(len(y), len(y), replace=True)
         mb = fit(models()[best][0], X[F].iloc[idx], y[idx], w[idx])
+        boot_models.append(mb)
         boots.append(mb.predict_proba(X[F])[:, 1])
     boots = np.array(boots)
     score = final.predict_proba(X[F])[:, 1]
@@ -186,6 +187,30 @@ def main():
     res["percentile"] = pct
     res["p10"] = np.quantile(boots, 0.1, axis=0)
     res["p90"] = np.quantile(boots, 0.9, axis=0)
+
+    # Road locations near hotspots were held out of training (ambiguous labels) but the
+    # product map must cover them: score them now with the final model.
+    near_file = cfg.path("processed") / "urban_points_near_hotspots.parquet"
+    if near_file.exists():
+        near = gpd.read_parquet(near_file)
+    else:
+        cand = uf.road_candidates(cfg, roads)
+        hot = res[res.label == 1]
+        near = cand[cand.geometry.apply(lambda p: hot.distance(p).min() < 300)].copy()
+        near = pd.concat([near, uf.build(cfg, near, roads, ww)], axis=1)
+        near.to_parquet(near_file)
+    Xn = near[F].astype(float).fillna(pts[F].median())
+    sn = final.predict_proba(Xn)[:, 1]
+    extra = near[["geometry", "highway"]].assign(
+        label=0, name=None, susceptibility=sn,
+        p10=np.quantile([mb_.predict_proba(Xn)[:, 1] for mb_ in boot_models], 0.1, axis=0),
+        p90=np.quantile([mb_.predict_proba(Xn)[:, 1] for mb_ in boot_models], 0.9, axis=0))
+    # percentile relative to the training road locations
+    unl = np.sort(score[y == 0])
+    extra["percentile"] = np.searchsorted(unl, sn) / len(unl)
+    res = pd.concat([res, extra[res.columns]], ignore_index=True)
+    res = gpd.GeoDataFrame(res, geometry="geometry", crs=uf.UTM)
+    pct = res.percentile.values
     res["risk_class"] = pd.cut(pct, [0, 0.6, 0.85, 0.95, 1.0], labels=["low", "moderate", "high", "very high"],
                                include_lowest=True)
     res = res.to_crs("EPSG:4326")
