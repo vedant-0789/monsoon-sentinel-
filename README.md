@@ -2,6 +2,9 @@
 
 **Explainable AI early-warning platform for heavy rain and street-level waterlogging in Indian cities — Pune pilot.**
 
+🌐 **Live demo:** [citizen app](https://monsoon-sentinel-zeta.vercel.app/?date=2024-07-25) · [control room](https://monsoon-sentinel-zeta.vercel.app/control?date=2024-07-25) · [API docs](https://monsoon-sentinel-api.onrender.com/docs)
+<sub>The demo links replay the 25 July 2024 Pune flood. Switch to **Live** for today's forecast. The free API sleeps when idle, so the first load can take about a minute.</sub>
+
 Monsoon Sentinel answers three questions every monsoon morning:
 
 1. **Will it rain heavily?** — probability of IMD "heavy rain" (≥ 64.5 mm / 24 h) for each grid cell over Pune and its Western Ghats catchment, with a plain-language explanation of *why*.
