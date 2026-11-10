@@ -33,6 +33,10 @@ def db() -> sqlite3.Connection:
     con.execute("""CREATE TABLE IF NOT EXISTS reports (
         id INTEGER PRIMARY KEY AUTOINCREMENT, created_at TEXT, lat REAL, lon REAL,
         category TEXT, depth TEXT, note TEXT, lang TEXT)""")
+    cols = {r[1] for r in con.execute("PRAGMA table_info(reports)")}
+    for col, typ in [("auto_category", "TEXT"), ("urgent", "INTEGER DEFAULT 0")]:
+        if col not in cols:  # lightweight migration for databases created by v0.1
+            con.execute(f"ALTER TABLE reports ADD COLUMN {col} {typ}")
     return con
 
 
@@ -114,6 +118,29 @@ def actions(mode: Mode = "live", date: str | None = None, limit: int = Query(10,
         raise HTTPException(404, str(e))
 
 
+@app.get("/api/history")
+def history(mode: Mode = "live", date: str | None = None, days: int = Query(14, ge=3, le=30)):
+    """City heavy-rain probability (replay) and rain for the days leading up to the selected day."""
+    _guard(mode, date)
+    return STATE["s"].history(mode, date, days)
+
+
+class ClassifyIn(BaseModel):
+    text: str = Field(..., max_length=500)
+
+
+@app.post("/api/classify")
+def classify(body: ClassifyIn):
+    """Naive Bayes suggestion of report category and urgency from free text (EN / MR / HI / Hinglish)."""
+    return STATE["s"].classify_report(body.text) or {}
+
+
+@app.get("/api/model-card")
+def model_card():
+    """Benchmarks and evaluation details of every model in the system."""
+    return STATE["s"].model_card()
+
+
 @app.get("/api/replay-days")
 def replay_days():
     return STATE["s"].replay_days()
@@ -130,21 +157,26 @@ class Report(BaseModel):
 
 @app.post("/api/reports", status_code=201)
 def add_report(r: Report):
+    auto = STATE["s"].classify_report(r.note) if r.note else None
+    urgent = bool(auto and auto["urgent"]) or r.depth == "waist"
     con = db()
     with con:
         cur = con.execute(
-            "INSERT INTO reports (created_at, lat, lon, category, depth, note, lang) VALUES (?,?,?,?,?,?,?)",
-            (dt.datetime.now(dt.timezone.utc).isoformat(), r.lat, r.lon, r.category, r.depth, r.note, r.lang))
+            "INSERT INTO reports (created_at, lat, lon, category, depth, note, lang, auto_category, urgent) "
+            "VALUES (?,?,?,?,?,?,?,?,?)",
+            (dt.datetime.now(dt.timezone.utc).isoformat(), r.lat, r.lon, r.category, r.depth, r.note, r.lang,
+             auto["category"] if auto else None, int(urgent)))
     con.close()
-    return {"id": cur.lastrowid, "status": "received"}
+    return {"id": cur.lastrowid, "status": "received", "urgent": urgent, "auto": auto}
 
 
 @app.get("/api/reports")
 def list_reports(hours: int = Query(48, ge=1, le=24 * 30)):
     since = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=hours)).isoformat()
     con = db()
-    rows = con.execute("SELECT id, created_at, lat, lon, category, depth, note, lang FROM reports "
-                       "WHERE created_at >= ? ORDER BY created_at DESC LIMIT 500", (since,)).fetchall()
+    rows = con.execute("SELECT id, created_at, lat, lon, category, depth, note, lang, auto_category, urgent "
+                       "FROM reports WHERE created_at >= ? ORDER BY urgent DESC, created_at DESC LIMIT 500",
+                       (since,)).fetchall()
     con.close()
-    keys = ["id", "created_at", "lat", "lon", "category", "depth", "note", "lang"]
+    keys = ["id", "created_at", "lat", "lon", "category", "depth", "note", "lang", "auto_category", "urgent"]
     return [dict(zip(keys, r)) for r in rows]

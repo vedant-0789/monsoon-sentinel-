@@ -33,6 +33,7 @@ export default function TopBar() {
   const nav = [
     { href: "/", label: t("citizen") },
     { href: "/control", label: t("control") },
+    { href: "/about", label: t("howItWorks") },
   ];
   return (
     <header className="z-20 flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-zinc-200/80 bg-white/90 px-4 py-2.5 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/90">
@@ -48,7 +49,7 @@ export default function TopBar() {
         {nav.map((n) => (
           <Link
             key={n.href}
-            href={n.href + (date ? `?date=${date}` : "")}
+            href={n.href + (date && n.href !== "/about" ? `?date=${date}` : "")}
             className={`rounded-md px-3 py-1 font-medium transition ${
               path === n.href ? "bg-white shadow-sm dark:bg-zinc-700" : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
             }`}

@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { api } from "./api";
 import { makeT } from "./i18n";
-import type { Bulletin, Lang, Mode, PointInfo, ReplayDay } from "./types";
+import type { Bulletin, HistoryPoint, Lang, Mode, PointInfo, ReplayDay } from "./types";
 
 interface Picked {
   lat: number;
@@ -25,7 +25,9 @@ interface Ctx {
   bulletin: Bulletin | null;
   roads: GeoJSON.FeatureCollection | null;
   loading: boolean;
+  slow: boolean;
   error: string | null;
+  history: HistoryPoint[];
   picked: Picked | null;
   pick: (lat: number, lon: number) => void;
   clearPick: () => void;
@@ -45,6 +47,8 @@ export function SentinelProvider({ children }: { children: React.ReactNode }) {
   const [bulletin, setBulletin] = useState<Bulletin | null>(null);
   const [roads, setRoads] = useState<GeoJSON.FeatureCollection | null>(null);
   const [loading, setLoading] = useState(true);
+  const [slow, setSlow] = useState(false);
+  const [history, setHistory] = useState<HistoryPoint[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [picked, setPicked] = useState<Picked | null>(null);
   const [reportsVersion, setReportsVersion] = useState(0);
@@ -109,6 +113,9 @@ export function SentinelProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let alive = true;
+    // free hosting sleeps when idle: tell people the first load may take a while
+    const slowTimer = setTimeout(() => alive && setSlow(true), 4000);
+    api.history(mode, date).then((h) => alive && setHistory(h)).catch(() => alive && setHistory([]));
     Promise.all([api.bulletin(mode, date), api.roads(mode, date)])
       .then(([b, r]) => {
         if (!alive) return;
@@ -116,9 +123,16 @@ export function SentinelProvider({ children }: { children: React.ReactNode }) {
         setRoads(r);
       })
       .catch((e: Error) => alive && setError(e.message))
-      .finally(() => alive && setLoading(false));
+      .finally(() => {
+        clearTimeout(slowTimer);
+        if (alive) {
+          setLoading(false);
+          setSlow(false);
+        }
+      });
     return () => {
       alive = false;
+      clearTimeout(slowTimer);
     };
   }, [mode, date]);
 
@@ -126,10 +140,10 @@ export function SentinelProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo<Ctx>(
     () => ({
-      lang, setLang, t: makeT(lang), mode, date, setLive, setReplay, replayDays, bulletin, roads, loading, error,
+      lang, setLang, t: makeT(lang), mode, date, setLive, setReplay, replayDays, bulletin, roads, loading, slow, error, history,
       picked, pick, clearPick: () => setPicked(null), reportsVersion, bumpReports: () => setReportsVersion((v) => v + 1),
     }),
-    [lang, setLang, mode, date, setLive, setReplay, replayDays, bulletin, roads, loading, error, picked, pick, reportsVersion],
+    [lang, setLang, mode, date, setLive, setReplay, replayDays, bulletin, roads, loading, slow, error, history, picked, pick, reportsVersion],
   );
   return <SentinelContext.Provider value={value}>{children}</SentinelContext.Provider>;
 }

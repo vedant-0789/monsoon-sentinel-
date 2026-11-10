@@ -1,0 +1,969 @@
+text,category,urgent,lang,template
+"पानी की सप्लाई बंद, कर्वे रोड के पास",other,0,hi,92
+"near Wakad, gutter clogged with plastic",blocked_drain,0,en,28
+"in Deccan, road flooded, cars stuck in the water.",waterlogging,1,en,2
+"road band kar diya, Hadapsar mein, turant madad bhejo",road_closed,1,hinglish,67
+"Katraj pe, gutter jam ho gaya",blocked_drain,0,hinglish,35
+"Kondhwa:, storm water drain blocked",blocked_drain,0,en,27
+"big pothole, at Karve Road, since morning",other,0,en,77
+"on Karve Road, gutter clogged with plastic",blocked_drain,0,en,28
+"गटार तुंबले आहे, एकता नगर जवळ, गाड्या अडकल्या",blocked_drain,1,mr,38
+"गटर चोक हो गया, कोथरूड के पास, ट्रैफिक धीमा.",blocked_drain,0,hi,45
+"street under water, near Yerawada, traffic is slow",waterlogging,0,en,4
+"बानेर में, स्ट्रीट लाइट खराब, ध्यान से जाएँ!!",other,0,hi,89
+"ड्रेनेज जाम झाले, कोथरूड मध्ये.",blocked_drain,0,mr,41
+"tree fell on the road, in Karve Road, traffic is slow",tree_fall,0,en,48
+"हडपसर पर, पुल पानी में डूब गया, तुरंत मदद भेजें pls",road_closed,1,hi,74
+"गटारात कचरा अडकला, कर्वे रोड जवळ asap",blocked_drain,0,mr,42
+"Swargate mein, pul paani mein doob gaya, gaadi band pad gayi",road_closed,1,hinglish,68
+"रस्त्यावर मोठा खड्डा, हडपसर मध्ये",other,0,mr,85
+"पानी की सप्लाई बंद, कोथरूड में, ट्रैफिक धीमा pls",other,0,hi,92
+"स्वारगेट येथे, रस्ता बंद केला आहे, काळजी घ्या",road_closed,0,mr,72
+"Sahakar Nagar:, huge puddle across the road",waterlogging,0,en,7
+"in Kondhwa, tree uprooted, be careful asap",tree_fall,0,en,49
+"traffic diverted, road blocked, at Swargate, water entering houses",road_closed,1,en,66
+"drain is choked, at Sinhagad Road, traffic is slow asap",blocked_drain,0,en,26
+"Sinhagad Road pe, road band kar diya, log phans gaye",road_closed,1,hinglish,67
+"सड़क पर पानी भर गया, सिंहगढ़ रोड के पास, ध्यान से जाएँ.",waterlogging,0,hi,21
+"culvert blocked with garbage, at Baner, knee deep water",blocked_drain,1,en,31
+"वारजे मध्ये, झाड उन्मळून पडले",tree_fall,0,mr,57
+"कचरा उचलला नाही, स्वारगेट मध्ये, काळजी घ्या",other,0,mr,86
+"कात्रज में, पेड़ गिर गया",tree_fall,0,hi,59
+"झाड उन्मळून पडले, धनकवडी जवळ, तातडीने मदत पाठवा",tree_fall,1,mr,57
+"fallen tree blocking the lane, on Katraj, be careful",tree_fall,0,en,52
+"हडपसर में, सड़क पानी में डूबी",waterlogging,0,hi,23
+"स्वारगेट येथे, झाड उन्मळून पडले, वाहतूक संथ!!",tree_fall,0,mr,57
+"रस्ता वाहतुकीसाठी बंद, धनकवडी मध्ये asap",road_closed,0,mr,70
+"कात्रज में, पानी की सप्लाई बंद, ध्यान से जाएँ.",other,0,hi,92
+"चौराहे पर पानी जमा, कोथरूड के पास, ट्रैफिक धीमा",waterlogging,0,hi,24
+"at Aundh, fallen tree blocking the lane, ambulance cannot pass.",tree_fall,1,en,52
+"रस्ता बंद केला आहे, कोथरूड येथे, काळजी घ्या",road_closed,0,mr,72
+"झाड रस्त्यावर पडले, सिंहगड रोड जवळ, काळजी घ्या",tree_fall,0,mr,56
+"streetlight not working, Katraj:",other,0,en,76
+"स्वारगेट जवळ, झाड रस्त्यावर पडले",tree_fall,0,mr,56
+"storm water drain blocked, at Sinhagad Road, please send help urgently",blocked_drain,1,en,27
+"धनकवडी जवळ, झाड रस्त्यावर पडले, घरात पाणी शिरले",tree_fall,1,mr,56
+"Baner ke paas, nala overflow ho raha, dhyan se jao.",blocked_drain,0,hinglish,36
+"कर्वे रोड येथे, गटार तुंबले आहे, तातडीने मदत पाठवा",blocked_drain,1,mr,38
+"डाल टूट कर गिरी, कर्वे रोड के पास",tree_fall,0,hi,61
+"नाली में कचरा फँसा, स्वारगेट के पास, तुरंत मदद भेजें",blocked_drain,1,hi,47
+"स्वारगेट येथे, गटारात कचरा अडकला, वाहतूक संथ",blocked_drain,0,mr,42
+"कर्वे रोड में, चौराहे पर पानी जमा, तुरंत मदद भेजें",waterlogging,1,hi,24
+"Hadapsar mein, sadak pe paani hi paani",waterlogging,0,hinglish,13
+"रस्त्यावर पाणी साचले आहे, कोथरूड मध्ये, वाहतूक संथ",waterlogging,0,mr,16
+"gutter clogged with plastic, near Sinhagad Road!!",blocked_drain,0,en,28
+"Baner mein, nala overflow ho raha",blocked_drain,0,hinglish,36
+"चौराहे पर पानी जमा, कर्वे रोड में",waterlogging,0,hi,24
+"stray dogs menace, Sinhagad Road:",other,0,en,81
+"वारजे मध्ये, रस्ता वाहतुकीसाठी बंद, वाहतूक संथ",road_closed,0,mr,70
+"Baner ke paas, nala overflow ho raha",blocked_drain,0,hinglish,36
+"रास्ता बंद है, सिंहगढ़ रोड के पास, लोग फँसे हैं",road_closed,1,hi,75
+"पानी की सप्लाई बंद, स्वारगेट के पास",other,0,hi,92
+"on Kondhwa, tree collapsed, since morning asap",tree_fall,0,en,51
+"कात्रज मध्ये, पाणीपुरवठा बंद, काळजी घ्या",other,0,mr,88
+"road pe paani jama hai, Katraj pe asap",waterlogging,0,hinglish,12
+"near Katraj, sewer backing up, waist deep water.",blocked_drain,1,en,33
+"Sinhagad Road ke paas, gutter jam ho gaya",blocked_drain,0,hinglish,35
+"Baner pe, naali band hai, ghar mein paani ghus gaya",blocked_drain,1,hinglish,34
+"कात्रज पर, जलभराव हो गया",waterlogging,0,hi,22
+"कर्वे रोड के पास, नाला उफान पर है, ट्रैफिक धीमा pls",blocked_drain,0,hi,44
+"पुल पानी में डूब गया, कोथरूड के पास",road_closed,0,hi,74
+"daal toot ke giri, Katraj mein",tree_fall,0,hinglish,54
+"near Sinhagad Road, chowk is waterlogged, be careful.",waterlogging,0,en,10
+"रस्ता बंद केला आहे, हडपसर मध्ये, लोक अडकले",road_closed,1,mr,72
+"बानेर के पास, गली में पानी भरा, ध्यान से जाएँ",waterlogging,0,hi,25
+"lane is flooded, on Karve Road, knee deep water asap",waterlogging,1,en,9
+"सड़क बंद कर दी गई, कोथरूड पर, लोग फँसे हैं pls",road_closed,1,hi,73
+"drain is choked, near Aundh, since morning",blocked_drain,0,en,26
+"road closed by police, near Hadapsar, knee deep water",road_closed,1,en,62
+"एकता नगर येथे, पूल पाण्याखाली गेला, काळजी घ्या",road_closed,0,mr,71
+"Warje pe, road band kar diya, dhyan se jao asap",road_closed,0,hinglish,67
+"धनकवडी जवळ, ड्रेनेज जाम झाले, गाड्या अडकल्या",blocked_drain,1,mr,41
+"कर्वे रोड मध्ये, रस्त्यावर पाणी साचले आहे",waterlogging,0,mr,16
+"on Aundh, drain is choked, be careful",blocked_drain,0,en,26
+"rasta band hai, Katraj pe, ghutno tak paani",road_closed,1,hinglish,69
+"Baner ke paas, jalbharav ho gaya",waterlogging,0,hinglish,14
+"रस्ता पाण्याखाली, कोथरूड येथे, घरात पाणी शिरले",waterlogging,1,mr,18
+"सड़क बंद कर दी गई, हडपसर के पास, लोग फँसे हैं pls",road_closed,1,hi,73
+"on Baner, water standing on the road, be careful",waterlogging,0,en,8
+"no water supply, at Baner",other,0,en,79
+"stray dogs menace, near Aundh, be careful",other,0,en,81
+"हडपसर में, पेड़ गिर गया, ट्रैफिक धीमा",tree_fall,0,hi,59
+"वारजे पर, चौराहे पर पानी जमा, तुरंत मदद भेजें asap",waterlogging,1,hi,24
+"road closed by police, at Kondhwa, be careful",road_closed,0,en,62
+"causeway submerged, near Kothrud, traffic is slow.",road_closed,0,en,64
+"in Dhankawadi, tree fell on the road, waist deep water asap",tree_fall,1,en,48
+"near Sahakar Nagar, stray dogs menace",other,0,en,81
+"दिवे बंद आहेत, स्वारगेट येथे",other,0,mr,87
+"in Ekta Nagar, tree uprooted, people trapped",tree_fall,1,en,49
+"chamber se paani ulta aa raha, Swargate pe, turant madad bhejo",blocked_drain,1,hinglish,37
+"पानी की सप्लाई बंद, सिंहगढ़ रोड में, ट्रैफिक धीमा",other,0,hi,92
+"सड़क बंद कर दी गई, धनकवड़ी पर",road_closed,0,hi,73
+"ड्रेनेज जाम झाले, हडपसर मध्ये, वाहतूक संथ pls",blocked_drain,0,mr,41
+"barricades put up, road shut, near Ekta Nagar, since morning",road_closed,0,en,65
+"स्वारगेट पर, मैनहोल से पानी बह रहा, गाड़ियाँ फँसी हैं",blocked_drain,1,hi,46
+"drainage chamber jammed, near Sahakar Nagar, since morning.",blocked_drain,0,en,32
+"road flooded, near Baner, since morning",waterlogging,0,en,2
+"सिंहगढ़ रोड में, रास्ता बंद है, ध्यान से जाएँ",road_closed,0,hi,75
+"Karve Road mein, road pe paani jama hai, gaadi band pad gayi",waterlogging,1,hinglish,12
+"road band kar diya, Sinhagad Road ke paas, turant madad bhejo",road_closed,1,hinglish,67
+"on Wakad, big pothole, since morning",other,0,en,77
+"Deccan:, garbage not collected",other,0,en,78
+"गली में पानी भरा, कर्वे रोड पर, ध्यान से जाएँ",waterlogging,0,hi,25
+"on Deccan, streetlight not working, traffic is slow",other,0,en,76
+"sewer backing up, near Sinhagad Road, traffic is slow",blocked_drain,0,en,33
+"हडपसर पर, पेड़ गिर गया, घुटनों तक पानी",tree_fall,1,hi,59
+"Sinhagad Road mein, chamber se paani ulta aa raha, dhyan se jao",blocked_drain,0,hinglish,37
+"chamber se paani ulta aa raha, Hadapsar ke paas, dhyan se jao",blocked_drain,0,hinglish,37
+"गली में पानी भरा, सिंहगढ़ रोड में, तुरंत मदद भेजें",waterlogging,1,hi,25
+"flooding on the main road, in Sinhagad Road, traffic is slow!!",waterlogging,0,en,5
+"on Karve Road, drain is choked, traffic is slow",blocked_drain,0,en,26
+"street under water, Aundh:, be careful",waterlogging,0,en,4
+"Kothrud pe, road pe paani jama hai, gaadi band pad gayi pls",waterlogging,1,hinglish,12
+"ड्रेनेज जाम झाले, वारजे जवळ, वाहतूक संथ",blocked_drain,0,mr,41
+"drainage chamber jammed, near Sinhagad Road, be careful pls",blocked_drain,0,en,32
+"कर्वे रोड मध्ये, पूल पाण्याखाली गेला, गुडघाभर पाणी pls",road_closed,1,mr,71
+"पूल पाण्याखाली गेला, स्वारगेट मध्ये.",road_closed,0,mr,71
+"रस्ता बंद केला आहे, एकता नगर जवळ, काळजी घ्या",road_closed,0,mr,72
+"पानी की सप्लाई बंद, कर्वे रोड में",other,0,hi,92
+"street under water, on Wakad, be careful.",waterlogging,0,en,4
+"stray dogs menace, on Kondhwa, since morning!!",other,0,en,81
+"stray dogs menace, near Deccan, since morning",other,0,en,81
+"धनकवड़ी में, नाली जाम है",blocked_drain,0,hi,43
+"tree fell on the road, near Swargate, be careful",tree_fall,0,en,48
+"near Karve Road, culvert blocked with garbage, traffic is slow",blocked_drain,0,en,31
+"causeway submerged, at Yerawada, since morning",road_closed,0,en,64
+"कर्वे रोड के पास, पानी की सप्लाई बंद, ट्रैफिक धीमा asap",other,0,hi,92
+"हडपसर जवळ, रस्त्यावर पाणी साचले आहे, घरात पाणी शिरले",waterlogging,1,mr,16
+"धनकवड़ी में, पानी की सप्लाई बंद, ट्रैफिक धीमा",other,0,hi,92
+"स्वारगेट के पास, सड़क बंद कर दी गई, घुटनों तक पानी",road_closed,1,hi,73
+"धनकवड़ी पर, पेड़ उखड़ गया, घरों में पानी घुसा.",tree_fall,1,hi,60
+"दिवे बंद आहेत, कर्वे रोड येथे",other,0,mr,87
+"बानेर में, पुल पानी में डूब गया, गाड़ियाँ फँसी हैं",road_closed,1,hi,74
+"कात्रज जवळ, फांदी तुटून पडली, गाड्या अडकल्या",tree_fall,1,mr,58
+"on Hadapsar, tree uprooted, traffic is slow pls",tree_fall,0,en,49
+"बानेर में, पेड़ उखड़ गया, घुटनों तक पानी",tree_fall,1,hi,60
+"सड़क पर पानी भर गया, कोथरूड के पास, ट्रैफिक धीमा asap",waterlogging,0,hi,21
+"सड़क बंद कर दी गई, कर्वे रोड में, लोग फँसे हैं",road_closed,1,hi,73
+"नाली जाम है, कोथरूड में, लोग फँसे हैं",blocked_drain,1,hi,43
+"कोथरूड मध्ये, रस्त्यावर पाणी साचले आहे, गुडघाभर पाणी pls",waterlogging,1,mr,16
+"रस्ता बंद केला आहे, हडपसर मध्ये asap",road_closed,0,mr,72
+"कोथरूड में, नाली जाम है, घरों में पानी घुसा",blocked_drain,1,hi,43
+"bada khadda hai, Baner mein, dhyan se jao pls",other,0,hinglish,83
+"Kothrud pe, gutter jam ho gaya, turant madad bhejo",blocked_drain,1,hinglish,35
+"कर्वे रोड के पास, गली में पानी भरा, ध्यान से जाएँ",waterlogging,0,hi,25
+"Karve Road pe, road band kar diya pls",road_closed,0,hinglish,67
+"वारजे जवळ, नाला ओसंडून वाहत आहे, काळजी घ्या!!",blocked_drain,0,mr,39
+"कर्वे रोड में, स्ट्रीट लाइट खराब pls",other,0,hi,89
+"Baner mein, light nahi hai, dhyan se jao!!",other,0,hinglish,82
+"chamber se paani ulta aa raha, Hadapsar mein, dhyan se jao",blocked_drain,0,hinglish,37
+"नाला ओसंडून वाहत आहे, कोथरूड येथे, तातडीने मदत पाठवा",blocked_drain,1,mr,39
+"near Kothrud, water logging, be careful",waterlogging,0,en,1
+"गटर चोक हो गया, वारजे पर, घरों में पानी घुसा",blocked_drain,1,hi,45
+"वारजे में, पेड़ उखड़ गया, ट्रैफिक धीमा",tree_fall,0,hi,60
+"दिवे बंद आहेत, सिंहगड रोड मध्ये",other,0,mr,87
+"नाली में कचरा फँसा, स्वारगेट में, ध्यान से जाएँ",blocked_drain,0,hi,47
+"पाणीपुरवठा बंद, स्वारगेट जवळ",other,0,mr,88
+"रस्त्यावर पाणी साचले आहे, एकता नगर येथे",waterlogging,0,mr,16
+"पूल पाण्याखाली गेला, धनकवडी मध्ये, वाहतूक संथ pls",road_closed,0,mr,71
+"कचरा उचलला नाही, कोथरूड येथे, वाहतूक संथ",other,0,mr,86
+"Katraj pe, bada ped ukhad gaya, dhyan se jao",tree_fall,0,hinglish,55
+"गटर चोक हो गया, कात्रज के पास, ट्रैफिक धीमा",blocked_drain,0,hi,45
+"कोथरूड में, रास्ता बंद है, तुरंत मदद भेजें",road_closed,1,hi,75
+"हडपसर के पास, गली में पानी भरा, घरों में पानी घुसा",waterlogging,1,hi,25
+"Sinhagad Road mein, naali band hai",blocked_drain,0,hinglish,34
+"कर्वे रोड के पास, मैनहोल से पानी बह रहा, घरों में पानी घुसा",blocked_drain,1,hi,46
+"नाली में कचरा फँसा, वारजे में, गाड़ियाँ फँसी हैं!!",blocked_drain,1,hi,47
+"bada khadda hai, Swargate ke paas, dhyan se jao!!",other,0,hinglish,83
+"sadak pe paani hi paani, Hadapsar pe, dhyan se jao!!",waterlogging,0,hinglish,13
+"कात्रज येथे, झाड उन्मळून पडले, तातडीने मदत पाठवा",tree_fall,1,mr,57
+"flooding on the main road, at Hadapsar, since morning asap",waterlogging,0,en,5
+"Karve Road pe, kachra nahi uthaya, dhyan se jao",other,0,hinglish,84
+"रस्त्यावर मोठा खड्डा, बाणेर जवळ pls",other,0,mr,85
+"वारजे येथे, पाणी साचले, गुडघाभर पाणी",waterlogging,1,mr,17
+"हडपसर जवळ, पाणी साचले",waterlogging,0,mr,17
+"near Sahakar Nagar, rain water accumulated, traffic is slow",waterlogging,0,en,6
+"at Deccan, nala overflowing, be careful",blocked_drain,0,en,30
+"हडपसर में, पानी की सप्लाई बंद!!",other,0,hi,92
+"tree collapsed, on Kondhwa, be careful!!",tree_fall,0,en,51
+"in Ekta Nagar, drain is choked, since morning!!",blocked_drain,0,en,26
+"फांदी तुटून पडली, स्वारगेट येथे, काळजी घ्या",tree_fall,0,mr,58
+"Kothrud mein, rasta band hai pls",road_closed,0,hinglish,69
+"रस्ता वाहतुकीसाठी बंद, बाणेर जवळ",road_closed,0,mr,70
+"near Katraj, water has collected on the road",waterlogging,0,en,3
+"स्वारगेट जवळ, नाला ओसंडून वाहत आहे, काळजी घ्या",blocked_drain,0,mr,39
+"on Katraj, bridge closed, knee deep water",road_closed,1,en,63
+"धनकवडी मध्ये, रस्त्यावर तळे झाले",waterlogging,0,mr,20
+"Swargate pe, gutter jam ho gaya",blocked_drain,0,hinglish,35
+"drainage chamber jammed, in Sinhagad Road, since morning",blocked_drain,0,en,32
+"water standing on the road, near Karve Road, be careful",waterlogging,0,en,8
+"chowk is waterlogged, near Wakad, please send help urgently",waterlogging,1,en,10
+"bridge closed, at Ekta Nagar, be careful.",road_closed,0,en,63
+"रस्त्यावर तळे झाले, बाणेर जवळ, लोक अडकले pls",waterlogging,1,mr,20
+"चौकात पाणी साचले, हडपसर येथे, वाहतूक संथ",waterlogging,0,mr,19
+"streetlight not working, in Sahakar Nagar asap",other,0,en,76
+"हडपसर जवळ, पाणीपुरवठा बंद, वाहतूक संथ asap",other,0,mr,88
+"सड़क पर पानी भर गया, वारजे के पास, ध्यान से जाएँ",waterlogging,0,hi,21
+"drainage chamber jammed, at Deccan, be careful",blocked_drain,0,en,32
+"पानी की सप्लाई बंद, सिंहगढ़ रोड के पास, ट्रैफिक धीमा pls",other,0,hi,92
+"sewer backing up, near Karve Road, be careful",blocked_drain,0,en,33
+"near Katraj, nala overflowing, please send help urgently asap",blocked_drain,1,en,30
+"at Katraj, water logging, ambulance cannot pass",waterlogging,1,en,1
+"Katraj mein, bada khadda hai, dhyan se jao!!",other,0,hinglish,83
+"कात्रज येथे, चेंबर तुंबले, वाहतूक संथ",blocked_drain,0,mr,40
+"जलभराव हो गया, कोथरूड के पास",waterlogging,0,hi,22
+"स्ट्रीट लाइट खराब, कर्वे रोड पर, ट्रैफिक धीमा",other,0,hi,89
+"Karve Road ke paas, paani bhar gaya, dhyan se jao",waterlogging,0,hinglish,11
+"चेंबर तुंबले, स्वारगेट मध्ये",blocked_drain,0,mr,40
+"near Kondhwa, chowk is waterlogged, since morning",waterlogging,0,en,10
+"सिंहगड रोड येथे, गटारात कचरा अडकला, काळजी घ्या",blocked_drain,0,mr,42
+"fallen tree blocking the lane, in Deccan, since morning",tree_fall,0,en,52
+"Hadapsar ke paas, bada ped ukhad gaya",tree_fall,0,hinglish,55
+"रस्त्यावर मोठा खड्डा, वारजे जवळ!!",other,0,mr,85
+"near Warje, big branch broken and fallen",tree_fall,0,en,50
+"traffic diverted, road blocked, in Katraj, be careful asap",road_closed,0,en,66
+"on Karve Road, water logging, be careful",waterlogging,0,en,1
+"नाली में कचरा फँसा, स्वारगेट के पास, घुटनों तक पानी.",blocked_drain,1,hi,47
+"नाला उफान पर है, वारजे के पास",blocked_drain,0,hi,44
+"कोथरूड में, सड़क पानी में डूबी, ध्यान से जाएँ",waterlogging,0,hi,23
+"वारजे येथे, पाणीपुरवठा बंद, काळजी घ्या.",other,0,mr,88
+"at Aundh, stray dogs menace, since morning",other,0,en,81
+"Warje mein, light nahi hai",other,0,hinglish,82
+"वारजे येथे, गटारात कचरा अडकला, लोक अडकले",blocked_drain,1,mr,42
+"धनकवडी मध्ये, रस्त्यावर पाणी साचले आहे, गाड्या अडकल्या",waterlogging,1,mr,16
+"storm water drain blocked, at Karve Road, ambulance cannot pass.",blocked_drain,1,en,27
+"वारजे के पास, डाल टूट कर गिरी, ध्यान से जाएँ",tree_fall,0,hi,61
+"पानी की सप्लाई बंद, कोथरूड पर, ध्यान से जाएँ",other,0,hi,92
+"nala overflowing, in Yerawada",blocked_drain,0,en,30
+"ped gir gaya, Kothrud ke paas, dhyan se jao",tree_fall,0,hinglish,53
+"कचरा नहीं उठाया, स्वारगेट पर",other,0,hi,91
+"मैनहोल से पानी बह रहा, कर्वे रोड के पास, घरों में पानी घुसा",blocked_drain,1,hi,46
+"रस्ता बंद केला आहे, बाणेर मध्ये, काळजी घ्या asap",road_closed,0,mr,72
+"स्ट्रीट लाइट खराब, हडपसर में",other,0,hi,89
+"Kothrud ke paas, bada ped ukhad gaya, dhyan se jao",tree_fall,0,hinglish,55
+"huge puddle across the road, near Warje, waist deep water",waterlogging,1,en,7
+"पाणी साचले, एकता नगर मध्ये",waterlogging,0,mr,17
+"डाल टूट कर गिरी, कर्वे रोड के पास, ध्यान से जाएँ",tree_fall,0,hi,61
+"nala overflow ho raha, Kothrud pe, dhyan se jao",blocked_drain,0,hinglish,36
+"गटर चोक हो गया, कोथरूड के पास, गाड़ियाँ फँसी हैं asap",blocked_drain,1,hi,45
+"गटर चोक हो गया, कात्रज के पास",blocked_drain,0,hi,45
+"रास्ता बंद है, स्वारगेट पर, घरों में पानी घुसा",road_closed,1,hi,75
+"fallen tree blocking the lane, near Hadapsar, electric wires down",tree_fall,1,en,52
+"कचरा उचलला नाही, कोथरूड मध्ये, वाहतूक संथ!!",other,0,mr,86
+"नाली में कचरा फँसा, कर्वे रोड के पास, ध्यान से जाएँ",blocked_drain,0,hi,47
+"near Baner, tree fell on the road, knee deep water",tree_fall,1,en,48
+"huge puddle across the road, at Aundh, since morning",waterlogging,0,en,7
+"in Kothrud, rain water accumulated",waterlogging,0,en,6
+"गटार तुंबले आहे, सिंहगड रोड जवळ, वाहतूक संथ",blocked_drain,0,mr,38
+"स्वारगेट येथे, रस्ता पाण्याखाली, वाहतूक संथ",waterlogging,0,mr,18
+"डाल टूट कर गिरी, हडपसर में asap",tree_fall,0,hi,61
+"बानेर पर, नाली जाम है, ध्यान से जाएँ asap",blocked_drain,0,hi,43
+"daal toot ke giri, Kothrud pe.",tree_fall,0,hinglish,54
+"at Deccan, tree fell on the road, knee deep water",tree_fall,1,en,48
+"power cut since morning, near Wakad, be careful.",other,0,en,80
+"flooding on the main road, at Hadapsar, be careful.",waterlogging,0,en,5
+"nala overflow ho raha, Hadapsar ke paas, dhyan se jao.",blocked_drain,0,hinglish,36
+"पाणी साचले, कोथरूड जवळ, काळजी घ्या",waterlogging,0,mr,17
+"जलभराव हो गया, वारजे में, ध्यान से जाएँ",waterlogging,0,hi,22
+"सड़क पर पानी भर गया, कर्वे रोड के पास, ट्रैफिक धीमा",waterlogging,0,hi,21
+"Katraj ke paas, kachra nahi uthaya",other,0,hinglish,84
+"स्ट्रीट लाइट खराब, सिंहगढ़ रोड के पास, ट्रैफिक धीमा.",other,0,hi,89
+"कात्रज जवळ, रस्ता पाण्याखाली, गाड्या अडकल्या",waterlogging,1,mr,18
+"बाणेर मध्ये, रस्ता वाहतुकीसाठी बंद, गुडघाभर पाणी",road_closed,1,mr,70
+"हडपसर पर, नाली जाम है, ट्रैफिक धीमा",blocked_drain,0,hi,43
+"near Dhankawadi, sewer backing up, traffic is slow",blocked_drain,0,en,33
+"road flooded, in Warje, cars stuck in the water",waterlogging,1,en,2
+"Katraj mein, sadak pe paani hi paani",waterlogging,0,hinglish,13
+"at Hadapsar, lane is flooded, waist deep water asap",waterlogging,1,en,9
+"कोथरूड में, नाली जाम है, ट्रैफिक धीमा",blocked_drain,0,hi,43
+"Katraj ke paas, chamber se paani ulta aa raha, ghar mein paani ghus gaya",blocked_drain,1,hinglish,37
+"स्वारगेट येथे, चेंबर तुंबले, लोक अडकले",blocked_drain,1,mr,40
+"वारजे के पास, गली में पानी भरा, ध्यान से जाएँ",waterlogging,0,hi,25
+"कोथरूड येथे, कचरा उचलला नाही, वाहतूक संथ",other,0,mr,86
+"गटार तुंबले आहे, वारजे जवळ, काळजी घ्या",blocked_drain,0,mr,38
+"power cut since morning, near Aundh, since morning pls",other,0,en,80
+"कात्रज येथे, दिवे बंद आहेत",other,0,mr,87
+"सिंहगड रोड जवळ, कचरा उचलला नाही, काळजी घ्या",other,0,mr,86
+"tree collapsed, at Ekta Nagar, traffic is slow",tree_fall,0,en,51
+"on Hadapsar, water has collected on the road",waterlogging,0,en,3
+"हडपसर जवळ, रस्त्यावर मोठा खड्डा",other,0,mr,85
+"रस्ता बंद केला आहे, वारजे येथे, गुडघाभर पाणी",road_closed,1,mr,72
+"नाला ओसंडून वाहत आहे, हडपसर जवळ, काळजी घ्या",blocked_drain,0,mr,39
+"Karve Road:, manhole overflowing, please send help urgently!!",blocked_drain,1,en,29
+"near Karve Road, lane is flooded, traffic is slow.",waterlogging,0,en,9
+"near Ekta Nagar, huge puddle across the road, cars stuck in the water",waterlogging,1,en,7
+"कोथरूड येथे, झाड उन्मळून पडले, वाहतूक संथ",tree_fall,0,mr,57
+"एकता नगर येथे, झाड रस्त्यावर पडले, लोक अडकले",tree_fall,1,mr,56
+"at Hadapsar, nala overflowing, people trapped",blocked_drain,1,en,30
+"Katraj pe, jalbharav ho gaya, dhyan se jao asap",waterlogging,0,hinglish,14
+"in Yerawada, nala overflowing, be careful asap",blocked_drain,0,en,30
+"chowk is waterlogged, near Karve Road, since morning",waterlogging,0,en,10
+"huge puddle across the road, Katraj:, traffic is slow",waterlogging,0,en,7
+"Baner pe, road band kar diya, dhyan se jao",road_closed,0,hinglish,67
+"on Warje, drain is choked",blocked_drain,0,en,26
+"कात्रज में, रास्ता बंद है, ध्यान से जाएँ!!",road_closed,0,hi,75
+"पुल पानी में डूब गया, हडपसर पर, ट्रैफिक धीमा",road_closed,0,hi,74
+"bada khadda hai, Karve Road mein, dhyan se jao",other,0,hinglish,83
+"near Sahakar Nagar, lane is flooded, be careful",waterlogging,0,en,9
+"streetlight not working, near Karve Road, since morning",other,0,en,76
+"in Wakad, huge puddle across the road, knee deep water",waterlogging,1,en,7
+"bridge closed, in Deccan, waist deep water",road_closed,1,en,63
+"jalbharav ho gaya, Swargate ke paas",waterlogging,0,hinglish,14
+"बानेर में, पेड़ उखड़ गया, लोग फँसे हैं",tree_fall,1,hi,60
+"pul paani mein doob gaya, Karve Road pe",road_closed,0,hinglish,68
+"नाला ओसंडून वाहत आहे, कोथरूड येथे, वाहतूक संथ.",blocked_drain,0,mr,39
+"हडपसर के पास, स्ट्रीट लाइट खराब, ध्यान से जाएँ",other,0,hi,89
+"कोथरूड मध्ये, रस्ता बंद केला आहे",road_closed,0,mr,72
+"jalbharav ho gaya, Swargate ke paas, dhyan se jao.",waterlogging,0,hinglish,14
+"at Dhankawadi, road flooded",waterlogging,0,en,2
+"कात्रज येथे, पाणी साचले, काळजी घ्या!!",waterlogging,0,mr,17
+"jalbharav ho gaya, Kothrud pe, ghar mein paani ghus gaya",waterlogging,1,hinglish,14
+"at Deccan, tree fell on the road, since morning",tree_fall,0,en,48
+"कोथरूड के पास, सड़क पानी में डूबी, ट्रैफिक धीमा",waterlogging,0,hi,23
+"streetlight not working, at Deccan, be careful",other,0,en,76
+"चौराहे पर पानी जमा, सिंहगढ़ रोड के पास, ध्यान से जाएँ",waterlogging,0,hi,24
+"बाणेर मध्ये, चेंबर तुंबले",blocked_drain,0,mr,40
+"Katraj mein, naali band hai asap",blocked_drain,0,hinglish,34
+"सिंहगढ़ रोड के पास, स्ट्रीट लाइट खराब, ट्रैफिक धीमा",other,0,hi,89
+"no water supply, Karve Road:, since morning",other,0,en,79
+"गटर चोक हो गया, स्वारगेट के पास",blocked_drain,0,hi,45
+"naali band hai, Katraj ke paas",blocked_drain,0,hinglish,34
+"kachra nahi uthaya, Baner ke paas, dhyan se jao",other,0,hinglish,84
+"बानेर में, स्ट्रीट लाइट खराब",other,0,hi,89
+"ड्रेनेज जाम झाले, हडपसर येथे, काळजी घ्या",blocked_drain,0,mr,41
+"water has collected on the road, in Deccan, since morning pls",waterlogging,0,en,3
+"चौकात पाणी साचले, बाणेर येथे, वाहतूक संथ!!",waterlogging,0,mr,19
+"light nahi hai, Sinhagad Road mein, dhyan se jao",other,0,hinglish,82
+"Karve Road:, road closed by police, please send help urgently.",road_closed,1,en,62
+"बानेर के पास, कचरा नहीं उठाया, ध्यान से जाएँ asap",other,0,hi,91
+"सिंहगड रोड जवळ, रस्त्यावर मोठा खड्डा, वाहतूक संथ",other,0,mr,85
+"कोथरूड में, चौराहे पर पानी जमा",waterlogging,0,hi,24
+"नाला ओसंडून वाहत आहे, बाणेर मध्ये, काळजी घ्या",blocked_drain,0,mr,39
+"धनकवडी येथे, रस्ता पाण्याखाली",waterlogging,0,mr,18
+"स्वारगेट मध्ये, चौकात पाणी साचले, तातडीने मदत पाठवा.",waterlogging,1,mr,19
+"kachra nahi uthaya, Kothrud pe, dhyan se jao",other,0,hinglish,84
+"on Wakad, tree uprooted, water entering houses",tree_fall,1,en,49
+"in Kothrud, culvert blocked with garbage, be careful pls",blocked_drain,0,en,31
+"at Ekta Nagar, no water supply, be careful",other,0,en,79
+"Baner pe, light nahi hai, dhyan se jao!!",other,0,hinglish,82
+"at Dhankawadi, sewer backing up, traffic is slow",blocked_drain,0,en,33
+"chowk is waterlogged, at Kondhwa",waterlogging,0,en,10
+"नाली में कचरा फँसा, वारजे में",blocked_drain,0,hi,47
+"gutter jam ho gaya, Baner ke paas, turant madad bhejo",blocked_drain,1,hinglish,35
+"कोथरूड जवळ, रस्त्यावर तळे झाले",waterlogging,0,mr,20
+"गटार तुंबले आहे, कर्वे रोड मध्ये, गुडघाभर पाणी pls",blocked_drain,1,mr,38
+"धनकवडी येथे, कचरा उचलला नाही, वाहतूक संथ",other,0,mr,86
+"Baner mein, bada ped ukhad gaya",tree_fall,0,hinglish,55
+"bada khadda hai, Swargate mein",other,0,hinglish,83
+"Kondhwa:, water has collected on the road, ambulance cannot pass",waterlogging,1,en,3
+"पेड़ उखड़ गया, कोथरूड पर, ट्रैफिक धीमा",tree_fall,0,hi,60
+"Karve Road mein, pul paani mein doob gaya",road_closed,0,hinglish,68
+"गली में पानी भरा, कात्रज में, ध्यान से जाएँ",waterlogging,0,hi,25
+"स्वारगेट पर, चौराहे पर पानी जमा, ध्यान से जाएँ",waterlogging,0,hi,24
+"Warje mein, rasta band hai, gaadi band pad gayi",road_closed,1,hinglish,69
+"in Yerawada, flooding on the main road, be careful",waterlogging,0,en,5
+"Hadapsar pe, paani bhar gaya, gaadi band pad gayi",waterlogging,1,hinglish,11
+"वारजे जवळ, पाणी साचले, घरात पाणी शिरले",waterlogging,1,mr,17
+"Sinhagad Road pe, naali band hai, gaadi band pad gayi",blocked_drain,1,hinglish,34
+"garbage not collected, near Aundh, traffic is slow",other,0,en,78
+"एकता नगर जवळ, ड्रेनेज जाम झाले, लोक अडकले",blocked_drain,1,mr,41
+"road closed by police, near Ekta Nagar, people trapped",road_closed,1,en,62
+"sadak pe paani hi paani, Warje mein, ghutno tak paani",waterlogging,1,hinglish,13
+"वारजे मध्ये, कचरा उचलला नाही pls",other,0,mr,86
+"on Swargate, power cut since morning, be careful.",other,0,en,80
+"big branch broken and fallen, in Aundh, since morning",tree_fall,0,en,50
+"road pe paani jama hai, Swargate pe, ghar mein paani ghus gaya pls",waterlogging,1,hinglish,12
+"कोथरूड जवळ, ड्रेनेज जाम झाले, तातडीने मदत पाठवा",blocked_drain,1,mr,41
+"मैनहोल से पानी बह रहा, कात्रज में, ट्रैफिक धीमा",blocked_drain,0,hi,46
+"on Ekta Nagar, fallen tree blocking the lane",tree_fall,0,en,52
+"daal toot ke giri, Katraj ke paas, dhyan se jao",tree_fall,0,hinglish,54
+"बानेर के पास, कचरा नहीं उठाया, ध्यान से जाएँ",other,0,hi,91
+"बड़ा गड्ढा है, हडपसर पर, ट्रैफिक धीमा",other,0,hi,90
+"कर्वे रोड पर, सड़क पर पानी भर गया, ट्रैफिक धीमा",waterlogging,0,hi,21
+"Hadapsar:, tree fell on the road, traffic is slow",tree_fall,0,en,48
+"रस्ता पाण्याखाली, कोथरूड मध्ये, तातडीने मदत पाठवा",waterlogging,1,mr,18
+"चौराहे पर पानी जमा, बानेर के पास, ध्यान से जाएँ",waterlogging,0,hi,24
+"रस्त्यावर तळे झाले, बाणेर मध्ये, तातडीने मदत पाठवा!!",waterlogging,1,mr,20
+"पुल पानी में डूब गया, कात्रज में, ध्यान से जाएँ",road_closed,0,hi,74
+"फांदी तुटून पडली, कर्वे रोड मध्ये, लोक अडकले",tree_fall,1,mr,58
+"gutter jam ho gaya, Hadapsar mein",blocked_drain,0,hinglish,35
+"near Karve Road, tree collapsed, traffic is slow",tree_fall,0,en,51
+"धनकवड़ी के पास, सड़क बंद कर दी गई, ध्यान से जाएँ pls",road_closed,0,hi,73
+"सिंहगढ़ रोड पर, पुल पानी में डूब गया, ट्रैफिक धीमा",road_closed,0,hi,74
+"Baner:, big pothole, since morning pls",other,0,en,77
+"पाणी साचले, कात्रज जवळ, काळजी घ्या",waterlogging,0,mr,17
+"नाला उफान पर है, वारजे पर",blocked_drain,0,hi,44
+"daal toot ke giri, Karve Road mein, log phans gaye asap",tree_fall,1,hinglish,54
+"पूल पाण्याखाली गेला, बाणेर येथे, काळजी घ्या",road_closed,0,mr,71
+"jalbharav ho gaya, Warje pe, ghutno tak paani",waterlogging,1,hinglish,14
+"lane is flooded, at Warje, since morning",waterlogging,0,en,9
+"कात्रज के पास, बड़ा गड्ढा है, ट्रैफिक धीमा",other,0,hi,90
+"कर्वे रोड के पास, पेड़ उखड़ गया, ध्यान से जाएँ",tree_fall,0,hi,60
+"सड़क पानी में डूबी, स्वारगेट में, ध्यान से जाएँ",waterlogging,0,hi,23
+"storm water drain blocked, on Dhankawadi, traffic is slow",blocked_drain,0,en,27
+"पाणी साचले, धनकवडी येथे, तातडीने मदत पाठवा",waterlogging,1,mr,17
+"गटारात कचरा अडकला, कर्वे रोड जवळ, काळजी घ्या",blocked_drain,0,mr,42
+"near Ekta Nagar, tree uprooted, since morning",tree_fall,0,en,49
+"in Kondhwa, bridge closed, since morning",road_closed,0,en,63
+"हडपसर में, कचरा नहीं उठाया, ध्यान से जाएँ pls",other,0,hi,91
+"barricades put up, road shut, at Katraj, knee deep water!!",road_closed,1,en,65
+"Hadapsar ke paas, road pe paani jama hai",waterlogging,0,hinglish,12
+"at Deccan, tree collapsed pls",tree_fall,0,en,51
+"बड़ा गड्ढा है, कोथरूड के पास, ध्यान से जाएँ",other,0,hi,90
+"बानेर पर, सड़क पानी में डूबी pls",waterlogging,0,hi,23
+"Warje ke paas, naali band hai, dhyan se jao",blocked_drain,0,hinglish,34
+"कोथरूड येथे, फांदी तुटून पडली, वाहतूक संथ",tree_fall,0,mr,58
+"Baner:, traffic diverted, road blocked, traffic is slow",road_closed,0,en,66
+"Kondhwa:, barricades put up, road shut, cars stuck in the water!!",road_closed,1,en,65
+"फांदी तुटून पडली, सिंहगड रोड मध्ये, गुडघाभर पाणी",tree_fall,1,mr,58
+"वारजे येथे, कचरा उचलला नाही",other,0,mr,86
+"वारजे में, जलभराव हो गया, ट्रैफिक धीमा asap",waterlogging,0,hi,22
+"कात्रज येथे, नाला ओसंडून वाहत आहे, लोक अडकले pls",blocked_drain,1,mr,39
+"रस्त्यावर मोठा खड्डा, धनकवडी जवळ, काळजी घ्या",other,0,mr,85
+"on Dhankawadi, drainage chamber jammed, electric wires down pls",blocked_drain,1,en,32
+"रस्ता बंद केला आहे, कात्रज मध्ये, गुडघाभर पाणी",road_closed,1,mr,72
+"bada khadda hai, Kothrud ke paas, dhyan se jao",other,0,hinglish,83
+"near Katraj, road flooded, please send help urgently",waterlogging,1,en,2
+"धनकवड़ी के पास, नाला उफान पर है",blocked_drain,0,hi,44
+"चौराहे पर पानी जमा, हडपसर के पास, घरों में पानी घुसा",waterlogging,1,hi,24
+"मैनहोल से पानी बह रहा, हडपसर के पास, तुरंत मदद भेजें",blocked_drain,1,hi,46
+"water logging, at Karve Road, since morning",waterlogging,0,en,1
+"कर्वे रोड येथे, झाड उन्मळून पडले",tree_fall,0,mr,57
+"barricades put up, road shut, in Hadapsar, please send help urgently pls",road_closed,1,en,65
+"चेंबर तुंबले, वारजे मध्ये, घरात पाणी शिरले",blocked_drain,1,mr,40
+"rasta band hai, Katraj pe",road_closed,0,hinglish,69
+"ped gir gaya, Hadapsar pe, ghutno tak paani",tree_fall,1,hinglish,53
+"sadak pe paani hi paani, Hadapsar mein",waterlogging,0,hinglish,13
+"culvert blocked with garbage, in Wakad",blocked_drain,0,en,31
+"Hadapsar ke paas, pul paani mein doob gaya",road_closed,0,hinglish,68
+"सड़क पर पानी भर गया, स्वारगेट पर, तुरंत मदद भेजें asap",waterlogging,1,hi,21
+"near Kondhwa, culvert blocked with garbage, people trapped",blocked_drain,1,en,31
+"huge puddle across the road, near Deccan, water entering houses!!",waterlogging,1,en,7
+"Warje pe, paani bhar gaya, dhyan se jao asap",waterlogging,0,hinglish,11
+"Karve Road pe, nala overflow ho raha, dhyan se jao asap",blocked_drain,0,hinglish,36
+"सिंहगढ़ रोड पर, रास्ता बंद है, ट्रैफिक धीमा",road_closed,0,hi,75
+"at Yerawada, water has collected on the road, knee deep water!!",waterlogging,1,en,3
+"गटार तुंबले आहे, एकता नगर जवळ, वाहतूक संथ",blocked_drain,0,mr,38
+"tree collapsed, at Kondhwa, traffic is slow",tree_fall,0,en,51
+"बानेर के पास, नाली जाम है, लोग फँसे हैं",blocked_drain,1,hi,43
+"स्वारगेट में, जलभराव हो गया, ट्रैफिक धीमा",waterlogging,0,hi,22
+"Warje mein, rasta band hai",road_closed,0,hinglish,69
+"पुल पानी में डूब गया, हडपसर के पास, तुरंत मदद भेजें.",road_closed,1,hi,74
+"हडपसर में, कचरा नहीं उठाया, ट्रैफिक धीमा!!",other,0,hi,91
+"नाली में कचरा फँसा, सिंहगढ़ रोड पर, गाड़ियाँ फँसी हैं",blocked_drain,1,hi,47
+"in Hadapsar, tree collapsed",tree_fall,0,en,51
+"bada ped ukhad gaya, Swargate mein, gaadi band pad gayi",tree_fall,1,hinglish,55
+"सड़क पर पानी भर गया, कात्रज पर!!",waterlogging,0,hi,21
+"वारजे येथे, झाड रस्त्यावर पडले",tree_fall,0,mr,56
+"कात्रज जवळ, रस्त्यावर तळे झाले",waterlogging,0,mr,20
+"chamber se paani ulta aa raha, Hadapsar mein, turant madad bhejo",blocked_drain,1,hinglish,37
+"वारजे मध्ये, कचरा उचलला नाही pls",other,0,mr,86
+"सिंहगड रोड येथे, गटार तुंबले आहे, तातडीने मदत पाठवा",blocked_drain,1,mr,38
+"बाणेर येथे, चौकात पाणी साचले, गुडघाभर पाणी",waterlogging,1,mr,19
+"Baner ke paas, rasta band hai, ghar mein paani ghus gaya!!",road_closed,1,hinglish,69
+"कात्रज येथे, चेंबर तुंबले, लोक अडकले pls",blocked_drain,1,mr,40
+"रस्त्यावर तळे झाले, कात्रज येथे, तातडीने मदत पाठवा",waterlogging,1,mr,20
+"एकता नगर येथे, पाणीपुरवठा बंद",other,0,mr,88
+"चेंबर तुंबले, कात्रज मध्ये, गुडघाभर पाणी",blocked_drain,1,mr,40
+"कर्वे रोड जवळ, झाड रस्त्यावर पडले, काळजी घ्या",tree_fall,0,mr,56
+"धनकवड़ी के पास, डाल टूट कर गिरी, ट्रैफिक धीमा asap",tree_fall,0,hi,61
+"नाली जाम है, बानेर के पास, ट्रैफिक धीमा",blocked_drain,0,hi,43
+"paani nikal nahi raha road se, Sinhagad Road ke paas, ghar mein paani ghus gaya",waterlogging,1,hinglish,15
+"सड़क पानी में डूबी, कात्रज के पास, गाड़ियाँ फँसी हैं",waterlogging,1,hi,23
+"रस्ता पाण्याखाली, बाणेर जवळ, लोक अडकले",waterlogging,1,mr,18
+"चौकात पाणी साचले, कोथरूड येथे, गाड्या अडकल्या",waterlogging,1,mr,19
+"near Wakad, drainage chamber jammed, electric wires down!!",blocked_drain,1,en,32
+"drainage chamber jammed, in Katraj, waist deep water",blocked_drain,1,en,32
+"हडपसर मध्ये, गटारात कचरा अडकला asap",blocked_drain,0,mr,42
+"पेड़ गिर गया, कात्रज पर pls",tree_fall,0,hi,59
+"बड़ा गड्ढा है, धनकवड़ी के पास, ट्रैफिक धीमा",other,0,hi,90
+"बड़ा गड्ढा है, स्वारगेट के पास, ट्रैफिक धीमा",other,0,hi,90
+"स्वारगेट मध्ये, पूल पाण्याखाली गेला",road_closed,0,mr,71
+"कर्वे रोड पर, सड़क पर पानी भर गया, गाड़ियाँ फँसी हैं!!",waterlogging,1,hi,21
+"फांदी तुटून पडली, कर्वे रोड येथे, काळजी घ्या",tree_fall,0,mr,58
+"pul paani mein doob gaya, Warje ke paas, dhyan se jao",road_closed,0,hinglish,68
+"road pe paani jama hai, Swargate mein, ghar mein paani ghus gaya",waterlogging,1,hinglish,12
+"Hadapsar mein, bada ped ukhad gaya, gaadi band pad gayi",tree_fall,1,hinglish,55
+"stray dogs menace, on Deccan, since morning",other,0,en,81
+"fallen tree blocking the lane, on Baner, be careful",tree_fall,0,en,52
+"chowk is waterlogged, on Sahakar Nagar",waterlogging,0,en,10
+"paani bhar gaya, Baner mein, dhyan se jao",waterlogging,0,hinglish,11
+"on Hadapsar, flooding on the main road, be careful",waterlogging,0,en,5
+"कात्रज जवळ, चौकात पाणी साचले, घरात पाणी शिरले",waterlogging,1,mr,19
+"daal toot ke giri, Baner mein",tree_fall,0,hinglish,54
+"on Hadapsar, water logging, people trapped",waterlogging,1,en,1
+"at Ekta Nagar, rain water accumulated",waterlogging,0,en,6
+"धनकवडी येथे, रस्ता पाण्याखाली, वाहतूक संथ",waterlogging,0,mr,18
+"नाला ओसंडून वाहत आहे, कोथरूड येथे, गाड्या अडकल्या",blocked_drain,1,mr,39
+"मैनहोल से पानी बह रहा, स्वारगेट के पास, ध्यान से जाएँ",blocked_drain,0,hi,46
+"नाली में कचरा फँसा, कर्वे रोड के पास, लोग फँसे हैं",blocked_drain,1,hi,47
+"धनकवड़ी में, पुल पानी में डूब गया asap",road_closed,0,hi,74
+"on Aundh, barricades put up, road shut, since morning",road_closed,0,en,65
+"गटर चोक हो गया, सिंहगढ़ रोड पर, घरों में पानी घुसा",blocked_drain,1,hi,45
+"सिंहगढ़ रोड के पास, गटर चोक हो गया",blocked_drain,0,hi,45
+"causeway submerged, on Sahakar Nagar, water entering houses",road_closed,1,en,64
+"Kothrud ke paas, sadak pe paani hi paani, gaadi band pad gayi",waterlogging,1,hinglish,13
+"road band kar diya, Kothrud ke paas, dhyan se jao",road_closed,0,hinglish,67
+"Karve Road ke paas, paani nikal nahi raha road se, gaadi band pad gayi",waterlogging,1,hinglish,15
+"कर्वे रोड पर, पेड़ गिर गया, लोग फँसे हैं",tree_fall,1,hi,59
+"जलभराव हो गया, बानेर में, ट्रैफिक धीमा",waterlogging,0,hi,22
+"at Kondhwa, bridge closed, knee deep water",road_closed,1,en,63
+"naali band hai, Hadapsar ke paas, turant madad bhejo",blocked_drain,1,hinglish,34
+"barricades put up, road shut, near Sinhagad Road, knee deep water",road_closed,1,en,65
+"road pe paani jama hai, Kothrud mein, dhyan se jao",waterlogging,0,hinglish,12
+"traffic diverted, road blocked, near Warje",road_closed,0,en,66
+"मैनहोल से पानी बह रहा, कोथरूड के पास, तुरंत मदद भेजें",blocked_drain,1,hi,46
+"जलभराव हो गया, वारजे में, ध्यान से जाएँ asap",waterlogging,0,hi,22
+"paani nikal nahi raha road se, Sinhagad Road pe, dhyan se jao",waterlogging,0,hinglish,15
+"कोथरूड के पास, चौराहे पर पानी जमा, ध्यान से जाएँ!!",waterlogging,0,hi,24
+"बानेर में, बड़ा गड्ढा है, ध्यान से जाएँ",other,0,hi,90
+"pul paani mein doob gaya, Hadapsar pe asap",road_closed,0,hinglish,68
+"in Baner, power cut since morning, since morning",other,0,en,80
+"कोथरूड येथे, झाड उन्मळून पडले, गुडघाभर पाणी",tree_fall,1,mr,57
+"Katraj pe, chamber se paani ulta aa raha",blocked_drain,0,hinglish,37
+"कोथरूड पर, रास्ता बंद है, ध्यान से जाएँ",road_closed,0,hi,75
+"in Wakad, street under water",waterlogging,0,en,4
+"road closed by police, in Dhankawadi, traffic is slow",road_closed,0,en,62
+"कर्वे रोड जवळ, ड्रेनेज जाम झाले, घरात पाणी शिरले",blocked_drain,1,mr,41
+"कोथरूड जवळ, रस्त्यावर मोठा खड्डा",other,0,mr,85
+"at Baner, traffic diverted, road blocked",road_closed,0,en,66
+"near Karve Road, water logging, since morning pls",waterlogging,0,en,1
+"paani nikal nahi raha road se, Katraj mein, dhyan se jao asap",waterlogging,0,hinglish,15
+"nala overflow ho raha, Swargate mein",blocked_drain,0,hinglish,36
+"बड़ा गड्ढा है, कात्रज के पास.",other,0,hi,90
+"स्वारगेट येथे, रस्ता बंद केला आहे",road_closed,0,mr,72
+"garbage not collected, in Swargate, since morning asap",other,0,en,78
+"ped gir gaya, Kothrud pe, ghar mein paani ghus gaya",tree_fall,1,hinglish,53
+"पानी की सप्लाई बंद, कर्वे रोड में",other,0,hi,92
+"सड़क पानी में डूबी, धनकवड़ी पर, ध्यान से जाएँ asap",waterlogging,0,hi,23
+"kachra nahi uthaya, Katraj pe, dhyan se jao",other,0,hinglish,84
+"Baner mein, chamber se paani ulta aa raha, dhyan se jao",blocked_drain,0,hinglish,37
+"at Sinhagad Road, causeway submerged, knee deep water",road_closed,1,en,64
+"gutter jam ho gaya, Swargate mein, dhyan se jao",blocked_drain,0,hinglish,35
+"ड्रेनेज जाम झाले, स्वारगेट येथे pls",blocked_drain,0,mr,41
+"big pothole, on Deccan",other,0,en,77
+"कोथरूड येथे, पाणीपुरवठा बंद, वाहतूक संथ!!",other,0,mr,88
+"कोथरूड में, नाला उफान पर है, लोग फँसे हैं",blocked_drain,1,hi,44
+"water standing on the road, on Karve Road, waist deep water",waterlogging,1,en,8
+"chamber se paani ulta aa raha, Karve Road ke paas, ghutno tak paani",blocked_drain,1,hinglish,37
+"बानेर के पास, चौराहे पर पानी जमा, घुटनों तक पानी asap",waterlogging,1,hi,24
+"sadak pe paani hi paani, Baner pe, log phans gaye",waterlogging,1,hinglish,13
+"हडपसर में, पेड़ गिर गया, ध्यान से जाएँ",tree_fall,0,hi,59
+"ped gir gaya, Karve Road mein, turant madad bhejo",tree_fall,1,hinglish,53
+"Baner mein, jalbharav ho gaya, log phans gaye",waterlogging,1,hinglish,14
+"गली में पानी भरा, कर्वे रोड के पास, ध्यान से जाएँ!!",waterlogging,0,hi,25
+"Swargate ke paas, rasta band hai, log phans gaye",road_closed,1,hinglish,69
+"road band kar diya, Kothrud ke paas",road_closed,0,hinglish,67
+"paani nikal nahi raha road se, Karve Road ke paas, dhyan se jao!!",waterlogging,0,hinglish,15
+"on Ekta Nagar, water logging, since morning pls",waterlogging,0,en,1
+"at Kondhwa, tree uprooted, traffic is slow",tree_fall,0,en,49
+"दिवे बंद आहेत, धनकवडी जवळ, वाहतूक संथ",other,0,mr,87
+"bada khadda hai, Sinhagad Road ke paas",other,0,hinglish,83
+"near Swargate, power cut since morning, since morning",other,0,en,80
+"एकता नगर येथे, चेंबर तुंबले, वाहतूक संथ",blocked_drain,0,mr,40
+"near Sinhagad Road, barricades put up, road shut, electric wires down pls",road_closed,1,en,65
+"Hadapsar mein, nala overflow ho raha",blocked_drain,0,hinglish,36
+"वारजे येथे, पाणी साचले, गाड्या अडकल्या",waterlogging,1,mr,17
+"Swargate ke paas, ped gir gaya, gaadi band pad gayi asap",tree_fall,1,hinglish,53
+"Warje mein, gutter jam ho gaya",blocked_drain,0,hinglish,35
+"Sinhagad Road ke paas, bada khadda hai, dhyan se jao",other,0,hinglish,83
+"कात्रज में, पेड़ गिर गया",tree_fall,0,hi,59
+"on Sinhagad Road, big pothole!!",other,0,en,77
+"near Kothrud, water standing on the road, waist deep water",waterlogging,1,en,8
+"हडपसर मध्ये, चेंबर तुंबले, घरात पाणी शिरले",blocked_drain,1,mr,40
+"झाड रस्त्यावर पडले, धनकवडी येथे, घरात पाणी शिरले",tree_fall,1,mr,56
+"मैनहोल से पानी बह रहा, कर्वे रोड के पास, घरों में पानी घुसा pls",blocked_drain,1,hi,46
+"कात्रज में, मैनहोल से पानी बह रहा, ध्यान से जाएँ",blocked_drain,0,hi,46
+"हडपसर पर, पेड़ उखड़ गया, ट्रैफिक धीमा",tree_fall,0,hi,60
+"on Kothrud, road closed by police, cars stuck in the water",road_closed,1,en,62
+"tree uprooted, near Katraj, electric wires down",tree_fall,1,en,49
+"पेड़ गिर गया, कात्रज के पास, घरों में पानी घुसा.",tree_fall,1,hi,59
+"पेड़ उखड़ गया, बानेर में, ध्यान से जाएँ",tree_fall,0,hi,60
+"स्वारगेट जवळ, दिवे बंद आहेत, वाहतूक संथ!!",other,0,mr,87
+"culvert blocked with garbage, at Kothrud, please send help urgently.",blocked_drain,1,en,31
+"Sinhagad Road:, bridge closed, water entering houses",road_closed,1,en,63
+"road closed by police, Warje:, traffic is slow",road_closed,0,en,62
+"झाड रस्त्यावर पडले, कोथरूड मध्ये, वाहतूक संथ",tree_fall,0,mr,56
+"पाणी साचले, कात्रज मध्ये pls",waterlogging,0,mr,17
+"gutter jam ho gaya, Karve Road mein, ghutno tak paani",blocked_drain,1,hinglish,35
+"water standing on the road, near Warje, traffic is slow",waterlogging,0,en,8
+"in Sahakar Nagar, streetlight not working, be careful",other,0,en,76
+"दिवे बंद आहेत, बाणेर मध्ये, काळजी घ्या",other,0,mr,87
+"नाली में कचरा फँसा, कात्रज में, घुटनों तक पानी.",blocked_drain,1,hi,47
+"सिंहगढ़ रोड के पास, सड़क बंद कर दी गई, ट्रैफिक धीमा",road_closed,0,hi,73
+"नाला उफान पर है, वारजे पर",blocked_drain,0,hi,44
+"बड़ा गड्ढा है, कर्वे रोड में, ट्रैफिक धीमा",other,0,hi,90
+"नाली जाम है, कात्रज के पास, लोग फँसे हैं",blocked_drain,1,hi,43
+"bada ped ukhad gaya, Kothrud mein, dhyan se jao",tree_fall,0,hinglish,55
+"पूल पाण्याखाली गेला, कात्रज मध्ये, वाहतूक संथ",road_closed,0,mr,71
+"kachra nahi uthaya, Katraj pe",other,0,hinglish,84
+"कोथरूड में, जलभराव हो गया!!",waterlogging,0,hi,22
+"in Hadapsar, bridge closed, since morning",road_closed,0,en,63
+"एकता नगर जवळ, झाड उन्मळून पडले, गाड्या अडकल्या.",tree_fall,1,mr,57
+"near Baner, gutter clogged with plastic, please send help urgently",blocked_drain,1,en,28
+"Katraj mein, nala overflow ho raha, dhyan se jao.",blocked_drain,0,hinglish,36
+"Karve Road mein, kachra nahi uthaya",other,0,hinglish,84
+"water logging, on Warje, cars stuck in the water",waterlogging,1,en,1
+"Katraj ke paas, kachra nahi uthaya, dhyan se jao",other,0,hinglish,84
+"हडपसर के पास, गटर चोक हो गया",blocked_drain,0,hi,45
+"स्वारगेट येथे, रस्त्यावर मोठा खड्डा",other,0,mr,85
+"डाल टूट कर गिरी, कात्रज में, ध्यान से जाएँ asap",tree_fall,0,hi,61
+"बड़ा गड्ढा है, धनकवड़ी के पास",other,0,hi,90
+"at Dhankawadi, tree collapsed!!",tree_fall,0,en,51
+"झाड रस्त्यावर पडले, कोथरूड येथे, घरात पाणी शिरले",tree_fall,1,mr,56
+"पुल पानी में डूब गया, कोथरूड पर asap",road_closed,0,hi,74
+"Warje mein, kachra nahi uthaya, dhyan se jao",other,0,hinglish,84
+"Baner mein, ped gir gaya asap",tree_fall,0,hinglish,53
+"कर्वे रोड येथे, रस्त्यावर मोठा खड्डा, वाहतूक संथ",other,0,mr,85
+"gutter clogged with plastic, Karve Road:",blocked_drain,0,en,28
+"manhole overflowing, Baner:, waist deep water asap",blocked_drain,1,en,29
+"बानेर के पास, मैनहोल से पानी बह रहा",blocked_drain,0,hi,46
+"धनकवडी येथे, गटारात कचरा अडकला, काळजी घ्या",blocked_drain,0,mr,42
+"gutter clogged with plastic, in Swargate, traffic is slow",blocked_drain,0,en,28
+"Warje pe, jalbharav ho gaya, ghar mein paani ghus gaya",waterlogging,1,hinglish,14
+"बाणेर येथे, फांदी तुटून पडली",tree_fall,0,mr,58
+"हडपसर के पास, कचरा नहीं उठाया",other,0,hi,91
+"road flooded, Ekta Nagar:, ambulance cannot pass",waterlogging,1,en,2
+"बानेर के पास, डाल टूट कर गिरी, ध्यान से जाएँ",tree_fall,0,hi,61
+"धनकवड़ी पर, नाला उफान पर है, गाड़ियाँ फँसी हैं",blocked_drain,1,hi,44
+"कोथरूड जवळ, झाड उन्मळून पडले, तातडीने मदत पाठवा pls",tree_fall,1,mr,57
+"स्ट्रीट लाइट खराब, कर्वे रोड में, ध्यान से जाएँ",other,0,hi,89
+"कर्वे रोड येथे, पाणी साचले, गाड्या अडकल्या",waterlogging,1,mr,17
+"कचरा नहीं उठाया, धनकवड़ी पर, ध्यान से जाएँ",other,0,hi,91
+"bridge closed, at Deccan, traffic is slow",road_closed,0,en,63
+"road band kar diya, Sinhagad Road mein",road_closed,0,hinglish,67
+"स्वारगेट मध्ये, रस्ता वाहतुकीसाठी बंद, गुडघाभर पाणी!!",road_closed,1,mr,70
+"एकता नगर जवळ, रस्त्यावर तळे झाले, घरात पाणी शिरले",waterlogging,1,mr,20
+"रस्त्यावर तळे झाले, एकता नगर जवळ, काळजी घ्या",waterlogging,0,mr,20
+"कात्रज में, डाल टूट कर गिरी, घरों में पानी घुसा",tree_fall,1,hi,61
+"Kothrud ke paas, ped gir gaya, ghar mein paani ghus gaya.",tree_fall,1,hinglish,53
+"स्ट्रीट लाइट खराब, सिंहगढ़ रोड पर",other,0,hi,89
+"कात्रज येथे, रस्ता पाण्याखाली pls",waterlogging,0,mr,18
+"Warje pe, sadak pe paani hi paani, ghar mein paani ghus gaya",waterlogging,1,hinglish,13
+"water has collected on the road, Dhankawadi:, since morning",waterlogging,0,en,3
+"कोथरूड जवळ, झाड रस्त्यावर पडले, वाहतूक संथ.",tree_fall,0,mr,56
+"सिंहगड रोड मध्ये, कचरा उचलला नाही, वाहतूक संथ",other,0,mr,86
+"Hadapsar mein, road band kar diya asap",road_closed,0,hinglish,67
+"Katraj mein, ped gir gaya, dhyan se jao",tree_fall,0,hinglish,53
+"naali band hai, Karve Road ke paas, gaadi band pad gayi",blocked_drain,1,hinglish,34
+"नाली में कचरा फँसा, स्वारगेट के पास, गाड़ियाँ फँसी हैं pls",blocked_drain,1,hi,47
+"tree fell on the road, at Hadapsar, knee deep water.",tree_fall,1,en,48
+"light nahi hai, Karve Road mein",other,0,hinglish,82
+"सिंहगड रोड मध्ये, चेंबर तुंबले, वाहतूक संथ.",blocked_drain,0,mr,40
+"पूल पाण्याखाली गेला, वारजे मध्ये, लोक अडकले",road_closed,1,mr,71
+"Sinhagad Road ke paas, road pe paani jama hai, dhyan se jao asap",waterlogging,0,hinglish,12
+"कात्रज के पास, नाली जाम है",blocked_drain,0,hi,43
+"Kothrud pe, paani bhar gaya, gaadi band pad gayi",waterlogging,1,hinglish,11
+"Dhankawadi:, no water supply, traffic is slow asap",other,0,en,79
+"सड़क बंद कर दी गई, सिंहगढ़ रोड के पास, लोग फँसे हैं",road_closed,1,hi,73
+"causeway submerged, Dhankawadi:, be careful",road_closed,0,en,64
+"ड्रेनेज जाम झाले, कोथरूड मध्ये, वाहतूक संथ",blocked_drain,0,mr,41
+"कचरा नहीं उठाया, स्वारगेट पर, ट्रैफिक धीमा",other,0,hi,91
+"rasta band hai, Katraj pe, log phans gaye!!",road_closed,1,hinglish,69
+"Kothrud pe, pul paani mein doob gaya, log phans gaye",road_closed,1,hinglish,68
+"रस्त्यावर मोठा खड्डा, स्वारगेट मध्ये, काळजी घ्या",other,0,mr,85
+"धनकवडी येथे, रस्ता वाहतुकीसाठी बंद, लोक अडकले",road_closed,1,mr,70
+"sewer backing up, on Swargate, water entering houses pls",blocked_drain,1,en,33
+"bada ped ukhad gaya, Warje pe!!",tree_fall,0,hinglish,55
+"Karve Road ke paas, nala overflow ho raha, dhyan se jao",blocked_drain,0,hinglish,36
+"Sahakar Nagar:, lane is flooded, traffic is slow.",waterlogging,0,en,9
+"big branch broken and fallen, at Kothrud, please send help urgently",tree_fall,1,en,50
+"big branch broken and fallen, on Sinhagad Road, be careful.",tree_fall,0,en,50
+"Swargate ke paas, gutter jam ho gaya.",blocked_drain,0,hinglish,35
+"कर्वे रोड के पास, जलभराव हो गया, ट्रैफिक धीमा.",waterlogging,0,hi,22
+"दिवे बंद आहेत, वारजे मध्ये, काळजी घ्या",other,0,mr,87
+"रस्त्यावर पाणी साचले आहे, धनकवडी येथे!!",waterlogging,0,mr,16
+"manhole overflowing, near Kondhwa, ambulance cannot pass",blocked_drain,1,en,29
+"street under water, on Deccan, traffic is slow",waterlogging,0,en,4
+"sadak pe paani hi paani, Kothrud mein, gaadi band pad gayi.",waterlogging,1,hinglish,13
+"on Karve Road, big branch broken and fallen, since morning",tree_fall,0,en,50
+"रास्ता बंद है, हडपसर पर, ट्रैफिक धीमा",road_closed,0,hi,75
+"बड़ा गड्ढा है, कात्रज में, ट्रैफिक धीमा.",other,0,hi,90
+"एकता नगर जवळ, चौकात पाणी साचले, गुडघाभर पाणी",waterlogging,1,mr,19
+"वारजे जवळ, रस्ता पाण्याखाली",waterlogging,0,mr,18
+"Karve Road mein, gutter jam ho gaya",blocked_drain,0,hinglish,35
+"एकता नगर येथे, गटार तुंबले आहे, लोक अडकले",blocked_drain,1,mr,38
+"पूल पाण्याखाली गेला, धनकवडी येथे, तातडीने मदत पाठवा",road_closed,1,mr,71
+"light nahi hai, Baner pe, dhyan se jao asap",other,0,hinglish,82
+"at Sahakar Nagar, power cut since morning, be careful",other,0,en,80
+"बाणेर जवळ, रस्ता बंद केला आहे, वाहतूक संथ",road_closed,0,mr,72
+"रस्त्यावर तळे झाले, बाणेर येथे",waterlogging,0,mr,20
+"Kothrud ke paas, paani nikal nahi raha road se, ghar mein paani ghus gaya",waterlogging,1,hinglish,15
+"वारजे में, नाला उफान पर है, घुटनों तक पानी pls",blocked_drain,1,hi,44
+"Swargate:, garbage not collected, be careful",other,0,en,78
+"गली में पानी भरा, वारजे पर, ट्रैफिक धीमा",waterlogging,0,hi,25
+"Warje pe, bada khadda hai",other,0,hinglish,83
+"in Sahakar Nagar, manhole overflowing, traffic is slow",blocked_drain,0,en,29
+"पाणीपुरवठा बंद, सिंहगड रोड येथे, काळजी घ्या!!",other,0,mr,88
+"no water supply, near Swargate, be careful",other,0,en,79
+"कोथरूड में, सड़क पानी में डूबी, ट्रैफिक धीमा.",waterlogging,0,hi,23
+"at Kothrud, road closed by police, traffic is slow",road_closed,0,en,62
+"on Deccan, flooding on the main road, cars stuck in the water pls",waterlogging,1,en,5
+"Katraj mein, paani bhar gaya, gaadi band pad gayi.",waterlogging,1,hinglish,11
+"rain water accumulated, in Kothrud, traffic is slow",waterlogging,0,en,6
+"Katraj pe, gutter jam ho gaya",blocked_drain,0,hinglish,35
+"water standing on the road, in Sinhagad Road, ambulance cannot pass",waterlogging,1,en,8
+"स्वारगेट के पास, स्ट्रीट लाइट खराब",other,0,hi,89
+"रस्त्यावर तळे झाले, हडपसर मध्ये, काळजी घ्या",waterlogging,0,mr,20
+"गटारात कचरा अडकला, हडपसर येथे, तातडीने मदत पाठवा",blocked_drain,1,mr,42
+"रस्ता वाहतुकीसाठी बंद, कात्रज येथे, काळजी घ्या",road_closed,0,mr,70
+"नाला ओसंडून वाहत आहे, कोथरूड मध्ये, गुडघाभर पाणी asap",blocked_drain,1,mr,39
+"on Deccan, nala overflowing, traffic is slow",blocked_drain,0,en,30
+"at Dhankawadi, chowk is waterlogged, be careful!!",waterlogging,0,en,10
+"नाला ओसंडून वाहत आहे, बाणेर येथे, गाड्या अडकल्या",blocked_drain,1,mr,39
+"daal toot ke giri, Sinhagad Road mein, dhyan se jao",tree_fall,0,hinglish,54
+"कात्रज येथे, झाड रस्त्यावर पडले",tree_fall,0,mr,56
+"ped gir gaya, Baner ke paas",tree_fall,0,hinglish,53
+"power cut since morning, Wakad:, since morning",other,0,en,80
+"कात्रज में, कचरा नहीं उठाया",other,0,hi,91
+"garbage not collected, at Deccan!!",other,0,en,78
+"near Warje, causeway submerged, people trapped",road_closed,1,en,64
+"जलभराव हो गया, स्वारगेट पर, ध्यान से जाएँ",waterlogging,0,hi,22
+"ped gir gaya, Warje pe, log phans gaye",tree_fall,1,hinglish,53
+"big pothole, Wakad:, traffic is slow",other,0,en,77
+"कात्रज के पास, पेड़ उखड़ गया, ट्रैफिक धीमा",tree_fall,0,hi,60
+"barricades put up, road shut, at Wakad, knee deep water",road_closed,1,en,65
+"in Yerawada, streetlight not working, traffic is slow!!",other,0,en,76
+"कोथरूड जवळ, गटारात कचरा अडकला, घरात पाणी शिरले",blocked_drain,1,mr,42
+"pul paani mein doob gaya, Baner ke paas, dhyan se jao.",road_closed,0,hinglish,68
+"Sinhagad Road ke paas, paani nikal nahi raha road se, dhyan se jao",waterlogging,0,hinglish,15
+"जलभराव हो गया, हडपसर में, घरों में पानी घुसा.",waterlogging,1,hi,22
+"कात्रज के पास, पेड़ उखड़ गया, ट्रैफिक धीमा",tree_fall,0,hi,60
+"no water supply, near Hadapsar, since morning",other,0,en,79
+"garbage not collected, near Wakad asap",other,0,en,78
+"Hadapsar ke paas, light nahi hai",other,0,hinglish,82
+"सिंहगड रोड जवळ, रस्ता वाहतुकीसाठी बंद, काळजी घ्या",road_closed,0,mr,70
+"बड़ा गड्ढा है, कर्वे रोड के पास pls",other,0,hi,90
+"pul paani mein doob gaya, Karve Road pe, dhyan se jao",road_closed,0,hinglish,68
+"हडपसर येथे, रस्ता वाहतुकीसाठी बंद, काळजी घ्या",road_closed,0,mr,70
+"कर्वे रोड जवळ, कचरा उचलला नाही, काळजी घ्या",other,0,mr,86
+"रस्ता वाहतुकीसाठी बंद, बाणेर जवळ, गुडघाभर पाणी.",road_closed,1,mr,70
+"सड़क पानी में डूबी, कात्रज के पास, ट्रैफिक धीमा",waterlogging,0,hi,23
+"near Katraj, lane is flooded, water entering houses",waterlogging,1,en,9
+"street under water, at Yerawada, be careful",waterlogging,0,en,4
+"कोथरूड मध्ये, गटार तुंबले आहे, गाड्या अडकल्या",blocked_drain,1,mr,38
+"जलभराव हो गया, सिंहगढ़ रोड में, ध्यान से जाएँ",waterlogging,0,hi,22
+"पूल पाण्याखाली गेला, हडपसर येथे",road_closed,0,mr,71
+"Warje ke paas, paani nikal nahi raha road se, ghutno tak paani",waterlogging,1,hinglish,15
+"nala overflow ho raha, Kothrud mein",blocked_drain,0,hinglish,36
+"Karve Road ke paas, sadak pe paani hi paani, dhyan se jao",waterlogging,0,hinglish,13
+"स्वारगेट मध्ये, रस्ता पाण्याखाली, तातडीने मदत पाठवा",waterlogging,1,mr,18
+"सड़क पर पानी भर गया, सिंहगढ़ रोड पर, लोग फँसे हैं",waterlogging,1,hi,21
+"नाली जाम है, स्वारगेट में, लोग फँसे हैं",blocked_drain,1,hi,43
+"Hadapsar ke paas, daal toot ke giri, ghutno tak paani",tree_fall,1,hinglish,54
+"storm water drain blocked, at Sinhagad Road, water entering houses",blocked_drain,1,en,27
+"at Baner, power cut since morning, since morning",other,0,en,80
+"धनकवडी येथे, झाड उन्मळून पडले",tree_fall,0,mr,57
+"धनकवड़ी में, पुल पानी में डूब गया, तुरंत मदद भेजें",road_closed,1,hi,74
+"रस्त्यावर मोठा खड्डा, हडपसर येथे, काळजी घ्या",other,0,mr,85
+"in Aundh, fallen tree blocking the lane, since morning",tree_fall,0,en,52
+"in Dhankawadi, manhole overflowing, traffic is slow.",blocked_drain,0,en,29
+"मैनहोल से पानी बह रहा, कोथरूड में, घुटनों तक पानी",blocked_drain,1,hi,46
+"naali band hai, Warje mein, ghutno tak paani",blocked_drain,1,hinglish,34
+"Baner ke paas, jalbharav ho gaya, dhyan se jao",waterlogging,0,hinglish,14
+"near Aundh, tree uprooted, since morning pls",tree_fall,0,en,49
+"बानेर में, सड़क पानी में डूबी, गाड़ियाँ फँसी हैं",waterlogging,1,hi,23
+"on Karve Road, traffic diverted, road blocked, people trapped",road_closed,1,en,66
+"फांदी तुटून पडली, सिंहगड रोड जवळ, काळजी घ्या",tree_fall,0,mr,58
+"नाला उफान पर है, बानेर पर, ध्यान से जाएँ",blocked_drain,0,hi,44
+"jalbharav ho gaya, Hadapsar pe, ghutno tak paani!!",waterlogging,1,hinglish,14
+"गटर चोक हो गया, वारजे में pls",blocked_drain,0,hi,45
+"street under water, Deccan:",waterlogging,0,en,4
+"sadak pe paani hi paani, Warje ke paas pls",waterlogging,0,hinglish,13
+"स्वारगेट मध्ये, रस्त्यावर पाणी साचले आहे, घरात पाणी शिरले.",waterlogging,1,mr,16
+"पाणी साचले, धनकवडी मध्ये, लोक अडकले",waterlogging,1,mr,17
+"fallen tree blocking the lane, on Wakad, traffic is slow",tree_fall,0,en,52
+"pul paani mein doob gaya, Baner ke paas",road_closed,0,hinglish,68
+"हडपसर पर, पेड़ उखड़ गया",tree_fall,0,hi,60
+"गटर चोक हो गया, सिंहगढ़ रोड पर.",blocked_drain,0,hi,45
+"फांदी तुटून पडली, हडपसर येथे, काळजी घ्या",tree_fall,0,mr,58
+"Karve Road pe, paani nikal nahi raha road se, log phans gaye",waterlogging,1,hinglish,15
+"रस्ता बंद केला आहे, कात्रज येथे, घरात पाणी शिरले",road_closed,1,mr,72
+"on Warje, drain is choked, water entering houses",blocked_drain,1,en,26
+"sewer backing up, near Baner, since morning pls",blocked_drain,0,en,33
+"Warje mein, kachra nahi uthaya",other,0,hinglish,84
+"स्वारगेट पर, गली में पानी भरा, ध्यान से जाएँ",waterlogging,0,hi,25
+"कर्वे रोड के पास, नाला उफान पर है, ट्रैफिक धीमा",blocked_drain,0,hi,44
+"कर्वे रोड मध्ये, ड्रेनेज जाम झाले, घरात पाणी शिरले",blocked_drain,1,mr,41
+"पेड़ गिर गया, स्वारगेट पर, घुटनों तक पानी",tree_fall,1,hi,59
+"water has collected on the road, on Sahakar Nagar, ambulance cannot pass",waterlogging,1,en,3
+"Swargate pe, naali band hai",blocked_drain,0,hinglish,34
+"on Aundh, nala overflowing, be careful pls",blocked_drain,0,en,30
+"at Aundh, storm water drain blocked, waist deep water",blocked_drain,1,en,27
+"कोथरूड के पास, सड़क पानी में डूबी, ध्यान से जाएँ",waterlogging,0,hi,23
+"road pe paani jama hai, Karve Road ke paas, ghutno tak paani",waterlogging,1,hinglish,12
+"big branch broken and fallen, at Swargate, water entering houses",tree_fall,1,en,50
+"no water supply, Yerawada:, since morning",other,0,en,79
+"कात्रज में, डाल टूट कर गिरी, घरों में पानी घुसा pls",tree_fall,1,hi,61
+"near Kothrud, gutter clogged with plastic, people trapped",blocked_drain,1,en,28
+"on Swargate, manhole overflowing, since morning",blocked_drain,0,en,29
+"झाड उन्मळून पडले, सिंहगड रोड मध्ये",tree_fall,0,mr,57
+"दिवे बंद आहेत, कर्वे रोड जवळ, वाहतूक संथ",other,0,mr,87
+"नाला उफान पर है, सिंहगढ़ रोड के पास",blocked_drain,0,hi,44
+"चौकात पाणी साचले, एकता नगर जवळ, काळजी घ्या",waterlogging,0,mr,19
+"chamber se paani ulta aa raha, Hadapsar pe",blocked_drain,0,hinglish,37
+"Katraj ke paas, light nahi hai, dhyan se jao",other,0,hinglish,82
+"सिंहगढ़ रोड के पास, कचरा नहीं उठाया, ध्यान से जाएँ",other,0,hi,91
+"on Sahakar Nagar, storm water drain blocked, people trapped",blocked_drain,1,en,27
+"garbage not collected, at Katraj, traffic is slow",other,0,en,78
+"बाणेर मध्ये, दिवे बंद आहेत!!",other,0,mr,87
+"चौकात पाणी साचले, हडपसर जवळ, घरात पाणी शिरले",waterlogging,1,mr,19
+"on Wakad, flooding on the main road, electric wires down",waterlogging,1,en,5
+"paani bhar gaya, Karve Road ke paas",waterlogging,0,hinglish,11
+"at Karve Road, culvert blocked with garbage, please send help urgently!!",blocked_drain,1,en,31
+"पुल पानी में डूब गया, सिंहगढ़ रोड में, लोग फँसे हैं",road_closed,1,hi,74
+"road flooded, on Aundh, since morning",waterlogging,0,en,2
+"rain water accumulated, at Ekta Nagar pls",waterlogging,0,en,6
+"paani bhar gaya, Warje mein",waterlogging,0,hinglish,11
+"हडपसर पर, रास्ता बंद है, ट्रैफिक धीमा!!",road_closed,0,hi,75
+"flooding on the main road, at Kondhwa pls",waterlogging,0,en,5
+"स्वारगेट में, कचरा नहीं उठाया, ध्यान से जाएँ",other,0,hi,91
+"Wakad:, water standing on the road",waterlogging,0,en,8
+"rain water accumulated, near Karve Road, traffic is slow",waterlogging,0,en,6
+"रास्ता बंद है, हडपसर पर, ध्यान से जाएँ",road_closed,0,hi,75
+"कर्वे रोड मध्ये, ड्रेनेज जाम झाले, वाहतूक संथ",blocked_drain,0,mr,41
+"bada ped ukhad gaya, Karve Road pe",tree_fall,0,hinglish,55
+"कोथरूड पर, सड़क पर पानी भर गया, लोग फँसे हैं",waterlogging,1,hi,21
+"एकता नगर जवळ, रस्त्यावर पाणी साचले आहे, लोक अडकले",waterlogging,1,mr,16
+"पूल पाण्याखाली गेला, बाणेर जवळ, काळजी घ्या",road_closed,0,mr,71
+"फांदी तुटून पडली, स्वारगेट मध्ये",tree_fall,0,mr,58
+"Katraj pe, jalbharav ho gaya, log phans gaye",waterlogging,1,hinglish,14
+"पूल पाण्याखाली गेला, सिंहगड रोड येथे",road_closed,0,mr,71
+"झाड रस्त्यावर पडले, एकता नगर येथे!!",tree_fall,0,mr,56
+"Baner mein, road pe paani jama hai, dhyan se jao",waterlogging,0,hinglish,12
+"गटार तुंबले आहे, एकता नगर मध्ये, तातडीने मदत पाठवा pls",blocked_drain,1,mr,38
+"Sinhagad Road mein, paani nikal nahi raha road se, ghutno tak paani",waterlogging,1,hinglish,15
+"pul paani mein doob gaya, Hadapsar pe, ghutno tak paani!!",road_closed,1,hinglish,68
+"water has collected on the road, at Sinhagad Road",waterlogging,0,en,3
+"Baner ke paas, light nahi hai asap",other,0,hinglish,82
+"daal toot ke giri, Swargate ke paas, dhyan se jao.",tree_fall,0,hinglish,54
+"Swargate ke paas, chamber se paani ulta aa raha",blocked_drain,0,hinglish,37
+"at Katraj, big branch broken and fallen, people trapped",tree_fall,1,en,50
+"एकता नगर जवळ, गटार तुंबले आहे",blocked_drain,0,mr,38
+"कर्वे रोड पर, सड़क पर पानी भर गया",waterlogging,0,hi,21
+"Sinhagad Road mein, chamber se paani ulta aa raha",blocked_drain,0,hinglish,37
+"Katraj pe, daal toot ke giri, dhyan se jao pls",tree_fall,0,hinglish,54
+"हडपसर में, पेड़ गिर गया, गाड़ियाँ फँसी हैं asap",tree_fall,1,hi,59
+"धनकवडी जवळ, नाला ओसंडून वाहत आहे, गाड्या अडकल्या asap",blocked_drain,1,mr,39
+"near Katraj, no water supply, traffic is slow",other,0,en,79
+"Hadapsar:, nala overflowing, please send help urgently asap",blocked_drain,1,en,30
+"Baner ke paas, road band kar diya, ghar mein paani ghus gaya",road_closed,1,hinglish,67
+"गली में पानी भरा, बानेर पर, ध्यान से जाएँ asap",waterlogging,0,hi,25
+"धनकवड़ी पर, पेड़ गिर गया, ट्रैफिक धीमा pls",tree_fall,0,hi,59
+"कर्वे रोड जवळ, रस्त्यावर तळे झाले, काळजी घ्या",waterlogging,0,mr,20
+"road pe paani jama hai, Karve Road mein, ghar mein paani ghus gaya.",waterlogging,1,hinglish,12
+"स्ट्रीट लाइट खराब, बानेर में, ट्रैफिक धीमा",other,0,hi,89
+"स्वारगेट येथे, पाणीपुरवठा बंद, वाहतूक संथ",other,0,mr,88
+"रस्ता पाण्याखाली, कोथरूड जवळ, वाहतूक संथ",waterlogging,0,mr,18
+"सिंहगड रोड जवळ, झाड उन्मळून पडले, काळजी घ्या",tree_fall,0,mr,57
+"Kondhwa:, culvert blocked with garbage, water entering houses pls",blocked_drain,1,en,31
+"bada ped ukhad gaya, Warje pe, turant madad bhejo pls",tree_fall,1,hinglish,55
+"Baner ke paas, bada khadda hai, dhyan se jao",other,0,hinglish,83
+"कोथरूड मध्ये, गटार तुंबले आहे!!",blocked_drain,0,mr,38
+"रस्ता वाहतुकीसाठी बंद, कोथरूड मध्ये, वाहतूक संथ",road_closed,0,mr,70
+"streetlight not working, near Sahakar Nagar, traffic is slow",other,0,en,76
+"सड़क पानी में डूबी, बानेर के पास",waterlogging,0,hi,23
+"in Baner, causeway submerged, traffic is slow",road_closed,0,en,64
+"धनकवडी येथे, रस्त्यावर पाणी साचले आहे, गाड्या अडकल्या",waterlogging,1,mr,16
+"Warje pe, light nahi hai.",other,0,hinglish,82
+"चौकात पाणी साचले, स्वारगेट मध्ये, काळजी घ्या",waterlogging,0,mr,19
+"kachra nahi uthaya, Hadapsar ke paas",other,0,hinglish,84
+"Kothrud mein, paani nikal nahi raha road se, dhyan se jao",waterlogging,0,hinglish,15
+"कोथरूड मध्ये, पाणीपुरवठा बंद, वाहतूक संथ pls",other,0,mr,88
+"rain water accumulated, Yerawada:, since morning",waterlogging,0,en,6
+"पुल पानी में डूब गया, स्वारगेट के पास.",road_closed,0,hi,74
+"Kothrud ke paas, naali band hai",blocked_drain,0,hinglish,34
+"कोथरूड में, सड़क पर पानी भर गया, तुरंत मदद भेजें",waterlogging,1,hi,21
+"Hadapsar ke paas, paani bhar gaya.",waterlogging,0,hinglish,11
+"डाल टूट कर गिरी, सिंहगढ़ रोड पर, ट्रैफिक धीमा",tree_fall,0,hi,61
+"bada ped ukhad gaya, Kothrud mein, dhyan se jao",tree_fall,0,hinglish,55
+"पेड़ गिर गया, धनकवड़ी में, तुरंत मदद भेजें",tree_fall,1,hi,59
+"एकता नगर येथे, चेंबर तुंबले, लोक अडकले pls",blocked_drain,1,mr,40
+"Warje ke paas, paani bhar gaya",waterlogging,0,hinglish,11
+"Warje mein, paani bhar gaya",waterlogging,0,hinglish,11
+"गटारात कचरा अडकला, कर्वे रोड येथे, काळजी घ्या",blocked_drain,0,mr,42
+"रास्ता बंद है, बानेर में, ट्रैफिक धीमा pls",road_closed,0,hi,75
+"Karve Road ke paas, jalbharav ho gaya, gaadi band pad gayi",waterlogging,1,hinglish,14
+"Hadapsar pe, kachra nahi uthaya!!",other,0,hinglish,84
+"manhole overflowing, Karve Road:, water entering houses",blocked_drain,1,en,29
+"on Hadapsar, water standing on the road, traffic is slow",waterlogging,0,en,8
+"Sahakar Nagar:, sewer backing up, ambulance cannot pass",blocked_drain,1,en,33
+"गली में पानी भरा, बानेर के पास, ट्रैफिक धीमा",waterlogging,0,hi,25
+"बाणेर मध्ये, कचरा उचलला नाही, काळजी घ्या.",other,0,mr,86
+"पाणीपुरवठा बंद, बाणेर मध्ये, वाहतूक संथ",other,0,mr,88
+"नाली जाम है, स्वारगेट पर, ध्यान से जाएँ",blocked_drain,0,hi,43
+"rain water accumulated, Warje:, be careful",waterlogging,0,en,6
+"स्वारगेट में, पेड़ उखड़ गया",tree_fall,0,hi,60
+"सिंहगड रोड येथे, नाला ओसंडून वाहत आहे, काळजी घ्या",blocked_drain,0,mr,39
+"Baner ke paas, naali band hai, log phans gaye",blocked_drain,1,hinglish,34
+"storm water drain blocked, in Swargate, water entering houses",blocked_drain,1,en,27
+"धनकवड़ी पर, सड़क बंद कर दी गई, तुरंत मदद भेजें",road_closed,1,hi,73
+"नाली में कचरा फँसा, स्वारगेट पर, लोग फँसे हैं",blocked_drain,1,hi,47
+"daal toot ke giri, Sinhagad Road mein, dhyan se jao asap",tree_fall,0,hinglish,54
+"दिवे बंद आहेत, एकता नगर जवळ, वाहतूक संथ.",other,0,mr,87
+"Kondhwa:, huge puddle across the road, knee deep water.",waterlogging,1,en,7
+"दिवे बंद आहेत, हडपसर येथे, वाहतूक संथ asap",other,0,mr,87
+"paani nikal nahi raha road se, Warje pe, turant madad bhejo.",waterlogging,1,hinglish,15
+"big pothole, near Yerawada, traffic is slow",other,0,en,77
+"street under water, near Sinhagad Road, traffic is slow",waterlogging,0,en,4
+"चौकात पाणी साचले, धनकवडी येथे, तातडीने मदत पाठवा.",waterlogging,1,mr,19
+"रस्त्यावर मोठा खड्डा, वारजे येथे, काळजी घ्या",other,0,mr,85
+"वारजे में, गटर चोक हो गया, तुरंत मदद भेजें",blocked_drain,1,hi,45
+"near Deccan, big branch broken and fallen, water entering houses",tree_fall,1,en,50
+"Kondhwa:, traffic diverted, road blocked!!",road_closed,0,en,66
+"स्वारगेट जवळ, रस्त्यावर पाणी साचले आहे, घरात पाणी शिरले asap",waterlogging,1,mr,16
+"चौराहे पर पानी जमा, कर्वे रोड पर, ध्यान से जाएँ",waterlogging,0,hi,24
+"rasta band hai, Katraj ke paas, ghutno tak paani pls",road_closed,1,hinglish,69
+"ped gir gaya, Katraj mein, dhyan se jao",tree_fall,0,hinglish,53
+"daal toot ke giri, Karve Road pe, dhyan se jao",tree_fall,0,hinglish,54
+"डाल टूट कर गिरी, कात्रज पर, लोग फँसे हैं",tree_fall,1,hi,61
+"Karve Road pe, pul paani mein doob gaya!!",road_closed,0,hinglish,68
+"drain is choked, in Hadapsar, ambulance cannot pass",blocked_drain,1,en,26
+"manhole overflowing, Sinhagad Road:, traffic is slow",blocked_drain,0,en,29
+"कर्वे रोड जवळ, गटारात कचरा अडकला, गुडघाभर पाणी",blocked_drain,1,mr,42
+"बाणेर मध्ये, पाणीपुरवठा बंद.",other,0,mr,88
+"एकता नगर येथे, रस्त्यावर पाणी साचले आहे, वाहतूक संथ pls",waterlogging,0,mr,16
+"at Ekta Nagar, causeway submerged, traffic is slow asap",road_closed,0,en,64
+"big pothole, in Karve Road, be careful",other,0,en,77
+"बड़ा गड्ढा है, बानेर पर.",other,0,hi,90
+"चौकात पाणी साचले, कोथरूड जवळ, वाहतूक संथ",waterlogging,0,mr,19
+"Baner ke paas, road pe paani jama hai, ghutno tak paani",waterlogging,1,hinglish,12
+"bada khadda hai, Sinhagad Road ke paas, dhyan se jao",other,0,hinglish,83
+"नाला उफान पर है, कोथरूड पर, ध्यान से जाएँ asap",blocked_drain,0,hi,44
+"स्वारगेट येथे, गटारात कचरा अडकला, घरात पाणी शिरले",blocked_drain,1,mr,42
+"Kothrud ke paas, light nahi hai, dhyan se jao",other,0,hinglish,82
+"rasta band hai, Sinhagad Road pe, ghutno tak paani!!",road_closed,1,hinglish,69
+"सड़क बंद कर दी गई, सिंहगढ़ रोड पर, लोग फँसे हैं",road_closed,1,hi,73
+"Hadapsar mein, sadak pe paani hi paani pls",waterlogging,0,hinglish,13
+"स्वारगेट येथे, पाणीपुरवठा बंद",other,0,mr,88
+"कात्रज में, रास्ता बंद है!!",road_closed,0,hi,75
+"in Baner, chowk is waterlogged, be careful",waterlogging,0,en,10
+"light nahi hai, Sinhagad Road pe, dhyan se jao",other,0,hinglish,82
+"Hadapsar mein, ped gir gaya, ghutno tak paani",tree_fall,1,hinglish,53
+"Yerawada:, traffic diverted, road blocked, please send help urgently",road_closed,1,en,66
+"Baner ke paas, bada khadda hai.",other,0,hinglish,83
+"कचरा नहीं उठाया, बानेर पर, ध्यान से जाएँ",other,0,hi,91
+"कोथरूड येथे, रस्ता पाण्याखाली, गुडघाभर पाणी",waterlogging,1,mr,18
+"Karve Road mein, paani bhar gaya asap",waterlogging,0,hinglish,11
+"daal toot ke giri, Baner pe, gaadi band pad gayi.",tree_fall,1,hinglish,54
+"कर्वे रोड पर, नाली में कचरा फँसा, ट्रैफिक धीमा pls",blocked_drain,0,hi,47
+"rasta band hai, Sinhagad Road mein, gaadi band pad gayi",road_closed,1,hinglish,69
+"near Ekta Nagar, drainage chamber jammed, be careful asap",blocked_drain,0,en,32
+"चेंबर तुंबले, वारजे जवळ, तातडीने मदत पाठवा!!",blocked_drain,1,mr,40
+"फांदी तुटून पडली, हडपसर मध्ये, वाहतूक संथ",tree_fall,0,mr,58
+"मैनहोल से पानी बह रहा, सिंहगढ़ रोड के पास",blocked_drain,0,hi,46
+"lane is flooded, in Sinhagad Road, electric wires down",waterlogging,1,en,9
+"फांदी तुटून पडली, एकता नगर मध्ये, गुडघाभर पाणी",tree_fall,1,mr,58
+"near Warje, garbage not collected",other,0,en,78
+"सड़क बंद कर दी गई, बानेर पर, घरों में पानी घुसा",road_closed,1,hi,73
+"gutter clogged with plastic, in Kondhwa",blocked_drain,0,en,28
+"हडपसर येथे, रस्ता वाहतुकीसाठी बंद, वाहतूक संथ!!",road_closed,0,mr,70
+"on Baner, road flooded, ambulance cannot pass",waterlogging,1,en,2
+"Karve Road ke paas, nala overflow ho raha",blocked_drain,0,hinglish,36
+"rasta band hai, Baner pe, ghutno tak paani pls",road_closed,1,hinglish,69
+"सड़क बंद कर दी गई, कात्रज में, गाड़ियाँ फँसी हैं asap",road_closed,1,hi,73
+"stray dogs menace, Sinhagad Road:, traffic is slow",other,0,en,81
+"कोथरूड जवळ, रस्त्यावर तळे झाले, लोक अडकले",waterlogging,1,mr,20
+"हडपसर में, डाल टूट कर गिरी, तुरंत मदद भेजें",tree_fall,1,hi,61
+"bada ped ukhad gaya, Kothrud pe, ghutno tak paani pls",tree_fall,1,hinglish,55
+"road band kar diya, Sinhagad Road ke paas",road_closed,0,hinglish,67

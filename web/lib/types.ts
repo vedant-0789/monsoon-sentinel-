@@ -28,6 +28,30 @@ export interface Bulletin {
   road_alert_counts: Record<Alert, number>;
   streets_to_watch: { road: string; alert: Alert; lat: number; lon: number }[];
   hotspots: { name: string; type: string; alert: Alert; lat: number; lon: number; source: string }[];
+  impact?: Impact;
+}
+
+export type FacilityKind = "hospital" | "clinic" | "school" | "college" | "police" | "fire_station";
+
+export interface Impact {
+  red_road_km: number;
+  orange_road_km: number;
+  facilities_total: number;
+  facilities_at_risk: Partial<Record<FacilityKind, number>>;
+  facilities: { name: string; kind: FacilityKind; alert: Alert; lat: number; lon: number }[];
+}
+
+export interface HistoryPoint {
+  date: string;
+  probability: number | null;
+  rain_mm: number;
+}
+
+export interface Classification {
+  category?: string;
+  confidence?: number;
+  urgent?: boolean;
+  urgent_probability?: number;
 }
 
 export interface PointInfo {
@@ -53,6 +77,11 @@ export interface Zone {
   priority_score: number;
   action: "pump" | "crew" | "inspect";
   recommended: string;
+  p_flood?: number;
+  depot?: string;
+  depot_km?: number;
+  rl_deploy_pump?: boolean;
+  pumps_left_after?: number;
 }
 
 export interface CitizenReport {
@@ -64,6 +93,8 @@ export interface CitizenReport {
   depth: string;
   note: string;
   lang: Lang;
+  auto_category?: string | null;
+  urgent?: number | boolean;
 }
 
 export interface ReplayDay {

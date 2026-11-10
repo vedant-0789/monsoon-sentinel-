@@ -104,9 +104,28 @@ def main():
                                         direction=direction, scoring="average_precision", cv=3, n_jobs=-1)
         sfs.fit(Zs[:, idx], sub.y_heavy)
         sel[direction] = [feats[idx[i]] for i in np.flatnonzero(sfs.get_support())]
+    # filter method: mutual information with the target (model-free)
+    from sklearn.feature_selection import mutual_info_classif
+    mi = pd.Series(mutual_info_classif(Zs, sub.y_heavy, random_state=0), index=feats)
+    sel["filter_mutual_info"] = mi.nlargest(10).index.tolist()
+    # embedded method: L1-regularised logistic regression keeps a sparse subset
+    l1 = LogisticRegression(penalty="l1", solver="liblinear", C=0.02, class_weight="balanced").fit(Zs, sub.y_heavy)
+    coef = pd.Series(np.abs(l1.coef_[0]), index=feats)
+    sel["embedded_L1"] = coef[coef > 0].sort_values(ascending=False).head(10).index.tolist()
+    sel["embedded_L1_kept"] = int((coef > 0).sum())
+    # how well does each 10-feature subset do on the unseen test years?
+    sub_scores = {}
+    for name in ["forward", "backward", "filter_mutual_info", "embedded_L1"]:
+        cols = [feats.index(f) for f in sel[name]]
+        m = LogisticRegression(C=0.3, max_iter=2000).fit(Ztr[:, cols], train.y_heavy)
+        sub_scores[name] = average_precision_score(test.y_heavy, m.predict_proba(Zte[:, cols])[:, 1])
+    sel["test_PR_AUC_logreg_10_features"] = {k: round(v, 3) for k, v in sub_scores.items()}
     (out / "feature_selection.json").write_text(json.dumps(sel, indent=2))
     summary["SFS_top10"] = sel["forward"]
     summary["SBS_top10"] = sel["backward"]
+    summary["filter_MI_top10"] = sel["filter_mutual_info"]
+    summary["embedded_L1_top10"] = sel["embedded_L1"]
+    summary["feature_subset_test_PR_AUC"] = sel["test_PR_AUC_logreg_10_features"]
 
     # ----------------------------------- weather regimes (clustering)
     syn_cols = ["dom_tcwv", "dom_u", "dom_mslp", "dom_pr24", "ghats_u", "ghats_tcwv", "dom_rain_lag1_mean"]

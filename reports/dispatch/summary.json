@@ -1,0 +1,15 @@
+{
+  "train_days": 118,
+  "test_days": 9,
+  "pumps": 5,
+  "episodes": 120000,
+  "test_results": {
+    "Oracle (knows outcomes in advance; upper bound)": 2.3335,
+    "Rule: deploy only to zones with >= 50 red segments": 0.9131,
+    "Q-learning (learned policy)": 0.8741,
+    "Rule: deploy if zone is above median severity": 0.8668,
+    "Rule: deploy to every zone until pumps run out": 0.4281,
+    "Never deploy": 0.0
+  },
+  "q_vs_best_rule_pct": -4.3
+}

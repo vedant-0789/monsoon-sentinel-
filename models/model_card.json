@@ -1,0 +1,503 @@
+{
+ "rain": {
+  "task": "P(IMD heavy rain >= 64.5 mm in the next 24 h), issued 08:30 IST, 15 grid cells",
+  "data": "IMD 0.25 deg gauge rainfall + ERA5 hourly reanalysis, Jun-Oct 2001-2024",
+  "split": "train 2001-2016 / validate 2017-2020 / test 2021-2024 (chronological)",
+  "deployed": "XGBoost",
+  "benchmark": [
+   {
+    "model": "Logistic Regression",
+    "ROC_AUC": 0.95,
+    "PR_AUC": 0.658,
+    "BSS_vs_clim": 0.31,
+    "POD": 0.731,
+    "FAR": 0.548,
+    "CSI": 0.387,
+    "HSS": 0.538,
+    "city_ROC_AUC": 0.754
+   },
+   {
+    "model": "Ensemble (LGBM+XGB+RF)",
+    "ROC_AUC": 0.964,
+    "PR_AUC": 0.655,
+    "BSS_vs_clim": 0.311,
+    "POD": 0.768,
+    "FAR": 0.53,
+    "CSI": 0.411,
+    "HSS": 0.564,
+    "city_ROC_AUC": 0.832
+   },
+   {
+    "model": "XGBoost",
+    "ROC_AUC": 0.961,
+    "PR_AUC": 0.655,
+    "BSS_vs_clim": 0.279,
+    "POD": 0.771,
+    "FAR": 0.534,
+    "CSI": 0.409,
+    "HSS": 0.561,
+    "city_ROC_AUC": 0.806
+   },
+   {
+    "model": "Random Forest",
+    "ROC_AUC": 0.962,
+    "PR_AUC": 0.633,
+    "BSS_vs_clim": 0.294,
+    "POD": 0.777,
+    "FAR": 0.542,
+    "CSI": 0.405,
+    "HSS": 0.557,
+    "city_ROC_AUC": 0.843
+   },
+   {
+    "model": "LightGBM",
+    "ROC_AUC": 0.96,
+    "PR_AUC": 0.655,
+    "BSS_vs_clim": 0.313,
+    "POD": 0.694,
+    "FAR": 0.475,
+    "CSI": 0.427,
+    "HSS": 0.581,
+    "city_ROC_AUC": 0.783
+   },
+   {
+    "model": "KNN (k=50)",
+    "ROC_AUC": 0.952,
+    "PR_AUC": 0.645,
+    "BSS_vs_clim": 0.369,
+    "POD": 0.746,
+    "FAR": 0.526,
+    "CSI": 0.408,
+    "HSS": 0.56,
+    "city_ROC_AUC": 0.672
+   },
+   {
+    "model": "Bagging (Decision Trees)",
+    "ROC_AUC": 0.96,
+    "PR_AUC": 0.625,
+    "BSS_vs_clim": 0.315,
+    "POD": 0.731,
+    "FAR": 0.499,
+    "CSI": 0.423,
+    "HSS": 0.577,
+    "city_ROC_AUC": 0.858
+   },
+   {
+    "model": "Neural Network (MLP)",
+    "ROC_AUC": 0.962,
+    "PR_AUC": 0.646,
+    "BSS_vs_clim": 0.323,
+    "POD": 0.765,
+    "FAR": 0.575,
+    "CSI": 0.376,
+    "HSS": 0.525,
+    "city_ROC_AUC": 0.86
+   },
+   {
+    "model": "Decision Tree",
+    "ROC_AUC": 0.95,
+    "PR_AUC": 0.566,
+    "BSS_vs_clim": 0.215,
+    "POD": 0.771,
+    "FAR": 0.568,
+    "CSI": 0.382,
+    "HSS": 0.532,
+    "city_ROC_AUC": 0.812
+   },
+   {
+    "model": "SVM (RBF)",
+    "ROC_AUC": 0.925,
+    "PR_AUC": 0.622,
+    "BSS_vs_clim": 0.33,
+    "POD": 0.648,
+    "FAR": 0.391,
+    "CSI": 0.458,
+    "HSS": 0.614,
+    "city_ROC_AUC": 0.694
+   },
+   {
+    "model": "Gaussian Naive Bayes",
+    "ROC_AUC": 0.931,
+    "PR_AUC": 0.357,
+    "BSS_vs_clim": -3.213,
+    "POD": 0.706,
+    "FAR": 0.588,
+    "CSI": 0.352,
+    "HSS": 0.498,
+    "city_ROC_AUC": 0.677
+   },
+   {
+    "model": "Persistence (baseline)",
+    "ROC_AUC": 0.762,
+    "PR_AUC": 0.309,
+    "BSS_vs_clim": -0.088,
+    "POD": 0.541,
+    "FAR": 0.459,
+    "CSI": 0.371,
+    "HSS": 0.524,
+    "city_ROC_AUC": 0.496
+   },
+   {
+    "model": "Climatology (baseline)",
+    "ROC_AUC": 0.887,
+    "PR_AUC": 0.266,
+    "BSS_vs_clim": 0.0,
+    "POD": 0.624,
+    "FAR": 0.765,
+    "CSI": 0.206,
+    "HSS": 0.305,
+    "city_ROC_AUC": 0.533
+   }
+  ],
+  "top_drivers": [
+   {
+    "feature": "rain_lag1",
+    "mean_abs_shap": 0.014
+   },
+   {
+    "feature": "ghats_pr24",
+    "mean_abs_shap": 0.01
+   },
+   {
+    "feature": "dom_u",
+    "mean_abs_shap": 0.008
+   },
+   {
+    "feature": "rain_sum30",
+    "mean_abs_shap": 0.008
+   },
+   {
+    "feature": "pr_24h",
+    "mean_abs_shap": 0.006
+   },
+   {
+    "feature": "dom_tcwv",
+    "mean_abs_shap": 0.006
+   },
+   {
+    "feature": "rh_mean24",
+    "mean_abs_shap": 0.004
+   },
+   {
+    "feature": "tcwv_max24",
+    "mean_abs_shap": 0.004
+   }
+  ]
+ },
+ "analysis": {
+  "pca_components_90pct": 15,
+  "pca_pr_auc": [
+   0.6581431153338113,
+   0.6016623693408205
+  ],
+  "feature_selection": {
+   "forward": 0.654,
+   "backward": 0.655,
+   "filter_mutual_info": 0.663,
+   "embedded_L1": 0.672
+  },
+  "hmm": {
+   "active": 0.411,
+   "break": 0.019,
+   "dry": 0.0
+  },
+  "regimes": {
+   "0": 0.01,
+   "1": 0.266
+  },
+  "dbscan": {
+   "eps": 1.3321325697491302,
+   "clusters": 1,
+   "anomalous_days": 75,
+   "heavy_rain_rate_anomalous_days": 0.8,
+   "heavy_rain_rate_normal_days": 0.17185309784132324
+  },
+  "apriori": [
+   {
+    "antecedents": "cloudy + moist_flux_high + rain_yesterday_heavy",
+    "support": 0.01,
+    "confidence": 0.809,
+    "lift": 15.929
+   },
+   {
+    "antecedents": "moist_flux_high + rain_yesterday_heavy + wet_week",
+    "support": 0.014,
+    "confidence": 0.746,
+    "lift": 14.701
+   },
+   {
+    "antecedents": "moist_flux_high + rain_yesterday_heavy",
+    "support": 0.014,
+    "confidence": 0.733,
+    "lift": 14.435
+   }
+  ],
+  "regression": {
+   "Linear Regression": {
+    "MAE_mm": 7.553913280971457,
+    "RMSE_mm": 21.146245579216494,
+    "R2": 0.17641287410374773,
+    "MAE_on_heavy_days_mm": 72.01183689772105
+   },
+   "Linear SVR": {
+    "MAE_mm": 8.327960961826307,
+    "RMSE_mm": 25.720378174023388,
+    "R2": -0.21842192649133185,
+    "MAE_on_heavy_days_mm": 85.4836666991584
+   },
+   "Random Forest Regressor": {
+    "MAE_mm": 6.254921896978868,
+    "RMSE_mm": 13.994831703697157,
+    "R2": 0.6392732354300625,
+    "MAE_on_heavy_days_mm": 43.311645205179424
+   }
+  }
+ },
+ "susceptibility": {
+  "task": "Street-level waterlogging susceptibility, ~21,900 road locations",
+  "labels": "32 geocoded hotspots from public sources (traffic police, PMC, 2019/2024 floods)",
+  "validation": "spatial block cross-validation (2 km blocks, 5 folds)",
+  "benchmark": [
+   {
+    "model": "Baseline: near nala",
+    "ROC_AUC": 0.77,
+    "capture_top10pct": 0.375,
+    "capture_top20pct": 0.5
+   },
+   {
+    "model": "Monotone LightGBM (physics 6)",
+    "ROC_AUC": 0.761,
+    "capture_top10pct": 0.344,
+    "capture_top20pct": 0.562
+   },
+   {
+    "model": "Baseline: near river/nala",
+    "ROC_AUC": 0.742,
+    "capture_top10pct": 0.281,
+    "capture_top20pct": 0.469
+   },
+   {
+    "model": "Random Forest (physics 6)",
+    "ROC_AUC": 0.737,
+    "capture_top10pct": 0.375,
+    "capture_top20pct": 0.562
+   },
+   {
+    "model": "Logistic Regression (physics 6)",
+    "ROC_AUC": 0.733,
+    "capture_top10pct": 0.406,
+    "capture_top20pct": 0.5
+   },
+   {
+    "model": "LightGBM (all 15)",
+    "ROC_AUC": 0.696,
+    "capture_top10pct": 0.188,
+    "capture_top20pct": 0.375
+   },
+   {
+    "model": "Logistic Regression (all 15)",
+    "ROC_AUC": 0.674,
+    "capture_top10pct": 0.344,
+    "capture_top20pct": 0.438
+   },
+   {
+    "model": "Random Forest (all 15)",
+    "ROC_AUC": 0.669,
+    "capture_top10pct": 0.188,
+    "capture_top20pct": 0.375
+   },
+   {
+    "model": "Gaussian Naive Bayes (all 15)",
+    "ROC_AUC": 0.64,
+    "capture_top10pct": 0.375,
+    "capture_top20pct": 0.438
+   },
+   {
+    "model": "SVM RBF (all 15)",
+    "ROC_AUC": 0.594,
+    "capture_top10pct": 0.25,
+    "capture_top20pct": 0.375
+   },
+   {
+    "model": "Baseline: low HAND",
+    "ROC_AUC": 0.566,
+    "capture_top10pct": 0.219,
+    "capture_top20pct": 0.281
+   },
+   {
+    "model": "KNN k=25 (all 15)",
+    "ROC_AUC": 0.516,
+    "capture_top10pct": 0.062,
+    "capture_top20pct": 0.062
+   },
+   {
+    "model": "Baseline: high TWI",
+    "ROC_AUC": 0.504,
+    "capture_top10pct": 0.125,
+    "capture_top20pct": 0.125
+   },
+   {
+    "model": "Baseline: flow accumulation",
+    "ROC_AUC": 0.492,
+    "capture_top10pct": 0.094,
+    "capture_top20pct": 0.125
+   }
+  ],
+  "summary": {
+   "best_model": "Monotone LightGBM (physics 6)",
+   "n_hotspots": 32,
+   "n_road_locations": 21458,
+   "spatial_folds": 5,
+   "block_km": 2.0,
+   "metrics": {
+    "ROC_AUC": 0.7610703175971665,
+    "AUC_fold_mean": 0.7775772965100167,
+    "AUC_fold_std": 0.11260832183815135,
+    "capture_top5pct": 0.15625,
+    "capture_top10pct": 0.34375,
+    "capture_top20pct": 0.5625
+   },
+   "top_features": {
+    "log_dist_nala": 0.1263,
+    "log_dist_river": 0.0466,
+    "road_density_500m": 0.0465,
+    "tpi_300m": 0.034,
+    "hand_smooth": 0.0252,
+    "sink_depth_smooth": 0.0175
+   },
+   "risk_class_counts": {
+    "low": 12930,
+    "moderate": 5474,
+    "high": 2245,
+    "very high": 1149
+   }
+  }
+ },
+ "hindcast": {
+  "2019-09-25": {
+   "event": "Ambil Odha flash flood (Sahakar Nagar, Aranyeshwar, Katraj)",
+   "observed_rain_city_cells_mm": 78.1,
+   "max_p_heavy_city": 0.04,
+   "road_share_by_alert": {
+    "green": 0.95,
+    "yellow": 0.05,
+    "orange": 0.0,
+    "red": 0.0
+   },
+   "hotspots_orange_or_red": "0/32"
+  },
+  "2024-07-24": {
+   "event": "Night before the Khadakwasla-release flood",
+   "observed_rain_city_cells_mm": 40.2,
+   "max_p_heavy_city": 0.34,
+   "road_share_by_alert": {
+    "green": 0.282,
+    "yellow": 0.601,
+    "orange": 0.081,
+    "red": 0.036
+   },
+   "hotspots_orange_or_red": "17/32"
+  },
+  "2024-07-25": {
+   "event": "Sinhagad Road / Ekta Nagar flood",
+   "observed_rain_city_cells_mm": 113.9,
+   "max_p_heavy_city": 0.62,
+   "road_share_by_alert": {
+    "green": 0.0,
+    "yellow": 0.693,
+    "orange": 0.189,
+    "red": 0.118
+   },
+   "hotspots_orange_or_red": "31/32"
+  },
+  "2023-07-10": {
+   "event": "ordinary monsoon day",
+   "observed_rain_city_cells_mm": 0.6,
+   "max_p_heavy_city": 0.0,
+   "road_share_by_alert": {
+    "green": 0.95,
+    "yellow": 0.05,
+    "orange": 0.0,
+    "red": 0.0
+   },
+   "hotspots_orange_or_red": "0/32"
+  },
+  "2022-08-20": {
+   "event": "ordinary monsoon day",
+   "observed_rain_city_cells_mm": 0.6,
+   "max_p_heavy_city": 0.0,
+   "road_share_by_alert": {
+    "green": 0.95,
+    "yellow": 0.05,
+    "orange": 0.0,
+    "red": 0.0
+   },
+   "hotspots_orange_or_red": "0/32"
+  },
+  "2024-08-15": {
+   "event": "ordinary monsoon day",
+   "observed_rain_city_cells_mm": 0.0,
+   "max_p_heavy_city": 0.0,
+   "road_share_by_alert": {
+    "green": 0.95,
+    "yellow": 0.05,
+    "orange": 0.0,
+    "red": 0.0
+   },
+   "hotspots_orange_or_red": "0/32"
+  }
+ },
+ "dispatch": {
+  "train_days": 118,
+  "test_days": 9,
+  "pumps": 5,
+  "episodes": 120000,
+  "test_results": {
+   "Oracle (knows outcomes in advance; upper bound)": 2.3335,
+   "Rule: deploy only to zones with >= 50 red segments": 0.9131,
+   "Q-learning (learned policy)": 0.8741,
+   "Rule: deploy if zone is above median severity": 0.8668,
+   "Rule: deploy to every zone until pumps run out": 0.4281,
+   "Never deploy": 0.0
+  },
+  "q_vs_best_rule_pct": -4.3
+ },
+ "citizen_reports": {
+  "summary": {
+   "deployed": "Multinomial Naive Bayes",
+   "examples": 968,
+   "templates": 92,
+   "cv": "GroupKFold(5) over templates",
+   "metrics": {
+    "category_macro_F1": 0.486,
+    "urgent_F1": 0.939,
+    "category_F1_hi": 0.398,
+    "category_F1_en": 0.6,
+    "category_F1_hinglish": 0.467,
+    "category_F1_mr": 0.481
+   }
+  },
+  "benchmark": [
+   {
+    "model": "Logistic Regression",
+    "category_macro_F1": 0.511,
+    "urgent_F1": 0.995
+   },
+   {
+    "model": "Linear SVM",
+    "category_macro_F1": 0.503,
+    "urgent_F1": 0.995
+   },
+   {
+    "model": "Complement Naive Bayes",
+    "category_macro_F1": 0.502,
+    "urgent_F1": 0.926
+   },
+   {
+    "model": "Multinomial Naive Bayes",
+    "category_macro_F1": 0.486,
+    "urgent_F1": 0.939
+   }
+  ]
+ }
+}

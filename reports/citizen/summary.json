@@ -1,0 +1,14 @@
+{
+  "deployed": "Multinomial Naive Bayes",
+  "examples": 968,
+  "templates": 92,
+  "cv": "GroupKFold(5) over templates",
+  "metrics": {
+    "category_macro_F1": 0.486,
+    "urgent_F1": 0.939,
+    "category_F1_hi": 0.398,
+    "category_F1_en": 0.6,
+    "category_F1_hinglish": 0.467,
+    "category_F1_mr": 0.481
+  }
+}

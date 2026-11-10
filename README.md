@@ -8,8 +8,10 @@
 Monsoon Sentinel answers three questions every monsoon morning:
 
 1. **Will it rain heavily?** — probability of IMD "heavy rain" (≥ 64.5 mm / 24 h) for each grid cell over Pune and its Western Ghats catchment, with a plain-language explanation of *why*.
-2. **Which streets will flood?** — waterlogging risk for known hotspots and road segments *(in progress)*.
-3. **What should we do?** — where to pre-position pumps and response crews, and who to alert *(planned)*.
+2. **Which streets will flood?** — waterlogging risk for every ~150 m of Pune's road network, combined with the rain forecast into a green / yellow / orange / red alert.
+3. **What should we do?** — which critical facilities are cut off, where to send the city's limited pumps (Q-learning), and which citizen reports are urgent.
+
+📄 **Writing the paper?** All methods, results tables, figures and references are collected in [`docs/PAPER_REFERENCE.md`](docs/PAPER_REFERENCE.md).
 
 ---
 
@@ -17,12 +19,13 @@ Monsoon Sentinel answers three questions every monsoon morning:
 
 | Module | Status |
 |---|---|
-| ① Rain module — 24 h heavy-rain forecast + SHAP explanations | ✅ v0.1 |
-| ② Waterlogging module — street susceptibility + daily alerts | ✅ v0.1 |
-| ③ Impact module — roads, population, critical facilities | 🗓 planned |
-| ④ Decision module — response zones (DBSCAN) ✅ · RL pump / crew allocation 🗓 | ⏳ partial |
-| ⑤ Citizen signals — reporting ✅ · report classifier + photo verification 🗓 | ⏳ partial |
-| Live system — FastAPI + citizen app + control room (EN / मराठी / हिंदी) | ✅ v0.1 |
+| ① Rain — 24 h heavy-rain forecast, 13-way benchmark, TreeSHAP reasons | ✅ |
+| ② Waterlogging — street susceptibility (spatial CV) + IMD-style daily alerts | ✅ |
+| ③ Impact — road-km on alert, 1,763 critical facilities linked to their access street | ✅ |
+| ④ Decision — DBSCAN response zones, nearest fire-station depot, Q-learning pump dispatch | ✅ |
+| ⑤ Citizen signals — EN / मराठी / हिंदी reports, Naive Bayes category + urgency triage | ✅ |
+| Live system — FastAPI + citizen app + control room + "How it works", installable PWA | ✅ |
+| Photo verification of reports (CNN) | 🗓 future work — no labelled Pune photo set exists yet |
 
 ---
 
@@ -140,6 +143,14 @@ cd web && npm install && npm run dev -- --port 3007
 #      http://localhost:3007/control?date=2024-07-25   (control room)
 ```
 
+### Impact, dispatch and citizen reports
+
+| Module | Method | Result (held-out evaluation) |
+|---|---|---|
+| Impact | 1,763 OSM hospitals, clinics, schools, colleges, police and fire stations linked to their nearest street (≤ 250 m) | 25 July 2024 replay: ~401 km of road on red; Sassoon Hospital among facilities with access road on alert |
+| Pump dispatch | Tabular **Q-learning** (Bellman updates, expected-reward learning, visit-count step size); 5 pumps, zones arrive one by one; depot = nearest fire station | 2× the naive "deploy until empty" rule, within 4 % of the best hand-tuned rule; learns a clean threshold policy on its own ([details](reports/dispatch/)) |
+| Report triage | **Multinomial Naive Bayes** on char + word n-grams with Pune place names masked; EN / Hinglish / मराठी / हिंदी | On never-seen phrasings: category macro-F1 0.49, urgency F1 0.94 (seed data — the app only *suggests*) |
+
 ### Deployment
 
 | Part | Host | How |
@@ -166,6 +177,13 @@ python scripts/geocode_hotspots.py      # hotspot catalogue -> coordinates (Nomi
 python scripts/build_urban_layers.py    # DEM hydrology + OpenStreetMap roads/waterways
 python scripts/train_susceptibility.py  # street susceptibility, spatial CV, map
 python scripts/hindcast_risk.py         # daily alerts on 2019 / 2024 flood days
+
+python scripts/build_impact.py          # critical facilities -> access streets
+python scripts/train_dispatch.py        # Q-learning pump dispatcher (trained on 2001-2020 flood days)
+python scripts/make_report_seed.py      # multilingual report seed set
+python scripts/train_report_classifier.py   # Naive Bayes category + urgency
+python scripts/build_model_card.py      # all metrics -> models/model_card.json
+python scripts/export_artifacts.py      # ship trained artifacts to deploy/artifacts/
 ```
 
 ## Project layout

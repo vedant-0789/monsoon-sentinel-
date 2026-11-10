@@ -18,6 +18,10 @@ FILES = [
     "data/processed/rain_features.parquet",
     "data/processed/road_points_light.parquet",
     "data/labels/pune_hotspots.csv",
+    "data/processed/facilities.parquet",
+    "models/dispatch_qtable.json",
+    "models/report_classifier.joblib",
+    "models/model_card.json",
 ]
 
 if __name__ == "__main__":

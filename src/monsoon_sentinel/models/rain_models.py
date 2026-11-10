@@ -5,7 +5,8 @@ from __future__ import annotations
 import lightgbm as lgb
 import numpy as np
 import xgboost as xgb
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import BaggingClassifier, RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
@@ -36,7 +37,19 @@ def candidates(seed: int = 42) -> dict:
         "Random Forest": (_imputed(RandomForestClassifier(n_estimators=500, min_samples_leaf=5,
                                                           max_features="sqrt", n_jobs=-1,
                                                           random_state=seed)), None),
+        "Bagging (Decision Trees)": (_imputed(BaggingClassifier(
+            DecisionTreeClassifier(max_depth=8, min_samples_leaf=20), n_estimators=200,
+            max_samples=0.7, n_jobs=-1, random_state=seed)), None),
+        "Neural Network (MLP)": (_scaled(MLPClassifier(
+            hidden_layer_sizes=(64, 32), alpha=1e-3, learning_rate_init=1e-3, batch_size=256,
+            max_iter=200, early_stopping=True, validation_fraction=0.15, n_iter_no_change=10,
+            random_state=seed)), None),
     }
+
+
+# The deployed model must give exact per-forecast explanations (TreeSHAP), so only
+# gradient-boosted trees are deployable; every model is still benchmarked.
+DEPLOYABLE = {"XGBoost", "LightGBM"}
 
 
 def fit_lightgbm(X, y, Xv, yv, seed: int = 42) -> lgb.LGBMClassifier:

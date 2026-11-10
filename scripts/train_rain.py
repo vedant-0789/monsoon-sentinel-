@@ -127,8 +127,11 @@ def main():
 
     # deployable model = best non-baseline entry by validation selection score
     fitted["Ensemble (LGBM+XGB+RF)"] = EnsembleModel([fitted[m] for m in ens])
-    tied = bench[bench.tied_best & bench.model.isin(fitted)]
-    best = tied.sort_values("val_Brier").model.iloc[0]
+    # deployable = exact explanations (see rain_models.DEPLOYABLE); best val PR-AUC among them,
+    # near-ties (0.01) broken by validation Brier score
+    dep = bench[bench.model.isin(rm.DEPLOYABLE)]
+    dep = dep[dep.val_PR_AUC >= dep.val_PR_AUC.max() - 0.01]
+    best = dep.sort_values("val_Brier").model.iloc[0]
     b = bench.set_index("model").loc[best]
     best_thr, best_thr_city = float(b["threshold"]), float(b["city_threshold"])
     joblib.dump({"model": fitted[best], "features": feats, "threshold": best_thr,

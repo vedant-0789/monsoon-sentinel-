@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 import xgboost as xgb
 
-from monsoon_sentinel import risk
+from monsoon_sentinel import dispatch, risk
 from monsoon_sentinel.config import load_config
 from monsoon_sentinel.data import live
 from monsoon_sentinel.features import rain_features as rf
@@ -67,6 +67,14 @@ class Sentinel:
         self.hotspots = hs[~hs.name.isin(self.cfg["urban"]["exclude_hotspots"])].reset_index(drop=True)
         self._live_cache: tuple[dt.datetime, pd.DataFrame] | None = None
         self._lock = threading.Lock()
+        fac = self.cfg.path("processed") / "facilities.parquet"
+        self.facilities = pd.read_parquet(fac) if fac.exists() else None
+        self.depots = None
+        if self.facilities is not None:
+            dep = self.facilities[self.facilities.kind == "fire_station"].copy()
+            dep["x"], dep["y"] = _xy(dep.lat.values, dep.lon.values)
+            self.depots = dep
+        self.qtable = dispatch.load_qtable(self.cfg.path("models") / "dispatch_qtable.json")
 
     # ------------------------------------------------------------------ roads
     def _load_roads(self) -> pd.DataFrame:
@@ -235,6 +243,7 @@ class Sentinel:
                                   "lon": round(float(t.plon), 5)} for t in top.itertuples()],
             "hotspots": [{"name": h.name, "type": h.hazard_type, "alert": h.alert, "lat": h.lat, "lon": h.lon,
                           "source": h.source_url} for h in hs.itertuples()],
+            "impact": self.impact(roads),
         }
 
     def roads_geojson(self, mode: str, date: str | None, min_alert: str = "green") -> str:
@@ -280,8 +289,9 @@ class Sentinel:
             "covered": meters < 1500,
         }
 
-    def actions(self, mode: str, date: str | None, max_items: int = 10) -> list[dict]:
-        """Group red/orange street segments with DBSCAN (400 m) into response zones, ranked."""
+    def actions(self, mode: str, date: str | None, max_items: int = 10, use_rl: bool = True) -> list[dict]:
+        """Response zones (DBSCAN 250 m on red streets, oversized ones split by K-means), ranked,
+        with a Q-learning pump-deployment plan and the nearest fire station as depot."""
         from sklearn.cluster import DBSCAN, KMeans
 
         d = self.road_alerts(mode, date)
@@ -312,6 +322,8 @@ class Sentinel:
             cx, cy = g.x.mean(), g.y.mean()
             n_red = int((g.alert == "red").sum())
             n_or = int((((ox - cx) ** 2 + (oy - cy) ** 2) < 600 ** 2).sum())
+            red_share = n_red / max(n_red + n_or, 1)
+            p_flood = float(np.clip(np.nanmean(g.p_eff) * (0.5 + 0.5 * red_share), 0, 1))
             score = n_red * 2 + n_or
             label = named.road_name.iloc[int(np.argmin((nx - cx) ** 2 + (ny - cy) ** 2))]
             clat, clon = _lat_lon(cx, cy)
@@ -319,16 +331,93 @@ class Sentinel:
                 "zone": int(z), "lat": round(float(clat), 5),
                 "lon": round(float(clon), 5), "area_label": label,
                 "red_segments": n_red, "orange_segments": n_or,
-                "priority_score": score,
+                "priority_score": score, "p_flood": round(p_flood, 3),
+                **self._depot(cx, cy),
                 "action": "pump" if n_red >= 10 else "crew" if n_red else "inspect",
                 "recommended": ("Pre-position a dewatering pump and a response crew" if n_red >= 10
                                 else "Station a drain-clearing crew; keep a pump on standby" if n_red
                                 else "Inspect and clear drains before evening"),
             })
         zones.sort(key=lambda z: -z["priority_score"])
-        for i, z in enumerate(zones[:max_items], start=1):
+        zones = zones[:max_items]
+        for i, z in enumerate(zones, start=1):
             z["rank"] = i
-        return zones[:max_items]
+        if use_rl and self.qtable:
+            zones = dispatch.plan(self.qtable, zones)
+            for z in zones:  # the learned policy decides where the limited pumps go
+                z["action"] = "pump" if z["rl_deploy_pump"] else ("crew" if z["red_segments"] else "inspect")
+        return zones
+
+    def _depot(self, cx: float, cy: float) -> dict:
+        if self.depots is None or self.depots.empty:
+            return {}
+        d2 = (self.depots.x.values - cx) ** 2 + (self.depots.y.values - cy) ** 2
+        i = int(np.argmin(d2))
+        return {"depot": self.depots.name.iloc[i], "depot_km": round(float(np.sqrt(d2[i])) / 1000, 1)}
+
+    def impact(self, roads: pd.DataFrame) -> dict:
+        """Road length and critical facilities whose access street is on orange/red alert."""
+        spacing_km = self.cfg["urban"]["sample_spacing_m"] / 1000
+        out = {"red_road_km": round(int((roads.alert == "red").sum()) * spacing_km),
+               "orange_road_km": round(int((roads.alert == "orange").sum()) * spacing_km),
+               "facilities_total": 0, "facilities_at_risk": {}, "facilities": []}
+        if self.facilities is None or self.facilities.empty:
+            return out
+        f = self.facilities.assign(alert=roads.alert.values[self.facilities.road_idx.values])
+        risky = f[f.alert.isin(["red", "orange"])]
+        order = {"hospital": 0, "fire_station": 1, "clinic": 2, "police": 3, "school": 4, "college": 5}
+        risky = risky.assign(o=risky.kind.map(order), a=(risky.alert != "red").astype(int)).sort_values(["a", "o"])
+        out.update({
+            "facilities_total": int(len(f)),
+            "facilities_at_risk": {k: int(v) for k, v in risky.kind.value_counts().items()},
+            "facilities": [{"name": r.name, "kind": r.kind, "alert": r.alert, "lat": round(float(r.lat), 5),
+                            "lon": round(float(r.lon), 5)} for r in risky.head(40).itertuples()],
+        })
+        return out
+
+    # ------------------------------------------------------- citizen reports
+    @property
+    def report_classifier(self):
+        if not hasattr(self, "_clf"):
+            f = self.cfg.path("models") / "report_classifier.joblib"
+            self._clf = joblib.load(f) if f.exists() else None
+        return self._clf
+
+    def classify_report(self, text: str) -> dict | None:
+        clf = self.report_classifier
+        if clf is None or not text or len(text.strip()) < 4:
+            return None
+        p = clf["category"].predict_proba([text])[0]
+        i = int(np.argmax(p))
+        u = float(clf["urgent"].predict_proba([text])[0][1])
+        return {"category": str(clf["category"].classes_[i]), "confidence": round(float(p[i]), 2),
+                "urgent": u >= 0.5, "urgent_probability": round(u, 2)}
+
+    # --------------------------------------------------------------- history
+    def history(self, mode: str, date: str | None, days: int = 14) -> list[dict]:
+        """City heavy-rain probability and observed rain for the days up to the selected one."""
+        city = {tuple(c) for c in self.cfg["grid"]["city_cells"]}
+        if mode == "live":
+            hourly, _ = live.get_hourly(self.cfg)
+            daily = live.daily_rain_imd_style(hourly, self.cfg["issue_hour_utc"])
+            daily = daily[[(a, b) in city for a, b in zip(daily.lat, daily.lon)]]
+            s = daily.groupby("date").rain_mm.max().sort_index()
+            today = pd.Timestamp(dt.datetime.now(dt.timezone.utc).date())
+            s = s[s.index < today].tail(days)
+            return [{"date": str(d.date()), "probability": None, "rain_mm": round(float(v), 1)} for d, v in s.items()]
+        end = pd.Timestamp(date)
+        a = self.archive[(self.archive.date <= end) & (self.archive.date > end - pd.Timedelta(days=days))]
+        a = a[[(x, y) in city for x, y in zip(a.lat, a.lon)]]
+        if a.empty:
+            return []
+        p = self._predict(a.copy())
+        g = p.groupby("date").agg(probability=("p_heavy", "max"), rain_mm=("rain_mm", "max")).reset_index()
+        return [{"date": str(r.date.date()), "probability": round(float(r.probability), 3),
+                 "rain_mm": round(float(r.rain_mm), 1)} for r in g.itertuples()]
+
+    def model_card(self) -> dict:
+        f = self.cfg.path("models") / "model_card.json"
+        return json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
 
     def replay_days(self) -> list[dict]:
         """Notable archived days for the demo picker."""

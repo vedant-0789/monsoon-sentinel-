@@ -1,4 +1,4 @@
-import type { Bulletin, CitizenReport, Mode, PointInfo, ReplayDay, Zone } from "./types";
+import type { Bulletin, CitizenReport, Classification, HistoryPoint, Mode, PointInfo, ReplayDay, Zone } from "./types";
 
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8077").replace(/\/$/, "");
 
@@ -28,14 +28,24 @@ export const api = {
     get<PointInfo>(`/api/point?${qs(mode, date, { lat, lon })}`),
   actions: (mode: Mode, date?: string | null, limit = 10) => get<Zone[]>(`/api/actions?${qs(mode, date, { limit })}`),
   replayDays: () => get<ReplayDay[]>(`/api/replay-days`),
+  history: (mode: Mode, date?: string | null) => get<HistoryPoint[]>(`/api/history?${qs(mode, date)}`),
+  modelCard: () => get<Record<string, unknown>>(`/api/model-card`),
+  classify: async (text: string): Promise<Classification> => {
+    const r = await fetch(`${API_URL}/api/classify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    return r.ok ? r.json() : {};
+  },
   reports: (hours = 72) => get<CitizenReport[]>(`/api/reports?hours=${hours}`),
-  sendReport: async (body: Omit<CitizenReport, "id" | "created_at">) => {
+  sendReport: async (body: Omit<CitizenReport, "id" | "created_at" | "auto_category" | "urgent">) => {
     const r = await fetch(`${API_URL}/api/reports`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
     if (!r.ok) throw new Error(`${r.status}`);
-    return r.json() as Promise<{ id: number; status: string }>;
+    return r.json() as Promise<{ id: number; status: string; urgent?: boolean }>;
   },
 };

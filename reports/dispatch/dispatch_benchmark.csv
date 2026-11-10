@@ -1,0 +1,7 @@
+,avg_reward_per_event
+Oracle (knows outcomes in advance; upper bound),2.333495935191269
+Rule: deploy only to zones with >= 50 red segments,0.913140503754461
+Q-learning (learned policy),0.8741191629850229
+Rule: deploy if zone is above median severity,0.8667958969922108
+Rule: deploy to every zone until pumps run out,0.4280511967805898
+Never deploy,0.0

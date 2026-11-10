@@ -5,12 +5,14 @@ import { api } from "@/lib/api";
 import { ALERT_COPY, factor } from "@/lib/i18n";
 import { useSentinel } from "@/lib/store";
 import type { Alert } from "@/lib/types";
+import { Timeline } from "./charts";
 import { ALERT_STYLE, AlertIcon, AlertPill, Card, Gauge, Spinner, Stat } from "./ui";
 
 const mm = (v: number | null | undefined) => (v === null || v === undefined ? "—" : `${v.toFixed(0)} mm`);
 
 export function AlertHero() {
-  const { bulletin: b, lang, t, loading, error, mode } = useSentinel();
+  const { bulletin: b, lang, t, loading, error, mode, slow, history } = useSentinel();
+  const [copied, setCopied] = useState(false);
   if (error)
     return (
       <Card>
@@ -20,8 +22,12 @@ export function AlertHero() {
     );
   if (!b)
     return (
-      <Card className="flex items-center gap-2 text-sm text-zinc-500">
-        <Spinner /> {t("loading")}
+      <Card className="space-y-3">
+        <div className="flex items-center gap-2 text-sm text-zinc-500">
+          <Spinner /> {slow ? t("waking") : t("loading")}
+        </div>
+        <div className="h-24 animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-800" />
+        <div className="h-16 animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-800" />
       </Card>
     );
   const a = b.headline_alert;
@@ -30,16 +36,36 @@ export function AlertHero() {
   const date = new Date(b.date + "T00:00:00").toLocaleDateString(lang === "en" ? "en-IN" : lang === "mr" ? "mr-IN" : "hi-IN", {
     weekday: "short", day: "numeric", month: "short", year: "numeric",
   });
+  const share = async () => {
+    const text = `${copy.title} — ${copy.advice} (Pune, ${date})`;
+    const url = window.location.href;
+    try {
+      if (navigator.share) await navigator.share({ title: t("app"), text, url });
+      else {
+        await navigator.clipboard.writeText(`${text}
+${url}`);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch {}
+  };
   return (
-    <div className={`overflow-hidden rounded-2xl shadow-sm ring-1 ${s.ring} ${loading ? "opacity-60" : ""} transition-opacity`}>
+    <div className={`ms-enter overflow-hidden rounded-2xl shadow-sm ring-1 ${s.ring} ${loading ? "opacity-60" : ""} transition-opacity`}>
       <div className={`${s.bg} ${s.text} flex items-center gap-3 px-4 py-3`}>
         <AlertIcon alert={a} className="h-9 w-9 shrink-0" />
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="text-xl font-bold leading-tight">{copy.title}</div>
           <div className="text-xs opacity-90">
             Pune · {date} · {mode === "live" ? `${t("issued")} ${b.issued_at}` : `${t("replay")}`}
           </div>
         </div>
+        <button
+          onClick={share}
+          className="shrink-0 rounded-full bg-black/15 px-3 py-1.5 text-xs font-semibold backdrop-blur transition hover:bg-black/25"
+          aria-label={t("share")}
+        >
+          {copied ? t("copied") : t("share")}
+        </button>
       </div>
       <div className="space-y-3 bg-white p-4 dark:bg-zinc-900">
         <p className="text-[15px] leading-snug">{copy.advice}</p>
@@ -61,6 +87,12 @@ export function AlertHero() {
           <Stat label={t("last3days")} value={mm(b.heavy_rain.rain_last_3_days_mm)} />
         </div>
         <Drivers />
+        {history.length > 0 && (
+          <div className="rounded-xl border border-zinc-200 p-3 dark:border-zinc-800">
+            <div className="mb-1 text-xs font-semibold">{t("last14")}</div>
+            <Timeline data={history} labels={{ rain: t("rainBars"), chance: t("chanceLine") }} />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -218,6 +250,18 @@ export function ReportSheet({ open, onClose }: { open: boolean; onClose: () => v
   const [cat, setCat] = useState<(typeof CATS)[number]>("waterlogging");
   const [depth, setDepth] = useState<(typeof DEPTHS)[number]>("unknown");
   const [note, setNote] = useState("");
+  const [suggest, setSuggest] = useState<{ category?: string; urgent?: boolean } | null>(null);
+  const [touchedCat, setTouchedCat] = useState(false);
+  useEffect(() => {
+    if (note.trim().length < 6) return;
+    const id = setTimeout(() => {
+      api.classify(note).then((c) => {
+        setSuggest(c);
+        if (!touchedCat && c.category && (c.confidence ?? 0) >= 0.5) setCat(c.category as (typeof CATS)[number]);
+      }).catch(() => {});
+    }, 450);
+    return () => clearTimeout(id);
+  }, [note, touchedCat]);
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   useEffect(() => {
     if (!open) return;
@@ -260,7 +304,7 @@ export function ReportSheet({ open, onClose }: { open: boolean; onClose: () => v
           <>
             <div className="mt-4 flex flex-wrap gap-2">
               {CATS.map((c) => (
-                <button key={c} className={chip(cat === c)} onClick={() => setCat(c)} aria-pressed={cat === c}>
+                <button key={c} className={chip(cat === c)} onClick={() => { setCat(c); setTouchedCat(true); }} aria-pressed={cat === c}>
                   {t(`cat_${c}`)}
                 </button>
               ))}
@@ -278,6 +322,14 @@ export function ReportSheet({ open, onClose }: { open: boolean; onClose: () => v
               id="note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} rows={2}
               className="mt-1 w-full rounded-xl border border-zinc-300 bg-transparent p-2 text-sm outline-none focus:border-blue-600 dark:border-zinc-700"
             />
+            {note.trim().length >= 6 && suggest?.category && (
+              <p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-zinc-500" aria-live="polite">
+                <span>{t("suggested", { c: t(`cat_${suggest.category}`) })}</span>
+                {suggest.urgent && (
+                  <span className="rounded-full bg-red-600 px-2 py-0.5 font-semibold text-white">{t("urgentHint")}</span>
+                )}
+              </p>
+            )}
             {state === "error" && <p className="mt-2 text-sm text-red-600">{t("apiDown")}</p>}
           </>
         )}

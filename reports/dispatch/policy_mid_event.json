@@ -1,0 +1,22 @@
+{
+  "severity 0, pumps 1": "hold",
+  "severity 0, pumps 2": "hold",
+  "severity 0, pumps 3": "hold",
+  "severity 0, pumps 4": "hold",
+  "severity 0, pumps 5": "deploy",
+  "severity 1, pumps 1": "hold",
+  "severity 1, pumps 2": "hold",
+  "severity 1, pumps 3": "hold",
+  "severity 1, pumps 4": "deploy",
+  "severity 1, pumps 5": "deploy",
+  "severity 2, pumps 1": "hold",
+  "severity 2, pumps 2": "deploy",
+  "severity 2, pumps 3": "deploy",
+  "severity 2, pumps 4": "deploy",
+  "severity 2, pumps 5": "deploy",
+  "severity 3, pumps 1": "deploy",
+  "severity 3, pumps 2": "deploy",
+  "severity 3, pumps 3": "deploy",
+  "severity 3, pumps 4": "deploy",
+  "severity 3, pumps 5": "deploy"
+}

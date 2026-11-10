@@ -18,6 +18,40 @@ QUERIES = {
                motorway_link|trunk_link|primary_link|secondary_link|tertiary_link)$"]({bbox});""",
     "waterways": """way["waterway"~"^(river|stream|canal|drain|ditch)$"]({bbox});""",
 }
+FACILITY_QUERY = """nwr["amenity"~"^(hospital|clinic|school|college|fire_station|police)$"]({bbox});"""
+
+
+def download_facilities(cfg: Config) -> Path:
+    f = cfg.path("raw") / "osm" / "facilities.json"
+    if f.exists():
+        return f
+    query = f"[out:json][timeout:300];({FACILITY_QUERY.format(bbox=_bbox(cfg))});out center tags;"
+    for attempt in range(6):
+        try:
+            r = requests.post(OVERPASS, data={"data": query}, headers=UA, timeout=400)
+            if r.status_code == 200:
+                f.write_text(r.text, encoding="utf-8")
+                return f
+        except requests.RequestException:
+            pass
+        time.sleep(30 * (attempt + 1))
+    raise RuntimeError("Overpass download failed for facilities")
+
+
+def load_facilities(path: Path):
+    import pandas as pd
+
+    js = json.loads(Path(path).read_text(encoding="utf-8"))
+    rows = []
+    for el in js["elements"]:
+        lat = el.get("lat") or el.get("center", {}).get("lat")
+        lon = el.get("lon") or el.get("center", {}).get("lon")
+        t = el.get("tags", {})
+        if lat is None or lon is None:
+            continue
+        rows.append({"osm_id": f"{el['type']}/{el['id']}", "kind": t.get("amenity"),
+                     "name": t.get("name") or t.get("name:en"), "lat": lat, "lon": lon})
+    return pd.DataFrame(rows)
 
 
 def _bbox(cfg: Config) -> str:

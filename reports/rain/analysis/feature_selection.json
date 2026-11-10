@@ -22,5 +22,36 @@
     "moist_flux_u",
     "dom_rain_lag1_mean",
     "rh_now"
-  ]
+  ],
+  "filter_mutual_info": [
+    "ghats_pr24",
+    "dom_pr24",
+    "rain_lag1",
+    "dom_rain_lag1_mean",
+    "rain_sum3",
+    "dom_rain_lag1_max",
+    "ghats_u",
+    "pr_24h",
+    "dom_mslp",
+    "dom_u"
+  ],
+  "embedded_L1": [
+    "rain_lag1",
+    "rh_mean24",
+    "tcwv_max24",
+    "ghats_pr24",
+    "rain_sum30",
+    "dom_rain_lag1_max",
+    "pr_24h",
+    "u_tend24",
+    "rain_sum3",
+    "doy_sin"
+  ],
+  "embedded_L1_kept": 12,
+  "test_PR_AUC_logreg_10_features": {
+    "forward": 0.654,
+    "backward": 0.655,
+    "filter_mutual_info": 0.663,
+    "embedded_L1": 0.672
+  }
 }

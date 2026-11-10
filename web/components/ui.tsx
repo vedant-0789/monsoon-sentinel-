@@ -48,7 +48,7 @@ export function AlertIcon({ alert, className = "h-6 w-6" }: { alert: Alert; clas
 export function AlertPill({ alert, label }: { alert: Alert; label: string }) {
   const s = ALERT_STYLE[alert];
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${s.bg} ${s.text}`}>
+    <span className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-semibold ${s.bg} ${s.text}`}>
       <AlertIcon alert={alert} className="h-3.5 w-3.5" />
       {label}
     </span>
