@@ -1,0 +1,52 @@
+name: Deploy API to Hugging Face Space
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "api/**"
+      - "src/**"
+      - "configs/**"
+      - "deploy/**"
+      - "requirements-api.txt"
+      - ".github/workflows/deploy-api.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Needs: repository secret HF_TOKEN (write token) and variable HF_SPACE (e.g. user/monsoon-sentinel-api)
+    if: ${{ vars.HF_SPACE != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble Space build context
+        run: |
+          mkdir -p space
+          cp -r api src configs requirements-api.txt space/
+          cp deploy/Dockerfile deploy/README.md space/
+          cp -r deploy/artifacts/models deploy/artifacts/data space/
+          find space -name "__pycache__" -prune -exec rm -rf {} +
+          du -sh space
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Upload to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          pip install -q "huggingface_hub>=0.30"
+          python - <<'EOF'
+          import os
+          from huggingface_hub import HfApi
+          api = HfApi(token=os.environ["HF_TOKEN"])
+          repo = os.environ["HF_SPACE"]
+          api.create_repo(repo, repo_type="space", space_sdk="docker", exist_ok=True)
+          api.upload_folder(folder_path="space", repo_id=repo, repo_type="space",
+                            commit_message=f"Deploy {os.environ.get('GITHUB_SHA', '')[:7]}",
+                            delete_patterns=["*"])
+          print(f"Deployed: https://huggingface.co/spaces/{repo}")
+          EOF

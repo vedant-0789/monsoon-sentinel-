@@ -1,0 +1,17 @@
+# Runtime dependencies of the deployed API, pinned to the versions the
+# shipped models were trained with (pickled XGBoost/sklearn objects are version-sensitive).
+numpy==2.5.4
+pandas==3.1.1
+pyarrow==26.0.1
+PyYAML==6.0.3
+requests==2.34.2
+joblib==1.6.0
+scipy==1.18.1
+scikit-learn==1.9.1
+xgboost==3.4.1
+shapely==2.2.0
+pyproj==3.8.0
+geopandas==1.2.0
+pydantic==2.14.3
+fastapi==0.162.3
+uvicorn==0.54.0
