@@ -157,7 +157,10 @@ export function SubscribeCard({ onOpen }: { onOpen: () => void }) {
 export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t, lang, picked, alertLabels } = useSentinelWithLabels();
   const [channel, setChannel] = useState<"whatsapp" | "sms">("whatsapp");
-  const [phone, setPhone] = useState("+91");
+  const [phoneInput, setPhoneInput] = useState("");
+  // a 10-digit Indian mobile gets +91; anything typed with + is used as given (E.164)
+  const digits = phoneInput.replace(/[\s-]/g, "");
+  const phone = digits.startsWith("+") ? digits : `+91${digits.replace(/^0/, "")}`;
   const [label, setLabel] = useState("");
   const [minAlert, setMinAlert] = useState<"yellow" | "orange" | "red">("orange");
   const [consent, setConsent] = useState(false);
@@ -182,7 +185,7 @@ export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () =
     setBusy(true);
     setErr(null);
     try {
-      const r = await api.subscribe({ channel, phone: phone.replace(/\s|-/g, ""), lang, lat: picked.lat, lon: picked.lon,
+      const r = await api.subscribe({ channel, phone, lang, lat: picked.lat, lon: picked.lon,
         label: (label || place || "My street").slice(0, 60), min_alert: minAlert, consent });
       setSubId(r.id);
       setDemo(r.demo_code ?? null);
@@ -208,7 +211,7 @@ export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () =
   };
   const seg = (on: boolean) => `flex-1 rounded-lg px-3 py-2 text-sm font-medium transition ${on ? "bg-white shadow-sm dark:bg-zinc-700" : "text-zinc-500"}`;
   const input = "mt-1 w-full rounded-xl border border-zinc-300 bg-transparent px-3 py-2 text-sm outline-none focus:border-blue-600 dark:border-zinc-700";
-  const phoneOk = /^\+[1-9]\d{7,14}$/.test(phone.replace(/\s|-/g, ""));
+  const phoneOk = /^\+[1-9]\d{7,14}$/.test(phone) && (digits.startsWith("+") || /^0?[6-9]\d{9}$/.test(digits));
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={onClose}>
@@ -229,7 +232,11 @@ export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () =
               </div>
             </div>
             <label className="block text-sm font-medium">{t("phone")}
-              <input className={input} inputMode="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+9198XXXXXXXX" />
+              <div className="mt-1 flex items-center rounded-xl border border-zinc-300 focus-within:border-blue-600 dark:border-zinc-700">
+                {!digits.startsWith("+") && <span className="pl-3 text-sm text-zinc-500">+91</span>}
+                <input className="w-full bg-transparent px-2 py-2 text-sm outline-none" inputMode="tel" autoComplete="tel-national"
+                  value={phoneInput} onChange={(e) => setPhoneInput(e.target.value)} placeholder="98XXXXXXXX" />
+              </div>
             </label>
             <label className="block text-sm font-medium">{t("placeName")}
               <input className={input} value={label} maxLength={60} onChange={(e) => setLabel(e.target.value)} placeholder={place || "Home"} />
