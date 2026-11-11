@@ -12,6 +12,7 @@ inside the 24 h window after the user messages you (e.g. Twilio's sandbox after 
 
 from __future__ import annotations
 
+import json
 import os
 import re
 from dataclasses import dataclass
@@ -77,13 +78,40 @@ def configured() -> dict:
     }
 
 
-def _twilio(to: str, body: str, sender: str) -> SendResult:
+# WhatsApp only allows free-form text inside the 24 h window after the user writes to you;
+# business-initiated messages need an approved template, sent by its Content SID (HX...).
+TEMPLATE_ERRORS = ("21654", "63016", "63032")
+TWILIO_TEMPLATE_ENV = {"code": "TWILIO_WA_CODE_CONTENT_SID", "alert": "TWILIO_WA_ALERT_CONTENT_SID"}
+
+
+def _twilio(to: str, body: str, sender: str, content_sid: str | None = None,
+            variables: list[str] | None = None) -> SendResult:
     sid, tok = os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"]
+    data = {"To": to, "From": sender}
+    if content_sid:
+        data["ContentSid"] = content_sid
+        data["ContentVariables"] = json.dumps({str(i + 1): str(v) for i, v in enumerate(variables or [])})
+    else:
+        data["Body"] = body
     r = requests.post(f"https://api.twilio.com/2010-04-01/Accounts/{sid}/Messages.json",
-                      data={"To": to, "From": sender, "Body": body}, auth=(sid, tok), timeout=30)
+                      data=data, auth=(sid, tok), timeout=30)
     if r.ok:
         return SendResult("sent", "twilio", r.json().get("sid"))
     return SendResult("failed", "twilio", detail=f"{r.status_code}: {r.text[:200]}")
+
+
+def _twilio_whatsapp(to: str, body: str, kind: str, template_params: list[str] | None) -> SendResult:
+    """Template first when one is configured for this kind of message, else free-form text."""
+    sender = os.environ["TWILIO_WHATSAPP_FROM"]
+    content_sid = os.environ.get(TWILIO_TEMPLATE_ENV.get(kind, ""), "").strip()
+    if content_sid and template_params is not None:
+        return _twilio(f"whatsapp:{to}", body, sender, content_sid, template_params)
+    res = _twilio(f"whatsapp:{to}", body, sender)
+    if res.status == "failed" and any(c in (res.detail or "") for c in TEMPLATE_ERRORS):
+        env = TWILIO_TEMPLATE_ENV.get(kind)
+        res.detail = ("WhatsApp only accepts an approved template for this message. "
+                      + (f"Set {env} to the template's Content SID (HX...)." if env else "Ask the user to message first."))
+    return res
 
 
 def _meta_whatsapp(to: str, body: str, template_params: list[str] | None) -> SendResult:
@@ -103,7 +131,9 @@ def _meta_whatsapp(to: str, body: str, template_params: list[str] | None) -> Sen
     return SendResult("failed", "meta_whatsapp", detail=f"{r.status_code}: {r.text[:200]}")
 
 
-def send(channel: str, to: str, body: str, template_params: list[str] | None = None) -> SendResult:
+def send(channel: str, to: str, body: str, template_params: list[str] | None = None,
+         kind: str = "info") -> SendResult:
+    """kind: "code" (verification), "alert" (morning alert) or "info" (free-form only)."""
     cfg = configured()
     if cfg["dry_run"]:
         return SendResult("dry_run", "log", detail=body[:160])
@@ -113,7 +143,7 @@ def send(channel: str, to: str, body: str, template_params: list[str] | None = N
         if channel == "whatsapp" and cfg["whatsapp_meta"]:
             return _meta_whatsapp(to, body, template_params)
         if channel == "whatsapp" and cfg["whatsapp_twilio"]:
-            return _twilio(f"whatsapp:{to}", body, os.environ["TWILIO_WHATSAPP_FROM"])
+            return _twilio_whatsapp(to, body, kind, template_params)
     except requests.RequestException as ex:
         return SendResult("failed", channel, detail=str(ex)[:200])
     return SendResult("dry_run", "log", detail="no provider configured for " + channel)

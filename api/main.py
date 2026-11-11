@@ -285,7 +285,9 @@ def subscribe(body: SubscribeIn):
         "verified, code_hash, code_expires, attempts) VALUES (?,?,?,?,?,?,?,?,0,?,0,?,?,0)",
         (now_iso(), body.channel, phone, body.lang, body.lat, body.lon, body.label, body.min_alert,
          new_token(), _hash(code), expires))
-    res = alerts.send(body.channel, phone, alerts.code_text(body.lang, code), template_params=[code])
+    # template variables fit Twilio's pre-approved "Your {{1}} code is {{2}}" verification template
+    res = alerts.send(body.channel, phone, alerts.code_text(body.lang, code),
+                      template_params=["Monsoon Sentinel", code], kind="code")
     if res.status == "failed":
         raise HTTPException(502, f"could not send the code ({res.provider}): {res.detail}")
     out = {"id": sid, "status": "code_sent" if res.status == "sent" else res.status, "channel": body.channel}
@@ -378,8 +380,12 @@ def dispatch_alerts(body: DispatchIn, x_admin_token: str = Header("")):
         unsub = f"{API_URL}/api/unsubscribe?token={sub['token']}"
         text = alerts.alert_text(sub["lang"], pt["alert"], sub["label"], pt["nearest_road"],
                                  pt["heavy_rain_probability"] or 0, link, unsub)
+        fields = {"title": alerts.TITLES[sub["lang"]][pt["alert"]], "place": sub["label"],
+                  "road": pt["nearest_road"], "chance": f"{round((pt['heavy_rain_probability'] or 0) * 100)}%",
+                  "date": day, "link": link, "advice": alerts.ADVICE[sub["lang"]][pt["alert"]]}
+        order = [f.strip() for f in os.environ.get("MS_ALERT_TEMPLATE_VARS", "title,place,link").split(",") if f.strip()]
         res = alerts.send(sub["channel"], sub["phone"], text,
-                          template_params=[alerts.TITLES[sub["lang"]][pt["alert"]], sub["label"], link])
+                          template_params=[fields.get(f, f) for f in order], kind="alert")
         db.execute("INSERT INTO alert_log (created_at, subscriber_id, alert_date, alert, channel, status, "
                    "provider_id, detail) VALUES (?,?,?,?,?,?,?,?)",
                    (now_iso(), sub["id"], day, pt["alert"], sub["channel"], res.status, res.provider_id, res.detail))
