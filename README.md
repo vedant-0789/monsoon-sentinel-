@@ -25,7 +25,10 @@ Monsoon Sentinel answers three questions every monsoon morning:
 | ④ Decision — DBSCAN response zones, nearest fire-station depot, Q-learning pump dispatch | ✅ |
 | ⑤ Citizen signals — EN / मराठी / हिंदी reports, Naive Bayes category + urgency triage | ✅ |
 | Live system — FastAPI + citizen app + control room + "How it works", installable PWA | ✅ |
-| Photo verification of reports (CNN) | 🗓 future work — no labelled Pune photo set exists yet |
+| Short-range outlook — 5 NWP models hour by hour, intense-rain watch (verified vs IMD 2022–24) | ✅ |
+| Photo verification — MobileNetV3 CNN (95.3 % test accuracy), on the phone and on the server | ✅ |
+| WhatsApp / SMS alerts — verified opt-in, street-level morning dispatch, EN / मराठी / हिंदी | ✅ (needs provider keys to send) |
+| Engineering — 30 tests + CI, Postgres (Neon) storage, keep-alive, scheduled data pipeline | ✅ |
 
 ---
 
@@ -150,6 +153,18 @@ cd web && npm install && npm run dev -- --port 3007
 | Impact | 1,763 OSM hospitals, clinics, schools, colleges, police and fire stations linked to their nearest street (≤ 250 m) | 25 July 2024 replay: ~401 km of road on red; Sassoon Hospital among facilities with access road on alert |
 | Pump dispatch | Tabular **Q-learning** (Bellman updates, expected-reward learning, visit-count step size); 5 pumps, zones arrive one by one; depot = nearest fire station | 2× the naive "deploy until empty" rule, within 4 % of the best hand-tuned rule; learns a clean threshold policy on its own ([details](reports/dispatch/)) |
 | Report triage | **Multinomial Naive Bayes** on char + word n-grams with Pune place names masked; EN / Hinglish / मराठी / हिंदी | On never-seen phrasings: category macro-F1 0.49, urgency F1 0.94 (seed data — the app only *suggests*) |
+
+### Going fully live: environment variables (Render)
+
+| Variable | Purpose |
+|---|---|
+| `DATABASE_URL` | Neon Postgres connection string: keeps reports and subscribers across restarts |
+| `MS_ADMIN_TOKEN` | Long random secret; also add it as the GitHub secret `MS_ADMIN_TOKEN` for the morning-alert workflow |
+| `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_SMS_FROM` | SMS via Twilio |
+| `TWILIO_WHATSAPP_FROM` | WhatsApp via Twilio (sandbox: `whatsapp:+14155238886`) |
+| `WA_TOKEN`, `WA_PHONE_NUMBER_ID`, `WA_TEMPLATE`, `WA_TEMPLATE_LANG` | WhatsApp via Meta Cloud API (approved template for business-initiated messages) |
+
+Without provider keys the API runs in dry-run mode: sign-up works and shows the code on screen, and alerts are logged, not sent.
 
 ### Deployment
 

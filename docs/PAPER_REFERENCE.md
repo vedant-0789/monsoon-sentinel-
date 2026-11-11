@@ -23,7 +23,7 @@
 | Facilities | 1,763 OSM hospitals, clinics, schools, colleges, police, fire stations linked to streets |
 | Deployed rain model | XGBoost (exact TreeSHAP explanations) |
 | Deployed susceptibility model | Monotone-constrained LightGBM on 6 physics features |
-| Live system | FastAPI (Render) + Next.js (Vercel), EN/मराठी/हिंदी, live + replay modes |
+| Live system | FastAPI (Render) + Next.js (Vercel), EN/मराठी/हिंदी, live + replay modes, WhatsApp/SMS alerts, photo verification, 5-model hourly outlook |
 | Live demo | https://monsoon-sentinel-zeta.vercel.app · API docs https://monsoon-sentinel-api.onrender.com/docs |
 
 ---
@@ -59,8 +59,10 @@
 3. **Physics-guided susceptibility from ~30 labels:** monotone constraints beat unconstrained ML under spatial cross-validation (0.70 → 0.76 AUC; 38 % → 56 % hotspot capture in the top 20 %).
 4. **A curated, source-linked Pune hotspot dataset** (first public one, as far as we found), plus 21,891 scored street points.
 5. **Q-learning online pump dispatch** under a limited fleet. It learns an interpretable threshold policy without hand-tuning, doubles the naive rule's reward, and comes within 4 % of the best hand-tuned rule.
-6. **A multilingual citizen-report triage model** (Multinomial NB, char + word n-grams, place-name masking), evaluated on held-out phrasings.
-7. **An honest negative result** for the 2019 convective cloudburst, which identifies where NWP/radar nowcasting must come in.
+6. **A multilingual citizen-report triage model** (Multinomial NB, char + word n-grams, place-name masking), evaluated on held-out phrasings, plus **two-tier CNN photo verification** (95.3 % accuracy, the same ONNX model on the phone and the server).
+7. **A rigorous test of operational short-range NWP:** five models, six ways of combining them, leave-one-season-out. None adds daily heavy-rain skill over the morning ML model, which shapes how NWP is used (timing, not likelihood).
+8. **End-to-end delivery:** verified, consented, multilingual WhatsApp/SMS alerts targeted to each subscriber's own street.
+9. **An honest negative result** for the 2019 convective cloudburst, which identifies where NWP/radar nowcasting must come in.
 
 ---
 
@@ -358,6 +360,61 @@ On the same 2024 sample, the morning ML model reaches PR-AUC 0.67 and the ensemb
 - NWP is therefore used for **timing**: an hour-by-hour outlook, plus an intense-rain watch when ≥ 3 models forecast ≥ 30 mm in 3 h.
 - **Caveats:** the archive starts in 2022, so the 2019 cloudburst cannot be hindcast, and there is no hourly gauge truth to verify the watch.
 
+### 7.8 Photo verification of citizen reports (CNN, transfer learning)
+
+**Setup:**
+- **Data:** Flood10k (Odebode & Bennett Milburn 2025, Mendeley Data, DOI 10.17632/4sgcd7zdsp.1, CC BY-NC 4.0).
+  - 10,320 usable photos: 5,093 flooded, 5,227 normal.
+  - Flooded photos come from CrisisMMD, the Twitter Flood Dataset and FloodIMG.
+  - Normal photos come from Twitter and Google image searches.
+- **Split:** 70/10/20, stratified, seed 42.
+- **Model:**
+  - Backbone: ImageNet MobileNetV3-Small, frozen, giving 576-d pooled features.
+  - Heads compared on those features, against a colour-histogram baseline with no deep learning.
+  - Deployed head: logistic regression, folded into the network and exported to ONNX (3.7 MB). ONNX and PyTorch outputs differ by at most 7e-8.
+
+| Model (test, 2,064 photos) | Accuracy | F1 | Precision | Recall | ROC-AUC |
+|---|---|---|---|---|---|
+| Colour histogram + LR (no deep learning) | 0.857 | 0.859 | 0.835 | 0.885 | 0.915 |
+| CNN features + KNN (k=15) | 0.929 | 0.931 | 0.890 | 0.976 | 0.980 |
+| CNN features + Random Forest | 0.949 | 0.949 | 0.938 | 0.960 | 0.985 |
+| CNN features + Linear SVM | 0.952 | 0.951 | 0.955 | 0.948 | 0.987 |
+| **CNN features + Logistic Regression (deployed)** | **0.953** | **0.952** | **0.956** | **0.949** | **0.988** |
+
+- **"Verified" threshold:** 0.70, chosen on validation for ≥ 95 % precision. On test it gives precision 0.967 and recall 0.916.
+- **Confusion matrix at 0.5:** TN 1000, FP 45, FN 52, TP 967.
+- **Two-tier deployment:**
+  - The *same* ONNX model runs in the browser (onnxruntime-web, WebAssembly). This gives instant feedback, and the photo never needs to leave the phone just to be checked.
+  - It runs again on the server (onnxruntime) for the authoritative score shown in the control room.
+- **Privacy:** photos are resized to ≤ 1024 px on the device, and the canvas re-encode strips EXIF/GPS. The server stores ≤ 640 px JPEGs.
+- **Limitations:**
+  - The "normal" class comes partly from Google searches, so some source bias is possible.
+  - Not yet tested on Pune street photos; collect them from the app and re-evaluate.
+
+### 7.9 Alert delivery (WhatsApp / SMS)
+
+- **Opt-in flow:**
+  1. The citizen chooses WhatsApp or SMS, a location, a language (EN/MR/HI) and a minimum level (yellow/orange/red), with explicit consent.
+  2. A 6-digit code proves phone ownership. It's stored as a hash, expires in 15 min, and allows 5 attempts and at most 3 sign-ups per number per hour.
+- **Morning dispatch:** at 08:45 IST, a GitHub Actions cron calls an admin-token-protected endpoint.
+  - Each verified subscriber gets an alert only if *their* street reaches their level.
+  - No duplicate is sent the same day unless the level rises.
+  - Every message carries an unsubscribe link, and every attempt is logged.
+- **Providers:** Twilio SMS, Twilio WhatsApp, and Meta WhatsApp Cloud API (business-initiated messages need an approved template). With no provider configured, the system logs a dry run.
+- **Tested end to end:**
+  - API tests cover consent, phone validation, the code, dispatch on a red day vs a green day, de-duplication, unsubscribe, and never exposing phone numbers.
+  - The live web sign-up was tested in dry-run mode.
+
+### 7.10 Engineering quality
+- **Tests:** 30 automated pytest tests (units + API integration on the shipped artifacts).
+- **CI:** GitHub Actions runs the tests plus web lint, type check and production build on every push.
+- **Scheduled jobs:**
+  - live-data snapshot every 3 h
+  - morning alerts
+  - keep-alive ping every 10 min
+- **Storage:** Postgres (Neon) through `DATABASE_URL`, with SQLite fallback and lightweight migrations.
+- **Live robustness:** live-mode calls give up after 2 quick tries and are cached for 30 min. An earlier retry loop could block a request for about 3 minutes under upstream rate limiting.
+
 ---
 
 ## 8. System and deployment (for a "System design" section)
@@ -395,7 +452,8 @@ DEM / OSM layers ┘   risk · impact · RL   │                               
 - Obtain the PMC hotspot list via RTI and get event dates from traffic-police call logs → event-level labels.
 - Conformal prediction intervals for street risk; transfer to Mumbai/Chennai.
 - Deep RL with travel times and the real pump fleet; multi-agent pump + crew dispatch.
-- Photo verification of reports (CNN), and an active-learning loop from confirmed reports.
+- Re-evaluate the photo CNN on Pune photos collected through the app; an active-learning loop from confirmed reports.
+- Hourly rain-gauge or radar truth to verify the intense-rain watch; post-processing NWP at sub-daily scale.
 - A persistent database plus WhatsApp/SMS alert delivery.
 
 ## 11. Figures available (paths)
@@ -411,6 +469,8 @@ DEM / OSM layers ┘   risk · impact · RL   │                               
 | Susceptibility map | `reports/urban/susceptibility_map.png` |
 | Alert hindcast on 6 days | `reports/urban/hindcast_alerts.png` |
 | Q-learning curve | `reports/dispatch/learning_curve.png` |
+| Morning ML vs NWP precision-recall curves | `reports/nowcast/pr_curves.png` |
+| Photo verifier benchmark | `reports/photo/photo_benchmark.md` |
 | App screenshots | take from the live demo (citizen, control room, "How it works") |
 
 ## 12. Reproducibility
@@ -426,7 +486,10 @@ python scripts/hindcast_risk.py        # alert hindcast
 python scripts/build_impact.py         # facilities
 python scripts/train_dispatch.py       # Q-learning
 python scripts/make_report_seed.py && python scripts/train_report_classifier.py
+python scripts/build_nowcast.py         # 5-model short-range forecasts vs IMD
+python scripts/train_photo_verifier.py # needs data/raw/flood10k/Flood10k.zip (Mendeley, CC BY-NC 4.0)
 python scripts/build_model_card.py && python scripts/export_artifacts.py
+python -m pytest -q                    # 30 tests
 ```
 Seeds are fixed (42 / 0). Splits are chronological for rain and spatial (2 km blocks) for streets.
 
@@ -460,6 +523,9 @@ Seeds are fixed (42 / 0). Splits are chronological for rain and spatial (2 km bl
 - Water level from social media images — https://ar5iv.labs.arxiv.org/html/2007.06749
 - Pune hotspot sources: https://www.mypunepulse.com/pune-traffic-police-flag-26-waterlogging-hotspots-ahead-of-peak-monsoon-seek-pmcs-urgent-intervention/ ; https://www.thebridgechronicle.com/pune/heavy-rains-waterlogging-90-locations-pune ; https://www.punekarnews.in/?p=182761 ; https://citizenmatters.in/pune-september-flash-floods-causes-and-aftermath-14109
 - Data: IMD gridded rainfall (Pai et al., 2014, *Mausam*); ERA5 (Hersbach et al., 2020, *QJRMS*); Copernicus GLO-30; OpenStreetMap.
+- Flood10k: Odebode, A.; Bennett Milburn, A. (2025) Flood10k Dataset, Mendeley Data, V1, doi:10.17632/4sgcd7zdsp.1 (+ CrisisMMD: Alam, Ofli & Imran 2018, ICWSM).
+- MobileNetV3: Howard et al. 2019 (ICCV); ONNX Runtime.
+- Open-Meteo Historical Forecast API (ECMWF IFS, GFS, ICON, GEM, JMA).
 - Methods to cite: XGBoost (Chen & Guestrin 2016); LightGBM (Ke et al. 2017); SHAP/TreeSHAP (Lundberg & Lee 2017; Lundberg et al. 2020); DBSCAN (Ester et al. 1996); Q-learning (Watkins & Dayan 1992); HAND (Rennó et al. 2008); TWI (Beven & Kirkby 1979); verification scores (Wilks, *Statistical Methods in the Atmospheric Sciences*).
 
 > Before submitting, check every external citation against the original paper. The entries above come from search results gathered during development.
