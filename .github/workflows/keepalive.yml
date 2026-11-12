@@ -8,6 +8,9 @@ on:
     - cron: "*/10 * * * *"
   workflow_dispatch:
 
+permissions:
+  actions: write   # to re-run the live-data snapshot when GitHub's own schedule has lagged
+
 jobs:
   ping:
     runs-on: ubuntu-latest
@@ -15,3 +18,15 @@ jobs:
     steps:
       - name: Ping health endpoint
         run: curl -fsS -m 90 --retry 2 https://monsoon-sentinel-api.onrender.com/api/health || echo "API not reachable; will retry next run"
+
+      - name: Refresh the live weather snapshot if it is over 4 hours old
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          fetched=$(curl -fsS -m 20 "https://raw.githubusercontent.com/${{ github.repository }}/live-data/meta.json" | jq -r .fetched_at || echo "")
+          age=$(( $(date -u +%s) - $(date -u -d "${fetched:-1970-01-01}" +%s) ))
+          echo "snapshot age: $((age / 60)) min"
+          running=$(gh run list -R "${{ github.repository }}" -w live-data.yml -s in_progress --json databaseId --jq length)
+          if [ "$age" -gt 14400 ] && [ "$running" = "0" ]; then
+            gh workflow run live-data.yml -R "${{ github.repository }}" && echo "snapshot refresh started"
+          fi

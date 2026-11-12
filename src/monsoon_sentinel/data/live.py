@@ -74,9 +74,18 @@ def get_hourly(cfg: Config) -> tuple[pd.DataFrame, str]:
     snap = load_snapshot(url) if url else None
     if snap is not None:
         return snap, "snapshot"
-    return fetch(cfg), "direct"
+    try:
+        return fetch(cfg), "direct"
+    except Exception:
+        # Open-Meteo often rate-limits shared cloud IPs (429). An older snapshot still holds
+        # the forecast for today and the next days, which beats showing no forecast at all.
+        stale = load_snapshot(url, max_age_hours=STALE_HOURS) if url else None
+        if stale is None:
+            raise
+        return stale, "snapshot_stale"
 
 
+STALE_HOURS = 36
 NWP_SNAPSHOT_URL = SNAPSHOT_URL.replace("openmeteo_hourly.parquet", "nwp_live.parquet")
 
 
@@ -90,7 +99,13 @@ def get_nwp_hourly(cfg: Config) -> tuple[pd.DataFrame, str]:
     snap = load_snapshot(url, max_age_hours=7) if url else None
     if snap is not None:
         return snap, "snapshot"
-    return nwp.fetch_live(cfg), "direct"
+    try:
+        return nwp.fetch_live(cfg), "direct"
+    except Exception:
+        stale = load_snapshot(url, max_age_hours=STALE_HOURS) if url else None
+        if stale is None:
+            raise
+        return stale, "snapshot_stale"
 
 
 def daily_rain_imd_style(hourly: pd.DataFrame, issue_hour: int = 3) -> pd.DataFrame:

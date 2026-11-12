@@ -85,13 +85,17 @@ def _guard(mode: str, date: str | None):
 
 @app.exception_handler(Exception)
 async def upstream_error(request: Request, exc: Exception):
-    """Live mode depends on Open-Meteo; report upstream failures clearly instead of a bare 500."""
+    """Live mode depends on Open-Meteo; report upstream failures clearly instead of a bare 500.
+    This handler runs outside the CORS middleware, so it adds the CORS header itself; without
+    it the browser hides the message and only reports "Failed to fetch"."""
     live = request.query_params.get("mode", "live") == "live"
     msg = f"{type(exc).__name__}: {str(exc)[:300]}"
+    cors = {"Access-Control-Allow-Origin": "*"}
     if live and request.url.path in ("/api/bulletin", "/api/roads", "/api/point", "/api/actions", "/api/history"):
-        return JSONResponse({"detail": f"Live weather data is unavailable right now ({msg}). "
-                                       "Try again shortly, or use Replay."}, status_code=503)
-    return JSONResponse({"detail": msg}, status_code=500)
+        return JSONResponse({"detail": "Live weather data is unavailable right now. "
+                                       "Try again in a few minutes, or use Replay a past day."},
+                            status_code=503, headers=cors)
+    return JSONResponse({"detail": msg}, status_code=500, headers=cors)
 
 
 # ------------------------------------------------------------------ forecast
