@@ -32,6 +32,8 @@ def client(tmp_path_factory):
     os.environ.pop("DATABASE_URL", None)
     os.environ["MS_ALERTS_DRY_RUN"] = "1"
     os.environ["MS_ADMIN_TOKEN"] = "test-token"
+    os.environ["TELEGRAM_BOT_TOKEN"] = "123:test-only-not-a-real-token"  # dry run: never called
+    os.environ["TELEGRAM_BOT_USERNAME"] = "ms_test_bot"
     from fastapi.testclient import TestClient
 
     from api.main import app

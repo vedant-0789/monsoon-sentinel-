@@ -156,7 +156,7 @@ export function SubscribeCard({ onOpen }: { onOpen: () => void }) {
 
 export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t, lang, picked, alertLabels } = useSentinelWithLabels();
-  const [channel, setChannel] = useState<"whatsapp" | "sms">("whatsapp");
+  const [channel, setChannel] = useState<"telegram" | "whatsapp" | "sms">("telegram");
   const [phoneInput, setPhoneInput] = useState("");
   // a 10-digit Indian mobile gets +91; anything typed with + is used as given (E.164)
   const digits = phoneInput.replace(/[\s-]/g, "");
@@ -164,7 +164,8 @@ export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () =
   const [label, setLabel] = useState("");
   const [minAlert, setMinAlert] = useState<"yellow" | "orange" | "red">("orange");
   const [consent, setConsent] = useState(false);
-  const [step, setStep] = useState<"form" | "code" | "done">("form");
+  const [step, setStep] = useState<"form" | "code" | "telegram" | "done">("form");
+  const [tg, setTg] = useState<{ link: string | null; token: string } | null>(null);
   const [subId, setSubId] = useState<number | null>(null);
   const [demo, setDemo] = useState<string | null>(null);
   const [code, setCode] = useState("");
@@ -177,6 +178,19 @@ export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () =
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
+  // Telegram: wait until the person presses Start in the bot, then show "done"
+  useEffect(() => {
+    if (!open || step !== "telegram" || !tg || subId === null) return;
+    let stop = false;
+    const tick = async () => {
+      try {
+        const r = await api.subscriptionStatus(subId, tg.token);
+        if (!stop && r.verified) setStep("done");
+      } catch { /* keep polling */ }
+    };
+    const id = window.setInterval(tick, 3000);
+    return () => { stop = true; window.clearInterval(id); };
+  }, [open, step, tg, subId]);
   if (!open) return null;
 
   const place = picked?.info?.nearest_road?.replace(/^Near /, "") ?? "";
@@ -185,11 +199,17 @@ export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () =
     setBusy(true);
     setErr(null);
     try {
-      const r = await api.subscribe({ channel, phone, lang, lat: picked.lat, lon: picked.lon,
-        label: (label || place || "My street").slice(0, 60), min_alert: minAlert, consent });
+      const r = await api.subscribe({ channel, phone: channel === "telegram" ? undefined : phone, lang,
+        lat: picked.lat, lon: picked.lon, label: (label || place || "My street").slice(0, 60), min_alert: minAlert, consent });
       setSubId(r.id);
-      setDemo(r.demo_code ?? null);
-      setStep("code");
+      if (channel === "telegram") {
+        setTg({ link: r.telegram_link ?? null, token: r.token ?? "" });
+        if (r.telegram_link) window.open(r.telegram_link, "_blank", "noopener");
+        setStep("telegram");
+      } else {
+        setDemo(r.demo_code ?? null);
+        setStep("code");
+      }
     } catch (e) {
       setErr((e as Error).message);
     } finally {
@@ -227,10 +247,14 @@ export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () =
             <div>
               <div className="text-sm font-medium">{t("channel")}</div>
               <div className="mt-1 flex rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
+                <button className={seg(channel === "telegram")} onClick={() => setChannel("telegram")} aria-pressed={channel === "telegram"}>Telegram</button>
                 <button className={seg(channel === "whatsapp")} onClick={() => setChannel("whatsapp")} aria-pressed={channel === "whatsapp"}>WhatsApp</button>
                 <button className={seg(channel === "sms")} onClick={() => setChannel("sms")} aria-pressed={channel === "sms"}>SMS</button>
               </div>
             </div>
+            {channel === "telegram" ? (
+              <p className="rounded-xl bg-sky-50 p-3 text-xs leading-snug text-sky-900 dark:bg-sky-950/40 dark:text-sky-200">{t("tgNoPhone")}</p>
+            ) : (
             <label className="block text-sm font-medium">{t("phone")}
               <div className="mt-1 flex items-center rounded-xl border border-zinc-300 focus-within:border-blue-600 dark:border-zinc-700">
                 {!digits.startsWith("+") && <span className="pl-3 text-sm text-zinc-500">+91</span>}
@@ -238,6 +262,7 @@ export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () =
                   value={phoneInput} onChange={(e) => setPhoneInput(e.target.value)} placeholder="98XXXXXXXX" />
               </div>
             </label>
+            )}
             <label className="block text-sm font-medium">{t("placeName")}
               <input className={input} value={label} maxLength={60} onChange={(e) => setLabel(e.target.value)} placeholder={place || "Home"} />
             </label>
@@ -251,13 +276,28 @@ export function SubscribeSheet({ open, onClose }: { open: boolean; onClose: () =
             </div>
             <label className="flex items-start gap-2 text-xs leading-snug">
               <input type="checkbox" className="mt-0.5" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
-              {t("consent")}
+              {channel === "telegram" ? t("consentTg") : t("consent")}
             </label>
             {err && <p className="text-sm text-red-600">{err}</p>}
-            <button onClick={start} disabled={!consent || !phoneOk || busy}
+            <button onClick={start} disabled={!consent || (channel !== "telegram" && !phoneOk) || busy}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white disabled:opacity-40">
-              {busy && <Spinner />}{t("sendCode")}
+              {busy && <Spinner />}{channel === "telegram" ? t("tgContinue") : t("sendCode")}
             </button>
+          </div>
+        ) : step === "telegram" ? (
+          <div className="mt-3 space-y-3">
+            {tg?.link ? (
+              <>
+                <p className="text-sm">{t("tgStep")}</p>
+                <a href={tg.link} target="_blank" rel="noopener noreferrer"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-sky-500 px-4 py-3 text-sm font-semibold text-white">
+                  {t("tgOpen")}
+                </a>
+                <p className="flex items-center gap-2 text-xs text-zinc-500"><Spinner />{t("tgWaiting")}</p>
+              </>
+            ) : (
+              <p className="rounded-xl bg-sky-50 p-3 text-sm text-sky-900 dark:bg-sky-950/40 dark:text-sky-200">{t("tgDemo")}</p>
+            )}
           </div>
         ) : step === "code" ? (
           <div className="mt-3 space-y-3">

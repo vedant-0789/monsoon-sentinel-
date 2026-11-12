@@ -160,6 +160,7 @@ cd web && npm install && npm run dev -- --port 3007
 |---|---|
 | `DATABASE_URL` | Neon Postgres connection string: keeps reports and subscribers across restarts |
 | `MS_ADMIN_TOKEN` | Long random secret; also add it as the GitHub secret `MS_ADMIN_TOKEN` for the morning-alert workflow |
+| `TELEGRAM_BOT_TOKEN` | Telegram bot from @BotFather (recommended: free, no templates, sign-up by pressing Start; the webhook registers itself on startup) |
 | `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_SMS_FROM` | SMS via Twilio |
 | `TWILIO_WHATSAPP_FROM` | WhatsApp via Twilio (sandbox: `whatsapp:+14155238886`) |
 | `WA_TOKEN`, `WA_PHONE_NUMBER_ID`, `WA_TEMPLATE`, `WA_TEMPLATE_LANG` | WhatsApp via Meta Cloud API (approved template for business-initiated messages) |

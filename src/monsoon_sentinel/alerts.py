@@ -19,6 +19,8 @@ from dataclasses import dataclass
 
 import requests
 
+from monsoon_sentinel import telegram
+
 PHONE_RE = re.compile(r"^\+[1-9]\d{7,14}$")
 ALERT_RANK = {"green": 0, "yellow": 1, "orange": 2, "red": 3}
 
@@ -74,6 +76,7 @@ def configured() -> dict:
         "sms_twilio": all(e.get(k) for k in ("TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_SMS_FROM")),
         "whatsapp_meta": all(e.get(k) for k in ("WA_TOKEN", "WA_PHONE_NUMBER_ID")),
         "whatsapp_twilio": all(e.get(k) for k in ("TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_WHATSAPP_FROM")),
+        "telegram": telegram.configured(),
         "dry_run": dry_run(),
     }
 
@@ -132,7 +135,7 @@ def _meta_whatsapp(to: str, body: str, template_params: list[str] | None) -> Sen
 
 
 def send(channel: str, to: str, body: str, template_params: list[str] | None = None,
-         kind: str = "info") -> SendResult:
+         kind: str = "info", buttons: list[tuple[str, str]] | None = None) -> SendResult:
     """kind: "code" (verification), "alert" (morning alert) or "info" (free-form only)."""
     cfg = configured()
     if cfg["dry_run"]:
@@ -144,6 +147,11 @@ def send(channel: str, to: str, body: str, template_params: list[str] | None = N
             return _meta_whatsapp(to, body, template_params)
         if channel == "whatsapp" and cfg["whatsapp_twilio"]:
             return _twilio_whatsapp(to, body, kind, template_params)
+        if channel == "telegram" and cfg["telegram"]:
+            try:
+                return SendResult("sent", "telegram", telegram.send_message(to, body, buttons))
+            except RuntimeError as ex:
+                return SendResult("failed", "telegram", detail=str(ex)[:200])
     except requests.RequestException as ex:
         return SendResult("failed", channel, detail=str(ex)[:200])
     return SendResult("dry_run", "log", detail="no provider configured for " + channel)

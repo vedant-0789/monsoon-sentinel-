@@ -49,9 +49,11 @@ export const api = {
   outlook: (mode: Mode, date?: string | null) => get<Outlook>(`/api/outlook?${qs(mode, date)}`),
   alertsSummary: () => get<AlertsSummary>(`/api/alerts/summary`),
   reportPhotoUrl: (id: number) => `${API_URL}/api/reports/${id}/photo`,
-  subscribe: (body: { channel: "sms" | "whatsapp"; phone: string; lang: string; lat: number; lon: number;
+  subscribe: (body: { channel: "telegram" | "sms" | "whatsapp"; phone?: string; lang: string; lat: number; lon: number;
     label: string; min_alert: string; consent: boolean }) =>
-    post<{ id: number; status: string; demo_code?: string }>("/api/subscribe", body),
+    post<{ id: number; status: string; demo_code?: string; telegram_link?: string | null; token?: string }>("/api/subscribe", body),
+  subscriptionStatus: (id: number, token: string) =>
+    get<{ verified: boolean; active: boolean }>(`/api/subscribe/${id}/status?token=${encodeURIComponent(token)}`),
   verifySubscription: (id: number, code: string) =>
     post<{ status: string; unsubscribe_url?: string }>("/api/subscribe/verify", { id, code }),
   modelCard: () => get<Record<string, unknown>>(`/api/model-card`),

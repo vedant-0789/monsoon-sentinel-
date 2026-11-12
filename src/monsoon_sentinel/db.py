@@ -32,6 +32,7 @@ SCHEMA = [
 ]
 # columns added after v0.1 (lightweight migrations for existing databases)
 MIGRATIONS = {
+    "subscribers": [("chat_id", "TEXT")],   # Telegram chat linked to the subscription
     "reports": [("auto_category", "TEXT"), ("urgent", "INTEGER DEFAULT 0"), ("photo", "{blob}"),
                 ("photo_flood_prob", "REAL"), ("photo_verified", "INTEGER")],
 }

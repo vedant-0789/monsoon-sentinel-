@@ -34,7 +34,7 @@ from fastapi.middleware.gzip import GZipMiddleware  # noqa: E402
 from fastapi.responses import HTMLResponse, JSONResponse  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
-from monsoon_sentinel import alerts  # noqa: E402
+from monsoon_sentinel import alerts, telegram  # noqa: E402
 from monsoon_sentinel.db import DB, new_token  # noqa: E402
 from monsoon_sentinel.photo import PhotoVerifier, downscale_jpeg  # noqa: E402
 from monsoon_sentinel.service import Sentinel  # noqa: E402
@@ -54,6 +54,17 @@ async def lifespan(app: FastAPI):
     STATE["s"] = Sentinel()
     STATE["db"] = DB()
     STATE["photo"] = PhotoVerifier(ROOT / "models" / "photo_verifier.onnx")
+    if telegram.configured() and not alerts.dry_run():
+        import threading
+
+        def _register():
+            try:
+                telegram.set_webhook(f"{API_URL}/api/telegram/webhook")
+                STATE["telegram_webhook"] = "ok"
+            except Exception as ex:  # noqa: BLE001 - reported by /api/alerts/summary
+                STATE["telegram_webhook"] = f"error: {str(ex)[:120]}"
+
+        threading.Thread(target=_register, daemon=True).start()
     yield
 
 
@@ -255,8 +266,8 @@ def _hash(code: str) -> str:
 
 
 class SubscribeIn(BaseModel):
-    channel: Literal["sms", "whatsapp"]
-    phone: str = Field(..., max_length=20, description="E.164, e.g. +9198XXXXXXXX")
+    channel: Literal["telegram", "whatsapp", "sms"]
+    phone: str | None = Field(None, max_length=20, description="E.164 (WhatsApp / SMS only)")
     lang: Literal["en", "mr", "hi"] = "en"
     lat: float = Field(..., ge=18.0, le=19.0)
     lon: float = Field(..., ge=73.0, le=74.5)
@@ -270,7 +281,9 @@ def subscribe(body: SubscribeIn):
     """Start an alert subscription: a 6-digit code is sent to the phone to prove ownership."""
     if not body.consent:
         raise HTTPException(400, "consent is required")
-    phone = body.phone.replace(" ", "").replace("-", "")
+    if body.channel == "telegram":
+        return _subscribe_telegram(body)
+    phone = (body.phone or "").replace(" ", "").replace("-", "")
     if not alerts.PHONE_RE.match(phone):
         raise HTTPException(400, "phone must be in international format, e.g. +9198XXXXXXXX")
     db = STATE["db"]
@@ -294,6 +307,83 @@ def subscribe(body: SubscribeIn):
     if res.status == "dry_run":  # demo / testing without a provider: show the code on screen
         out["demo_code"] = code
     return out
+
+
+def _subscribe_telegram(body: SubscribeIn) -> dict:
+    """Create a pending subscription; the person activates it by pressing Start in Telegram."""
+    if not telegram.configured() and not alerts.dry_run():
+        raise HTTPException(503, "Telegram alerts are not configured on the server yet")
+    tok = new_token()
+    sid = STATE["db"].execute(
+        "INSERT INTO subscribers (created_at, channel, phone, lang, lat, lon, label, min_alert, active, token, "
+        "verified, attempts) VALUES (?,?,NULL,?,?,?,?,?,0,?,0,0)",
+        (now_iso(), "telegram", body.lang, body.lat, body.lon, body.label, body.min_alert, tok))
+    link = telegram.deep_link(tok)
+    if link is None and not alerts.dry_run():
+        raise HTTPException(503, "could not reach the Telegram bot; check TELEGRAM_BOT_TOKEN")
+    return {"id": sid, "status": "open_telegram", "channel": "telegram", "telegram_link": link, "token": tok}
+
+
+@app.get("/api/subscribe/{sid}/status")
+def subscription_status(sid: int, token: str = Query(..., min_length=10, max_length=64)):
+    """Polled by the website while the person presses Start in Telegram."""
+    rows = STATE["db"].query("SELECT verified, active FROM subscribers WHERE id = ? AND token = ?", (sid, token))
+    if not rows:
+        raise HTTPException(404, "subscription not found")
+    return {"verified": bool(rows[0]["verified"]), "active": bool(rows[0]["active"])}
+
+
+@app.post("/api/telegram/webhook")
+async def telegram_webhook(request: Request):
+    """Telegram calls this for every message to the bot (secret header checked)."""
+    if not telegram.configured() or not hmac.compare_digest(
+            request.headers.get("X-Telegram-Bot-Api-Secret-Token", ""), telegram.webhook_secret()):
+        raise HTTPException(401, "bad secret")
+    update = await request.json()
+    msg = update.get("message") or {}
+    chat_id = str((msg.get("chat") or {}).get("id", ""))
+    text = (msg.get("text") or "").strip()
+    if not chat_id or not text:
+        return {"ok": True}
+    db = STATE["db"]
+    lang = ((msg.get("from") or {}).get("language_code") or "en")[:2]
+    lang = lang if lang in ("en", "mr", "hi") else "en"
+
+    def reply(t: str, buttons=None):
+        alerts.send("telegram", chat_id, t, buttons=buttons)
+
+    if text.startswith("/start"):
+        parts = text.split(maxsplit=1)
+        tok = parts[1].strip() if len(parts) > 1 else ""
+        rows = db.query("SELECT * FROM subscribers WHERE token = ? AND channel = 'telegram'", (tok,)) if tok else []
+        if not rows:
+            reply(telegram.t(lang, "unknown_link" if tok else "hello"), [("Monsoon Sentinel", WEB_URL)])
+            return {"ok": True}
+        sub = rows[0]
+        if sub["verified"] and sub["chat_id"] == chat_id:
+            reply(telegram.t(sub["lang"], "already", place=sub["label"]))
+            return {"ok": True}
+        db.execute("UPDATE subscribers SET chat_id = ?, verified = 1, active = 1 WHERE id = ?", (chat_id, sub["id"]))
+        db.execute("UPDATE subscribers SET active = 0 WHERE chat_id = ? AND id <> ? AND label = ?",
+                   (chat_id, sub["id"], sub["label"]))  # one active subscription per chat + place
+        level = telegram.t(sub["lang"], "levels")[sub["min_alert"]]
+        link = f"{WEB_URL}/?lat={sub['lat']:.5f}&lon={sub['lon']:.5f}"
+        reply(telegram.t(sub["lang"], "welcome", place=sub["label"], level=level),
+              [(telegram.t(sub["lang"], "open_map"), link)])
+    elif text.startswith("/stop"):
+        db.execute("UPDATE subscribers SET active = 0 WHERE chat_id = ?", (chat_id,))
+        reply(telegram.t(lang, "stopped"))
+    elif text.startswith("/status"):
+        subs = db.query("SELECT label, min_alert, lang FROM subscribers WHERE chat_id = ? AND active = 1", (chat_id,))
+        if not subs:
+            reply(telegram.t(lang, "status_none"))
+        else:
+            sl = subs[0]["lang"]
+            items = "\n".join(f"• {x['label']} ({telegram.t(sl, 'levels')[x['min_alert']]})" for x in subs)
+            reply(telegram.t(sl, "status", items=items))
+    else:
+        reply(telegram.t(lang, "hello"), [("Monsoon Sentinel", WEB_URL)])
+    return {"ok": True}
 
 
 class VerifyIn(BaseModel):
@@ -345,7 +435,9 @@ def alerts_summary():
     cfg = alerts.configured()
     return {"active_subscribers": {r["channel"]: r["n"] for r in n},
             "sent_today": {r["status"]: r["n"] for r in sent},
-            "providers": {k: v for k, v in cfg.items() if k != "dry_run"}, "dry_run": cfg["dry_run"]}
+            "providers": {k: v for k, v in cfg.items() if k != "dry_run"}, "dry_run": cfg["dry_run"],
+            "telegram_bot": telegram.bot_username() if cfg.get("telegram") else None,
+            "telegram_webhook": STATE.get("telegram_webhook")}
 
 
 class DispatchIn(BaseModel):
@@ -384,8 +476,18 @@ def dispatch_alerts(body: DispatchIn, x_admin_token: str = Header("")):
                   "road": pt["nearest_road"], "chance": f"{round((pt['heavy_rain_probability'] or 0) * 100)}%",
                   "date": day, "link": link, "advice": alerts.ADVICE[sub["lang"]][pt["alert"]]}
         order = [f.strip() for f in os.environ.get("MS_ALERT_TEMPLATE_VARS", "title,place,link").split(",") if f.strip()]
-        res = alerts.send(sub["channel"], sub["phone"], text,
-                          template_params=[fields.get(f, f) for f in order], kind="alert")
+        if sub["channel"] == "telegram":
+            if not sub.get("chat_id"):
+                summary["skipped"] += 1
+                continue
+            text = alerts.alert_text(sub["lang"], pt["alert"], sub["label"], pt["nearest_road"],
+                                     pt["heavy_rain_probability"] or 0, link, unsub).rsplit("\n", 2)[0]
+            res = alerts.send("telegram", sub["chat_id"], text, kind="alert",
+                              buttons=[(telegram.t(sub["lang"], "open_map"), link),
+                                       (telegram.t(sub["lang"], "stop"), unsub)])
+        else:
+            res = alerts.send(sub["channel"], sub["phone"], text,
+                              template_params=[fields.get(f, f) for f in order], kind="alert")
         db.execute("INSERT INTO alert_log (created_at, subscriber_id, alert_date, alert, channel, status, "
                    "provider_id, detail) VALUES (?,?,?,?,?,?,?,?)",
                    (now_iso(), sub["id"], day, pt["alert"], sub["channel"], res.status, res.provider_id, res.detail))

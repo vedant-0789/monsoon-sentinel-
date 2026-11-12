@@ -93,3 +93,48 @@ def test_photo_verdict_thresholds(client, p):
     from api.main import _photo_verdict
     v = _photo_verdict(p)
     assert v in (0, 1, None)
+
+
+def test_telegram_signup_webhook_dispatch_stop(client):
+    from monsoon_sentinel import telegram
+
+    body = {"channel": "telegram", "lang": "hi", "label": "Ekta Nagar TG", "min_alert": "orange",
+            "consent": True, **EKTA}
+    assert client.post("/api/subscribe", json={**body, "consent": False}).status_code == 400
+    sub = client.post("/api/subscribe", json=body).json()          # no phone needed
+    assert sub["status"] == "open_telegram"
+    assert sub["telegram_link"] == f"https://t.me/ms_test_bot?start={sub['token']}"
+    status = f"/api/subscribe/{sub['id']}/status?token={sub['token']}"
+    assert client.get(status).json()["verified"] is False
+    assert client.get(f"/api/subscribe/{sub['id']}/status?token=wrong-token-xx").status_code == 404
+
+    def update(text, chat=555001):
+        return {"update_id": 1, "message": {"chat": {"id": chat}, "from": {"language_code": "hi"}, "text": text}}
+
+    hook = "/api/telegram/webhook"
+    good = {"X-Telegram-Bot-Api-Secret-Token": telegram.webhook_secret()}
+    assert client.post(hook, json=update(f"/start {sub['token']}")).status_code == 401
+    assert client.post(hook, json=update(f"/start {sub['token']}"),
+                       headers={"X-Telegram-Bot-Api-Secret-Token": "nope"}).status_code == 401
+    assert client.post(hook, json=update(f"/start {sub['token']}"), headers=good).json()["ok"]
+    assert client.get(status).json() == {"verified": True, "active": True}
+    assert client.post(hook, json=update("/start bogus-token-123"), headers=good).json()["ok"]
+    assert client.post(hook, json=update("hello"), headers=good).json()["ok"]
+    assert client.post(hook, json=update("/status"), headers=good).json()["ok"]
+
+    hdr = {"X-Admin-Token": "test-token"}
+    d = client.post("/api/alerts/dispatch", json={"mode": "replay", "date": DAY}, headers=hdr).json()
+    assert d["dry_run"] >= 1                                      # red day reaches the Telegram chat
+    summary = client.get("/api/alerts/summary").json()
+    assert summary["active_subscribers"].get("telegram", 0) >= 1 and summary["telegram_bot"] == "ms_test_bot"
+
+    client.post(hook, json=update("/stop"), headers=good)
+    assert client.get(status).json()["active"] is False
+    assert client.get("/api/alerts/summary").json()["active_subscribers"].get("telegram", 0) == 0
+
+
+def test_telegram_text_languages():
+    from monsoon_sentinel import telegram
+    assert "Ekta" in telegram.t("mr", "welcome", place="Ekta", level="लाल")
+    assert telegram.t("xx", "stop") == "Stop alerts"
+    assert len(telegram.webhook_secret()) == 48
