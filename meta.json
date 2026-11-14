@@ -1,0 +1,7 @@
+{
+  "fetched_at": "2026-11-14T16:52:53+00:00",
+  "rows": 15120,
+  "source": "Open-Meteo forecast API (best-match NWP)",
+  "first": "2026-10-05 00:00:00",
+  "last": "2026-11-15 23:00:00"
+}
